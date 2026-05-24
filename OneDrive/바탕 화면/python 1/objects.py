@@ -12,4 +12,16 @@ print("=====What is object =====")
 # an object has state and method properties.
 # Everything is object in python!
 
-print(type(`HELLO WORLD!`))
+print(type('Hello World!'))
+print(type(100))
+print(type(True))
+print(type(array))
+print(type(math))
+
+# Paradigma > Functional Programming & OOP
+# OOP 4 CONCEPTS > Abstraction | Encapsulation | Inheritence | Polimorphism
+result1 = math.ceil(97.7)  # Call
+print("result:", result1)
+
+result2 = ceil(98.7)
+print("result2:", result2)
