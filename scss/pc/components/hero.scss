@@ -1,0 +1,402 @@
+@import '../../variables';
+
+/* ========================================
+   KEN BURNS ANIMATION
+======================================== */
+@keyframes kenBurns1 {
+	0%   { transform: scale(1.0) translate(0%, 0%); }
+	25%  { transform: scale(1.08) translate(-1.5%, -0.8%); }
+	50%  { transform: scale(1.14) translate(-2.5%, 1.2%); }
+	75%  { transform: scale(1.07) translate(1%, -1.5%); }
+	100% { transform: scale(1.0) translate(0%, 0%); }
+}
+
+@keyframes kenBurns2 {
+	0%   { transform: scale(1.12) translate(-2%, 0%); }
+	33%  { transform: scale(1.05) translate(0%, -1.5%); }
+	66%  { transform: scale(1.10) translate(1.5%, 1%); }
+	100% { transform: scale(1.12) translate(-2%, 0%); }
+}
+
+@keyframes kenBurns3 {
+	0%   { transform: scale(1.0) translate(1%, 0%); }
+	50%  { transform: scale(1.15) translate(-1.5%, -2%); }
+	100% { transform: scale(1.0) translate(1%, 0%); }
+}
+
+@keyframes fadeInUp {
+	from { opacity: 0; transform: translateY(32px); }
+	to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+	from { opacity: 0; transform: translateY(-20px); }
+	to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounceScroll {
+	0%, 100% { transform: translateY(0); opacity: 1; }
+	50%       { transform: translateY(10px); opacity: 0.5; }
+}
+
+@keyframes pulseDot {
+	0%, 100% { transform: scale(1); opacity: 0.8; }
+	50%       { transform: scale(1.4); opacity: 1; }
+}
+
+/* ========================================
+   PAGE HERO — Full Screen
+   (navbar endi fixed, shuning uchun margin-top shart emas)
+======================================== */
+.page-hero {
+	position: relative;
+	width: 100%;
+	height: 100vh;
+	min-height: 600px;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+
+	/* Background image wrapper */
+	.hero-bg {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			object-position: center;
+			will-change: transform;
+
+			&.kb-1 { animation: kenBurns1 18s ease-in-out infinite; }
+			&.kb-2 { animation: kenBurns2 22s ease-in-out infinite; }
+			&.kb-3 { animation: kenBurns3 16s ease-in-out infinite; }
+		}
+	}
+
+	/* Gradient overlay */
+	.hero-overlay {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		background: linear-gradient(
+			135deg,
+			rgba(10, 36, 114, 0.82) 0%,
+			rgba(22, 73, 255, 0.55) 50%,
+			rgba(0, 0, 0, 0.4) 100%
+		);
+	}
+
+	/* Service page — lighter overlay so photo is clearly visible */
+	.hero-overlay.service-overlay {
+		background: linear-gradient(
+			to right,
+			rgba(10, 36, 114, 0.60) 0%,
+			rgba(10, 36, 114, 0.25) 50%,
+			rgba(0, 0, 0, 0.08) 100%
+		);
+	}
+
+	/* Dark bottom gradient for scroll indicator */
+	&::after {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 120px;
+		background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);
+		z-index: 2;
+		pointer-events: none;
+	}
+
+	/* Content */
+	.hero-content {
+		position: relative;
+		z-index: 3;
+		text-align: left;
+		color: #fff;
+		padding: 0 24px;
+		max-width: 580px;
+		width: 100%;
+
+		.hero-badge {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			background: rgba(255, 255, 255, 0.15);
+			backdrop-filter: blur(8px);
+			border: 1px solid rgba(255, 255, 255, 0.25);
+			border-radius: 100px;
+			padding: 6px 16px;
+			font-size: 13px;
+			font-weight: 500;
+			color: rgba(255, 255, 255, 0.9);
+			margin-bottom: 16px;
+			animation: fadeInDown 0.8s ease 0.2s both;
+		}
+
+		h1 {
+			font-size: clamp(26px, 3vw, 44px);
+			font-weight: 800;
+			line-height: 1.15;
+			margin-bottom: 14px;
+			text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+			animation: fadeInUp 0.8s ease 0.4s both;
+		}
+
+		.hero-subtitle {
+			font-size: 15px;
+			opacity: 0.88;
+			line-height: 1.65;
+			margin-bottom: 28px;
+			max-width: 460px;
+			animation: fadeInUp 0.8s ease 0.6s both;
+		}
+
+		.hero-actions {
+			display: flex;
+			gap: 16px;
+			justify-content: center;
+			flex-wrap: wrap;
+			animation: fadeInUp 0.8s ease 0.8s both;
+		}
+
+		.hero-search {
+			animation: fadeInUp 0.8s ease 0.7s both;
+			max-width: 560px;
+			margin: 0 auto;
+		}
+
+		.hero-stats {
+			display: flex;
+			gap: 40px;
+			justify-content: center;
+			margin-top: 48px;
+			animation: fadeInUp 0.8s ease 1.0s both;
+
+			.stat-item {
+				text-align: center;
+
+				.number {
+					font-size: 36px;
+					font-weight: 800;
+					line-height: 1;
+				}
+
+				.label {
+					font-size: 13px;
+					opacity: 0.75;
+					margin-top: 6px;
+				}
+			}
+
+			.stat-divider {
+				width: 1px;
+				background: rgba(255, 255, 255, 0.2);
+				align-self: stretch;
+			}
+		}
+	}
+
+	/* Scroll indicator */
+	.scroll-indicator {
+		position: absolute;
+		bottom: 32px;
+		left: 50%;
+		transform: translateX(-50%);
+		z-index: 3;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 6px;
+		cursor: pointer;
+
+		.scroll-dot {
+			width: 6px;
+			height: 6px;
+			border-radius: 50%;
+			background: rgba(255, 255, 255, 0.8);
+			animation: pulseDot 1.5s ease-in-out infinite;
+
+			&:nth-child(2) { animation-delay: 0.3s; }
+			&:nth-child(3) { animation-delay: 0.6s; }
+		}
+
+		.scroll-text {
+			font-size: 11px;
+			color: rgba(255, 255, 255, 0.6);
+			text-transform: uppercase;
+			letter-spacing: 2px;
+			animation: bounceScroll 2s ease-in-out infinite;
+		}
+	}
+
+	/* Agency detail hero variant */
+	&.agency-detail-hero {
+		.hero-content {
+			text-align: left;
+			max-width: 900px;
+
+			.agency-header-info {
+				display: flex;
+				align-items: flex-end;
+				gap: 24px;
+				margin-bottom: 24px;
+
+				.agency-logo {
+					width: 100px;
+					height: 100px;
+					border-radius: 16px;
+					object-fit: cover;
+					border: 3px solid rgba(255, 255, 255, 0.4);
+					background: rgba(255, 255, 255, 0.1);
+					flex-shrink: 0;
+					animation: fadeInUp 0.8s ease 0.5s both;
+				}
+
+				.agency-text {
+					animation: fadeInUp 0.8s ease 0.6s both;
+				}
+			}
+
+			.agency-action-row {
+				display: flex;
+				gap: 12px;
+				flex-wrap: wrap;
+				animation: fadeInUp 0.8s ease 0.9s both;
+			}
+		}
+	}
+
+	/* Join page variant — split layout */
+	&.join-hero {
+		.hero-overlay {
+			background: linear-gradient(
+				to right,
+				rgba(10, 36, 114, 0.9) 0%,
+				rgba(10, 36, 114, 0.7) 45%,
+				rgba(0, 0, 0, 0.3) 100%
+			);
+		}
+
+		.hero-content {
+			text-align: left;
+			align-self: center;
+		}
+
+		.join-form-panel {
+			position: absolute;
+			right: 80px;
+			top: 50%;
+			transform: translateY(-50%);
+			z-index: 10;
+			width: 420px;
+			background: rgba(255, 255, 255, 0.97);
+			backdrop-filter: blur(20px);
+			border-radius: 24px;
+			padding: 40px;
+			box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+			animation: fadeInUp 0.8s ease 0.4s both;
+		}
+	}
+
+	/* ── NESTAR usuli: 557px balandlik (LayoutBasic sahifalar) ── */
+	&.basic-hero {
+		height: 557px;
+		min-height: 400px;
+
+		/* NESTAR inset shadow overlay (qorong'i effekt) */
+		box-shadow: inset 10px 40px 150px 40px rgb(24 22 36);
+
+		.hero-overlay {
+			background: linear-gradient(
+				to bottom,
+				rgba(24, 22, 36, 0.55) 0%,
+				rgba(24, 22, 36, 0.35) 50%,
+				rgba(24, 22, 36, 0.65) 100%
+			);
+		}
+
+		.hero-content {
+			text-align: center;
+			margin-top: 60px; /* navbar ostida qolmasin */
+
+			h1 {
+				font-size: 48px;
+				font-weight: 600;
+				letter-spacing: 0.96px;
+			}
+
+			.hero-subtitle {
+				font-size: 24px;
+				font-weight: 400;
+				margin-bottom: 0;
+			}
+		}
+	}
+
+	/* Login sahifasi variant (300px) */
+	&.join-hero-basic {
+		height: 300px;
+		min-height: 300px;
+
+		box-shadow: inset 10px 40px 150px 40px rgb(24 22 36);
+
+		.hero-overlay {
+			background: rgba(24, 22, 36, 0.5);
+		}
+	}
+
+	/* Mypage variant */
+	&.mypage-hero {
+		height: 55vh;
+		min-height: 420px;
+
+		.hero-content {
+			text-align: center;
+		}
+	}
+}
+
+/* ========================================
+   MOBILE
+======================================== */
+@media (max-width: 768px) {
+	.page-hero {
+		height: 80vh;
+		min-height: 500px;
+
+		.hero-content {
+			padding: 0 16px;
+
+			h1 { font-size: 28px; }
+			.hero-subtitle { font-size: 15px; }
+
+			.hero-stats {
+				gap: 20px;
+				.stat-item .number { font-size: 26px; }
+			}
+		}
+
+		&.join-hero {
+			align-items: flex-start;
+			padding-top: 80px;
+
+			.join-form-panel {
+				position: relative;
+				right: auto;
+				top: auto;
+				transform: none;
+				width: calc(100% - 32px);
+				margin: 24px 16px;
+				padding: 24px;
+			}
+
+			.hero-content { display: none; }
+		}
+	}
+}

@@ -1,0 +1,18 @@
+export enum AgencyStatus {
+	ACTIVE = 'ACTIVE',
+	INACTIVE = 'INACTIVE',
+	SUSPENDED = 'SUSPENDED',
+}
+
+export enum AgencyVerificationStatus {
+	PENDING = 'PENDING',
+	VERIFIED = 'VERIFIED',
+	REJECTED = 'REJECTED',
+}
+
+export enum AgencySortField {
+	CREATED_AT = 'CREATED_AT',
+	AGENCY_RANK = 'AGENCY_RANK',
+	TOTAL_SERVICES = 'TOTAL_SERVICES',
+	AVERAGE_RATING = 'AVERAGE_RATING',
+}

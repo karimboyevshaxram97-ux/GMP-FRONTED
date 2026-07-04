@@ -1,0 +1,486 @@
+@import '../../variables';
+
+.agency-detail {
+	background: #f7f9fc;
+	min-height: 100vh;
+	padding-bottom: 64px;
+
+	.agency-cover-hero {
+		position: relative;
+		background-size: cover;
+		background-position: center;
+		background-color: #0a2472;
+		border-bottom: 1px solid rgba(10, 36, 114, 0.08);
+		padding: 112px 0 42px;
+
+		.cover-overlay {
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(
+				135deg,
+				rgba(10, 36, 114, 0.85) 0%,
+				rgba(10, 36, 114, 0.6) 60%,
+				rgba(0, 0, 0, 0.4) 100%
+			);
+			z-index: 0;
+		}
+
+		.container {
+			position: relative;
+			z-index: 1;
+		}
+
+		.back-button {
+			color: rgba(255, 255, 255, 0.85);
+		}
+
+		.agency-identity {
+			background: rgba(255, 255, 255, 0.12);
+			backdrop-filter: blur(16px);
+			border-color: rgba(255, 255, 255, 0.2);
+
+			h1, p { color: #ffffff; }
+			.rating-summary { color: rgba(255, 255, 255, 0.85); }
+		}
+
+		.profile-metrics {
+			background: rgba(255, 255, 255, 0.12);
+			backdrop-filter: blur(16px);
+			border-color: rgba(255, 255, 255, 0.2);
+
+			> div { background: rgba(255, 255, 255, 0.12); }
+			svg, span, strong { color: #ffffff; }
+		}
+	}
+
+	.agency-location.agency-location {
+		font-size: 13px;
+		color: rgba(255, 255, 255, 0.75);
+		margin-bottom: 6px;
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
+
+	.rank-chip.rank-chip {
+		background: rgba(255, 200, 0, 0.15);
+		color: #ffcc00;
+		font-weight: 800;
+		border: 1px solid rgba(255, 200, 0, 0.3);
+	}
+
+	.back-button {
+		color: $text-secondary;
+		font-weight: 700;
+		margin-bottom: 24px;
+		text-transform: none;
+	}
+
+	.profile-hero-grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 340px;
+		gap: 32px;
+		align-items: stretch;
+	}
+
+	.agency-identity {
+		display: flex;
+		gap: 24px;
+		background: rgba(255, 255, 255, 0.78);
+		border: 1px solid rgba(10, 36, 114, 0.08);
+		border-radius: 8px;
+		padding: 28px;
+		box-shadow: 0 16px 42px rgba(10, 36, 114, 0.08);
+
+		.agency-logo {
+			width: 116px;
+			height: 116px;
+			border: 1px solid rgba(10, 36, 114, 0.1);
+			border-radius: 8px;
+			background: #ffffff;
+			flex-shrink: 0;
+			object-fit: cover;
+		}
+
+		.badge-row {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px;
+			margin-bottom: 14px;
+		}
+
+		.verified-chip {
+			background: #eaf8ee;
+			color: #247a3d;
+			font-weight: 800;
+		}
+
+		.status-chip {
+			background: #edf2ff;
+			color: $primary;
+			font-weight: 800;
+		}
+
+		h1 {
+			color: $text-primary;
+			font-size: 42px;
+			font-weight: 800;
+			line-height: 1.1;
+			margin-bottom: 12px;
+		}
+
+		p {
+			color: $text-secondary;
+			font-size: 15px;
+			line-height: 1.7;
+			max-width: 720px;
+			margin-bottom: 16px;
+		}
+	}
+
+	.rating-summary {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 8px;
+
+		strong {
+			color: $text-primary;
+			font-size: 16px;
+		}
+
+		span {
+			color: $text-secondary;
+			font-size: 14px;
+		}
+	}
+
+	.profile-metrics {
+		display: grid;
+		gap: 12px;
+
+		> div {
+			background: #ffffff;
+			border: 1px solid rgba(10, 36, 114, 0.08);
+			border-radius: 8px;
+			padding: 20px;
+			box-shadow: 0 12px 32px rgba(10, 36, 114, 0.06);
+		}
+
+		svg {
+			color: $primary;
+			font-size: 24px;
+			margin-bottom: 12px;
+		}
+
+		span {
+			color: $text-secondary;
+			display: block;
+			font-size: 13px;
+			margin-bottom: 4px;
+		}
+
+		strong {
+			color: $text-primary;
+			display: block;
+			font-size: 26px;
+			line-height: 1;
+		}
+	}
+
+	.detail-layout {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 340px;
+		gap: 28px;
+		padding: 32px 0 0;
+	}
+
+	.profile-main,
+	.contact-card {
+		background: #ffffff;
+		border: 1px solid rgba(10, 36, 114, 0.08);
+		border-radius: 8px;
+		box-shadow: 0 10px 30px rgba(10, 36, 114, 0.06);
+	}
+
+	.profile-tabs {
+		border-bottom: 1px solid #edf1f7;
+		padding: 0 20px;
+
+		.MuiTab-root {
+			font-weight: 800;
+			text-transform: none;
+		}
+	}
+
+	.profile-section {
+		padding: 28px;
+
+		h2 {
+			color: $text-primary;
+			font-size: 24px;
+			font-weight: 800;
+			margin-bottom: 14px;
+		}
+
+		h3 {
+			color: $text-primary;
+			font-size: 17px;
+			font-weight: 800;
+			margin-bottom: 14px;
+		}
+
+		p {
+			color: $text-secondary;
+			font-size: 15px;
+			line-height: 1.8;
+		}
+	}
+
+	.country-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+
+		.MuiChip-root {
+			background: #f1f5ff;
+			color: $primary;
+			font-weight: 700;
+		}
+	}
+
+	.review-item {
+		border-bottom: 1px solid #edf1f7;
+		padding: 18px 0;
+
+		&:last-child {
+			border-bottom: none;
+			padding-bottom: 0;
+		}
+
+		.review-head {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			margin-bottom: 8px;
+
+			span {
+				color: $text-muted;
+				font-size: 13px;
+			}
+		}
+	}
+
+	.contact-card {
+		height: fit-content;
+		padding: 24px;
+		position: sticky;
+		top: 104px;
+
+		h3 {
+			color: $text-primary;
+			font-size: 20px;
+			font-weight: 800;
+			margin-bottom: 8px;
+		}
+
+		> p {
+			color: $text-secondary;
+			font-size: 14px;
+			line-height: 1.6;
+			margin-bottom: 20px;
+		}
+
+		.MuiButton-root {
+			border-radius: 8px;
+			font-weight: 800;
+			margin-top: 10px;
+			padding: 11px 16px;
+			text-transform: none;
+		}
+
+		.liked-action {
+			color: #ff4757;
+		}
+
+		.inline-msg-box {
+			border: 1.5px solid $primary;
+			border-radius: 10px;
+			margin-top: 10px;
+			overflow: hidden;
+
+			.inline-msg-textarea {
+				border: none;
+				display: block;
+				font-family: $font-family;
+				font-size: 14px;
+				line-height: 1.6;
+				outline: none;
+				padding: 12px 14px;
+				resize: none;
+				width: 100%;
+				color: $text-primary;
+				background: #f7f9ff;
+
+				&::placeholder { color: #aab4c8; }
+			}
+
+			.inline-msg-footer {
+				align-items: center;
+				background: #fff;
+				border-top: 1px solid #e8ecf4;
+				display: flex;
+				gap: 8px;
+				justify-content: flex-end;
+				padding: 8px 10px;
+			}
+		}
+
+		.msg-sent-box {
+			background: #f0fff4;
+			border: 1.5px solid #4caf50;
+			border-radius: 10px;
+			margin-top: 10px;
+			padding: 14px 16px;
+			text-align: center;
+
+			span {
+				color: #2e7d32;
+				display: block;
+				font-size: 15px;
+				font-weight: 700;
+				margin-bottom: 10px;
+			}
+
+			.msg-sent-actions {
+				display: flex;
+				gap: 8px;
+				justify-content: center;
+			}
+		}
+	}
+
+	.contact-list {
+		border-bottom: 1px solid #edf1f7;
+		margin-bottom: 16px;
+		padding-bottom: 16px;
+
+		> div {
+			align-items: center;
+			color: $text-secondary;
+			display: flex;
+			gap: 10px;
+			font-size: 14px;
+			margin-bottom: 12px;
+			min-width: 0;
+			overflow-wrap: anywhere;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+
+		svg {
+			color: $primary;
+			flex-shrink: 0;
+			font-size: 18px;
+		}
+
+		a {
+			color: $primary;
+			text-decoration: none;
+		}
+	}
+
+	.empty-inline,
+	.empty-contact {
+		background: #f7f9fc;
+		border-radius: 8px;
+		color: $text-secondary;
+		font-size: 14px;
+		padding: 16px;
+	}
+
+	.agency-profile-loading,
+	.agency-not-found {
+		background: #ffffff;
+		border: 1px solid rgba(10, 36, 114, 0.08);
+		border-radius: 8px;
+		box-shadow: 0 10px 30px rgba(10, 36, 114, 0.06);
+		margin-top: 120px;
+		padding: 32px;
+	}
+
+	.agency-profile-loading {
+		display: flex;
+		gap: 24px;
+	}
+
+	.agency-not-found {
+		text-align: center;
+
+		h1 {
+			color: $text-primary;
+			font-size: 28px;
+			font-weight: 800;
+			margin-bottom: 8px;
+		}
+
+		p {
+			color: $text-secondary;
+			margin-bottom: 20px;
+		}
+	}
+}
+
+@media (max-width: 1024px) {
+	.agency-detail {
+		.profile-hero-grid,
+		.detail-layout {
+			grid-template-columns: 1fr;
+		}
+
+		.profile-metrics {
+			grid-template-columns: repeat(3, 1fr);
+		}
+
+		.contact-card {
+			position: static;
+		}
+	}
+}
+
+@media (max-width: 768px) {
+	.agency-detail {
+		.agency-profile-hero {
+			padding: 92px 0 32px;
+		}
+
+		.agency-identity {
+			flex-direction: column;
+			padding: 20px;
+
+			.agency-logo {
+				height: 96px;
+				width: 96px;
+			}
+
+			h1 {
+				font-size: 30px;
+			}
+		}
+
+		.profile-metrics {
+			grid-template-columns: 1fr;
+		}
+
+		.profile-section,
+		.contact-card {
+			padding: 20px;
+		}
+
+		.agency-profile-loading {
+			flex-direction: column;
+		}
+	}
+}

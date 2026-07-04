@@ -1,0 +1,20 @@
+export enum ServiceType {
+	STUDY_ABROAD = 'STUDY_ABROAD',
+	WORK_ABROAD = 'WORK_ABROAD',
+	TRAVEL = 'TRAVEL',
+	VISA_SERVICES = 'VISA_SERVICES',
+}
+
+export enum ServiceStatus {
+	ACTIVE = 'ACTIVE',
+	DRAFT = 'DRAFT',
+	ARCHIVED = 'ARCHIVED',
+	SUSPENDED = 'SUSPENDED',
+}
+
+export enum ServiceSortField {
+	CREATED_AT = 'CREATED_AT',
+	SERVICE_RANK = 'SERVICE_RANK',
+	AVERAGE_RATING = 'AVERAGE_RATING',
+	PRICE = 'PRICE',
+}

@@ -1,0 +1,66 @@
+/* Box sizing — barcha elementlar uchun xavfsiz */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+/* Faqat oddiy blok elementlar margin/paddingni nolga tushuramiz.
+   input, textarea, fieldset, select, button kabi forma elementlariga TEGMAYMIZ —
+   MUI o'z CSS ini ishlatadi, bizning reset uni buzmaydi. */
+h1, h2, h3, h4, h5, h6,
+p, ul, ol, li, dl, dt, dd,
+blockquote, figure, figcaption,
+pre, hr, table, caption,
+thead, tbody, tfoot, tr, th, td {
+	margin: 0;
+	padding: 0;
+}
+
+/* Typography */
+html {
+	font-size: 16px;
+	scroll-behavior: smooth;
+}
+
+body {
+	font-family: 'Poppins', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+	color: #181a20;
+	background: #ffffff;
+	line-height: 1.6;
+	-webkit-font-smoothing: antialiased;
+}
+
+/* Links */
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+/* Images */
+img {
+	max-width: 100%;
+	display: block;
+}
+
+/* Lists */
+ul,
+ol {
+	list-style: none;
+}
+
+/* Button — border va background olib tashlanadi, padding/margin saqlanadi */
+button {
+	cursor: pointer;
+	border: none;
+	background: none;
+	font-family: inherit;
+}
+
+/* Input/textarea — faqat outline va font, boshqa hech nima */
+input,
+textarea,
+select {
+	outline: none;
+	font-family: inherit;
+}

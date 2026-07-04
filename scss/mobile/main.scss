@@ -1,0 +1,44 @@
+@import '../variables';
+
+@media (max-width: $mobile) {
+	#mobile-wrap {
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.navbar {
+		.navbar-main {
+			height: 60px;
+			padding: 0 16px;
+
+			.container {
+				padding: 0;
+			}
+
+			.router-box {
+				gap: 16px;
+
+				a div {
+					font-size: 13px;
+				}
+			}
+		}
+	}
+
+	.container {
+		padding: 0 16px;
+	}
+
+	.page-header {
+		padding: 40px 16px;
+
+		h1 {
+			font-size: 24px;
+		}
+	}
+
+	.agency-card .card-image {
+		height: 140px;
+	}
+}
