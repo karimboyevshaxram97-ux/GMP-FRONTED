@@ -77,6 +77,11 @@ const Join: NextPage = () => {
 	const [regPhone, setRegPhone] = useState('');
 	const [regPassword, setRegPassword] = useState('');
 	const [regRole, setRegRole] = useState<UserRole>(UserRole.USER);
+	const isAdminMode = router.query.mode === 'admin';
+
+	useEffect(() => {
+		if (isAdminMode) setTab('login');
+	}, [isAdminMode]);
 
 	const switchTab = (value: 'login' | 'register') => {
 		setTab(value);
@@ -186,7 +191,7 @@ const Join: NextPage = () => {
 
 						<div className="jr-heading">
 							<p className="jr-eyebrow">{ui('Welcome back')}</p>
-							<h2>{tab === 'login' ? ui('Sign in to your account') : ui('Create your account')}</h2>
+							<h2>{isAdminMode ? ui('Admin sign in') : tab === 'login' ? ui('Sign in to your account') : ui('Create your account')}</h2>
 						</div>
 
 						<div className="jr-tabs">
@@ -228,6 +233,18 @@ const Join: NextPage = () => {
 								<p className="jr-switch">
 									{ui('No account?')}{' '}
 									<button type="button" onClick={() => switchTab('register')}>{ui('Create one')}</button>
+								</p>
+								<p className="jr-switch">
+									{isAdminMode ? ui('User account?') : ui('Are you an admin?')}{' '}
+									<button
+										type="button"
+										onClick={() => {
+											if (isAdminMode) router.push('/account/join');
+											else router.push('/account/join?mode=admin');
+										}}
+									>
+										{isAdminMode ? ui('User sign in') : ui('Admin panel')}
+									</button>
 								</p>
 							</Box>
 						)}
