@@ -2164,23 +2164,23 @@
 		justify-content: center;
 		align-items: flex-start;
 		flex-wrap: wrap;
-		gap: 38px;
+		gap: 56px;
 	}
 
 	.top-agency-card {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 14px;
+		gap: 18px;
 		text-decoration: none;
-		width: 132px;
+		width: 200px;
 
 		&__avatar {
 			position: relative;
-			width: 116px;
-			height: 116px;
+			width: 176px;
+			height: 176px;
 			border-radius: 50%;
-			padding: 4px;
+			padding: 5px;
 			background: linear-gradient(135deg, #1649ff 0%, #4e7fff 100%);
 			box-shadow: 0 14px 34px rgba(22, 73, 255, 0.22);
 			transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
@@ -2199,22 +2199,22 @@
 			top: -6px;
 			left: -6px;
 			z-index: 2;
-			width: 34px;
-			height: 34px;
+			width: 44px;
+			height: 44px;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			border-radius: 50%;
 			background: #fff;
 			color: $primary;
-			font-size: 15px;
+			font-size: 19px;
 			font-weight: 900;
 			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 			border: 2px solid #e6edff;
 		}
 
 		&__name {
-			font-size: 14px;
+			font-size: 17px;
 			font-weight: 700;
 			color: $text-primary;
 			max-width: 100%;
@@ -2226,12 +2226,12 @@
 		&__rating {
 			display: inline-flex;
 			align-items: center;
-			gap: 3px;
-			font-size: 13px;
+			gap: 4px;
+			font-size: 15px;
 			font-weight: 700;
 			color: #f5a623;
 
-			svg { font-size: 16px; }
+			svg { font-size: 19px; }
 		}
 
 		&:hover .top-agency-card__avatar {

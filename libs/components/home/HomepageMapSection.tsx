@@ -14,6 +14,13 @@ import { REACT_APP_API_URL } from '../../config';
 import { useLang } from '../../utils/lang';
 import { useUiLang } from '../../utils/translations';
 
+// DB may contain out-of-range coordinates; plotting them pans the map to a tileless area
+const hasValidCoords = (a: Agency): boolean =>
+	typeof a.latitude === 'number' &&
+	typeof a.longitude === 'number' &&
+	Math.abs(a.latitude) <= 90 &&
+	Math.abs(a.longitude) <= 180;
+
 const HomepageMapSection: React.FC = () => {
 	const router = useRouter();
 	const tr = useLang();
@@ -92,7 +99,7 @@ const HomepageMapSection: React.FC = () => {
 		const markersAdded: any[] = [];
 
 		agencies.forEach((agency) => {
-			if (!agency.latitude || !agency.longitude) return;
+			if (!hasValidCoords(agency)) return;
 			const name = tr(agency.name);
 			const popupHtml = `
 				<div class="map-info-window" style="min-width:200px;">
@@ -112,7 +119,7 @@ const HomepageMapSection: React.FC = () => {
 			markersAdded.push(marker);
 		});
 
-		const points = agencies.filter((a) => a.latitude && a.longitude);
+		const points = agencies.filter(hasValidCoords);
 		if (points.length > 0) {
 			const bounds = L.latLngBounds(points.map((a: Agency) => [a.latitude!, a.longitude!]));
 			map.fitBounds(bounds, { padding: [30, 30], maxZoom: 10 });

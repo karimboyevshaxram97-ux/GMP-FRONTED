@@ -11,6 +11,13 @@ import { REACT_APP_API_URL } from '../../config';
 import { useLang } from '../../utils/lang';
 import { useUiLang } from '../../utils/translations';
 
+// DB may contain out-of-range coordinates; plotting them pans the map to a tileless area
+const hasValidCoords = (a: Agency): boolean =>
+	typeof a.latitude === 'number' &&
+	typeof a.longitude === 'number' &&
+	Math.abs(a.latitude) <= 90 &&
+	Math.abs(a.longitude) <= 180;
+
 function uniqueCountries(agencies: Agency[]): string[] {
 	const set = new Set<string>();
 	agencies.forEach((a) => { if (a.country) set.add(a.country); });
@@ -122,7 +129,7 @@ const AgencyMapView: React.FC = () => {
 		markersRef.current = {};
 
 		agencies.forEach((agency) => {
-			if (!agency.latitude || !agency.longitude) return;
+			if (!hasValidCoords(agency)) return;
 
 			const name = tr(agency.name);
 			const addressLine = [agency.address, agency.city, agency.country].filter(Boolean).join(', ');
@@ -155,7 +162,7 @@ const AgencyMapView: React.FC = () => {
 		});
 
 		// Fit bounds to all markers
-		const points = agencies.filter((a) => a.latitude && a.longitude);
+		const points = agencies.filter(hasValidCoords);
 		if (points.length > 0) {
 			const bounds = L.latLngBounds(points.map((a) => [a.latitude!, a.longitude!]));
 			map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
@@ -175,8 +182,8 @@ const AgencyMapView: React.FC = () => {
 		setSelectedId(agency._id);
 		const map = mapInstanceRef.current;
 		const ref = markersRef.current[agency._id];
-		if (map && agency.latitude && agency.longitude) {
-			map.flyTo([agency.latitude, agency.longitude], 14, { duration: 0.8 });
+		if (map && hasValidCoords(agency)) {
+			map.flyTo([agency.latitude!, agency.longitude!], 14, { duration: 0.8 });
 			setTimeout(() => ref?.marker?.openPopup(), 900);
 		}
 	}, []);
