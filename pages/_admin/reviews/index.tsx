@@ -208,3 +208,5 @@ const AdminReviews: NextPage = () => {
 };
 
 export default withLayoutAdmin(AdminReviews);
+
+export { i18nStaticProps as getStaticProps } from '../../../libs/i18n';

@@ -144,7 +144,7 @@ export const updateUserInfo = (jwtToken: string) => {
 	}
 
 	const tokenLang = normalizeLang(claims.preferredLanguage);
-	const nextLang = getSavedLang() ?? tokenLang ?? Lang.UZ;
+	const nextLang = getSavedLang() ?? tokenLang ?? Lang.KO;
 
 	userVar({
 		_id: claims._id ?? '',

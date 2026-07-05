@@ -119,3 +119,5 @@ const AuditLogPage: NextPage = () => {
 };
 
 export default withLayoutAdmin(AuditLogPage);
+
+export { i18nStaticProps as getStaticProps } from '../../../libs/i18n';

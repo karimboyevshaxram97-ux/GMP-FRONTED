@@ -37,3 +37,5 @@ const Homepage = () => (
 );
 
 export default withLayoutMain(Homepage);
+
+export { i18nStaticProps as getStaticProps } from '../libs/i18n';

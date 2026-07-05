@@ -21,3 +21,5 @@ const AgencyMapPage: NextPage = () => {
 };
 
 export default withLayoutBasic(AgencyMapPage);
+
+export { i18nStaticProps as getStaticProps } from '../../libs/i18n';

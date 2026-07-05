@@ -15,3 +15,5 @@ const TermsPage = () => (
 );
 
 export default TermsPage;
+
+export { i18nStaticProps as getStaticProps } from '../../libs/i18n';

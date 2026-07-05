@@ -371,3 +371,5 @@ const ServiceList: NextPage = () => {
 };
 
 export default withLayoutMain(ServiceList);
+
+export { i18nStaticProps as getStaticProps } from '../../libs/i18n';

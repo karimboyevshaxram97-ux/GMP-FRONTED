@@ -11,3 +11,5 @@ const CookiesPage = () => (
 );
 
 export default CookiesPage;
+
+export { i18nStaticProps as getStaticProps } from '../../libs/i18n';

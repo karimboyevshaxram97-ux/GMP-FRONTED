@@ -466,3 +466,5 @@ function ConvHeaderInfo({ conversation }: { conversation: any }) {
 }
 
 export default withLayoutBasic(MessagesPage);
+
+export { i18nStaticProps as getStaticProps } from '../../libs/i18n';

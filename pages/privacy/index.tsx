@@ -15,3 +15,5 @@ const PrivacyPage = () => (
 );
 
 export default PrivacyPage;
+
+export { i18nStaticProps as getStaticProps } from '../../libs/i18n';

@@ -294,3 +294,5 @@ const AgencyHome: NextPage = () => {
 };
 
 export default withLayoutMain(AgencyHome);
+
+export { i18nStaticProps as getStaticProps } from '../../libs/i18n';

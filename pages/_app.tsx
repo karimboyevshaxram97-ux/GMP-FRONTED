@@ -1,4 +1,6 @@
 import type { AppProps } from 'next/app';
+import { useRouter } from 'next/router';
+import { appWithTranslation } from 'next-i18next';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -9,6 +11,7 @@ import { Provider } from 'react-redux';
 import { store } from '../store';
 import { langVar, socketVar, userVar } from '../apollo/store';
 import { Lang } from '../libs/enums/lang.enum';
+import { getSavedLang, normalizeLang } from '../libs/utils/lang';
 import { getJwtToken } from '../libs/auth';
 import { REACT_APP_CHAT_WS } from '../libs/config';
 import '../scss/app.scss';
@@ -33,14 +36,23 @@ const App = ({ Component, pageProps }: AppProps) => {
 	const [theme] = useState(createTheme(light));
 	const client = useApollo(pageProps.initialApolloState);
 	const user = useReactiveVar(userVar);
+	const router = useRouter();
 
-	// Restore saved language after hydration to avoid SSR mismatch
+	// First visit always renders Korean (defaultLocale, localeDetection off).
+	// A language the user picked earlier (localStorage/cookie) is restored here.
 	useEffect(() => {
-		const saved = localStorage.getItem('gmp_lang') as Lang | null;
-		if (saved && Object.values(Lang).includes(saved)) {
-			langVar(saved);
+		const saved = getSavedLang();
+		if (saved && saved !== router.locale) {
+			router.replace(router.asPath, undefined, { locale: saved, scroll: false });
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	// Keep the Apollo reactive var in sync with the routing locale so
+	// non-i18next consumers (backend LocalizedString rendering) follow along.
+	useEffect(() => {
+		langVar(normalizeLang(router.locale) ?? Lang.KO);
+	}, [router.locale]);
 
 	useEffect(() => {
 		if (!REACT_APP_CHAT_WS) return;
@@ -77,4 +89,4 @@ const App = ({ Component, pageProps }: AppProps) => {
 	);
 };
 
-export default App;
+export default appWithTranslation(App);

@@ -380,3 +380,5 @@ const AgencyDetail: NextPage = () => {
 };
 
 export default withLayoutBasic(AgencyDetail);
+
+export { i18nServerSideProps as getServerSideProps } from '../../libs/i18n';

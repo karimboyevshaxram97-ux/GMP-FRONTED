@@ -235,3 +235,5 @@ const ServiceDetail: NextPage = () => {
 };
 
 export default withLayoutBasic(ServiceDetail);
+
+export { i18nStaticProps as getStaticProps } from '../../libs/i18n';

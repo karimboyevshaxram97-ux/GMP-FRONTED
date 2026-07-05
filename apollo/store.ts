@@ -3,9 +3,8 @@ import { CustomJwtPayload } from '../libs/types/customJwtPayload';
 import { UserRole, UserStatus } from '../libs/enums/user.enum';
 import { Lang } from '../libs/enums/lang.enum';
 
-// Always EN on first render (SSR + client initial).
-// _app.tsx useEffect restores saved lang after hydration.
-export const langVar = makeVar<Lang>(Lang.EN);
+// Korean is the site default; _app.tsx keeps this in sync with router.locale.
+export const langVar = makeVar<Lang>(Lang.KO);
 
 export const socketVar = makeVar<WebSocket | null>(null);
 

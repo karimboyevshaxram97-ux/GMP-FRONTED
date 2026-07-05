@@ -610,3 +610,5 @@ const HelpPage: NextPage = () => {
 };
 
 export default withLayoutMain(HelpPage);
+
+export { i18nStaticProps as getStaticProps } from '../../libs/i18n';

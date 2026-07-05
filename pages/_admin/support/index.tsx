@@ -174,3 +174,5 @@ const AdminSupport: NextPage = () => {
 };
 
 export default withLayoutAdmin(AdminSupport);
+
+export { i18nStaticProps as getStaticProps } from '../../../libs/i18n';

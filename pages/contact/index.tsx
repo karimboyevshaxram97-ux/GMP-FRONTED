@@ -12,3 +12,5 @@ const ContactPage = () => (
 );
 
 export default ContactPage;
+
+export { i18nStaticProps as getStaticProps } from '../../libs/i18n';
