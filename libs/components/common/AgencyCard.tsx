@@ -54,7 +54,7 @@ const AgencyCard = ({ agency, onClick, onLike }: Props) => {
 
 				<Box className="country-row">
 					<PublicIcon />
-					<span>{countries.length ? countries.slice(0, 3).join(', ') : ui('Global support')}</span>
+					<span>{countries.length ? countries.slice(0, 3).join(', ') : ui('agency.globalSupport')}</span>
 				</Box>
 
 				<Box className="rating-row">
@@ -86,7 +86,7 @@ const AgencyCard = ({ agency, onClick, onLike }: Props) => {
 						<span>{agency.totalReviews || 0}</span>
 					</Box>
 					<Button className="profile-button" endIcon={<ArrowForwardIcon />}>
-						{ui('View')}
+						{ui('common.view')}
 					</Button>
 				</Box>
 			</Box>

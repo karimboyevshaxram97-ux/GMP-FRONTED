@@ -206,7 +206,7 @@ const ServiceList: NextPage = () => {
 						<div className="stat-divider" />
 						<div className="stat-item">
 							<div className="number">$0–$5k</div>
-							<div className="label">{ui('Price range')}</div>
+							<div className="label">{ui('service.priceRange')}</div>
 						</div>
 					</Box>
 				</Box>
@@ -244,7 +244,7 @@ const ServiceList: NextPage = () => {
 							<span>{ui('service.filters')}</span>
 						</Box>
 
-						<label>{ui('Sort by')}</label>
+						<label>{ui('common.sortBy')}</label>
 						<FormControl fullWidth size="small">
 							<Select value={sort} onChange={(event) => setSort(event.target.value as ServiceSortField)}>
 								<MenuItem value={ServiceSortField.SERVICE_RANK}>{ui('service.topRanked')}</MenuItem>
@@ -254,7 +254,7 @@ const ServiceList: NextPage = () => {
 							</Select>
 						</FormControl>
 
-						<label>{ui('Price range')}</label>
+						<label>{ui('service.priceRange')}</label>
 						<Box className="price-label">${priceRange[0]} – ${priceRange[1]}</Box>
 						<Slider
 							value={priceRange}

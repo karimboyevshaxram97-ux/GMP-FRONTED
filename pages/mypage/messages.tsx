@@ -245,7 +245,7 @@ const MessagesPage: NextPage = () => {
 						{filtered.length === 0 ? (
 							<Box className="msg-empty-sidebar">
 								<ChatBubbleOutlineIcon sx={{ fontSize: 40, color: '#c8d3f5' }} />
-								<p>{search ? ui('No results found') : ui('mypage.noConversationsYet')}</p>
+								<p>{search ? ui('common.noResultsFound') : ui('mypage.noConversationsYet')}</p>
 								{!search && user?.role === UserRole.AGENCY_ADMIN && (
 									<span>{ui('mypage.whenUsersMessageYourAgency')}</span>
 								)}

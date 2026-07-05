@@ -157,7 +157,7 @@ const Footer = () => {
 							</li>
 							<li>
 								<Link href="/mypage">
-									<span>{ui('My Agency')}</span>
+									<span>{ui('mypage.myAgency')}</span>
 								</Link>
 							</li>
 						</ul>

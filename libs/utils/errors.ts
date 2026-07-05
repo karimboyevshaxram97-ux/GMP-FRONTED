@@ -1,3 +1,5 @@
+import { i18n } from 'next-i18next';
+
 const AUTH_ERROR_PARTS = [
 	'user is not active',
 	'invalid token',
@@ -10,6 +12,13 @@ const AUTH_ERROR_PARTS = [
 	'inactive',
 ];
 
+// Non-hook module: translate through the global i18next instance at call time,
+// falling back to English before i18n has initialized (SSR/early client).
+const tr = (key: string, fallback: string): string => {
+	const value = i18n?.t(key, { ns: 'common' });
+	return value && value !== key ? value : fallback;
+};
+
 export const getErrorMessage = (err: any): string => {
 	return err?.graphQLErrors?.[0]?.message || err?.message || '';
 };
@@ -19,23 +28,24 @@ export const isAuthErrorMessage = (message = ''): boolean => {
 	return AUTH_ERROR_PARTS.some((part) => normalized.includes(part));
 };
 
-export const toFriendlyError = (errOrMessage: any, fallback = 'Something went wrong!'): string => {
+export const toFriendlyError = (errOrMessage: any, fallback?: string): string => {
 	const message = typeof errOrMessage === 'string' ? errOrMessage : getErrorMessage(errOrMessage);
 	const normalized = message.toLowerCase();
+	const defaultFallback = fallback ?? tr('errors.somethingWentWrong', 'Something went wrong!');
 
-	if (!message) return fallback;
+	if (!message) return defaultFallback;
 	if (normalized.includes('already_exists') || normalized.includes('already exists')) {
-		if (normalized.includes('phone')) return 'Bu telefon raqam allaqachon ishlatilgan.';
-		return "Bu ma'lumot allaqachon mavjud.";
+		if (normalized.includes('phone')) return tr('errors.alreadyUsedPhone', 'This phone number is already in use.');
+		return tr('errors.alreadyExists', 'This information already exists.');
 	}
 	if (normalized.includes('not_allowed_request')) {
-		return "Bu xizmatga ariza qabul qilish yopilgan yoki limit to'lgan.";
+		return tr('errors.applicationsClosed', 'Applications for this service are closed or the limit has been reached.');
 	}
 	if (normalized.includes('invalid token') || normalized.includes('no token provided') || normalized.includes('user is not active')) {
-		return 'Sessiya muddati tugagan. Iltimos, qayta kiring.';
+		return tr('errors.sessionExpired', 'Your session has expired. Please sign in again.');
 	}
 
-	return message || fallback;
+	return message || defaultFallback;
 };
 
 export const applicationErrorMessage = (err: any): string => {
@@ -43,11 +53,11 @@ export const applicationErrorMessage = (err: any): string => {
 	const normalized = message.toLowerCase();
 
 	if (normalized.includes('already_exists') || normalized.includes('already exists')) {
-		return 'Siz bu xizmatga allaqachon ariza topshirgansiz.';
+		return tr('errors.alreadyApplied', 'You have already applied to this service.');
 	}
 	if (normalized.includes('not_allowed_request')) {
-		return "Bu xizmatga ariza qabul qilish yopilgan yoki limit to'lgan.";
+		return tr('errors.applicationsClosed', 'Applications for this service are closed or the limit has been reached.');
 	}
 
-	return toFriendlyError(message, 'Failed to submit application');
+	return toFriendlyError(message, tr('errors.failedToSubmitApplication', 'Failed to submit application'));
 };

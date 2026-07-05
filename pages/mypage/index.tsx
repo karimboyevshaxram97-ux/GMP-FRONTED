@@ -59,7 +59,7 @@ function FollowingAgencyRow({ follow, onOpen }: { follow: any; onOpen: () => voi
 					</span>
 				</div>
 			</Box>
-			<Chip label={ui('View')} />
+			<Chip label={ui('common.view')} />
 		</Box>
 	);
 }
@@ -288,7 +288,7 @@ const MyPage: NextPage = () => {
 			await refreshAuthTokens();
 			await sweetMixinSuccessAlert(ui('mypage.avatarUpdated'));
 		} catch (err: any) {
-			const msg = err?.graphQLErrors?.[0]?.message || err?.message || ui('Failed to upload photo');
+			const msg = err?.graphQLErrors?.[0]?.message || err?.message || ui('errors.failedToUploadPhoto');
 			await sweetMixinErrorAlert(msg);
 		} finally {
 			setAvatarUploading(false);
@@ -305,7 +305,7 @@ const MyPage: NextPage = () => {
 			await refreshAuthTokens();
 			await sweetMixinSuccessAlert(ui('mypage.profileUpdated'));
 		} catch (err: any) {
-			await sweetMixinErrorAlert(toFriendlyError(err, ui('Failed to update profile')));
+			await sweetMixinErrorAlert(toFriendlyError(err, ui('errors.failedToUpdateProfile')));
 		}
 	};
 
@@ -462,7 +462,7 @@ const MyPage: NextPage = () => {
 			setShowServiceForm(false);
 			refetchAgencyServices();
 		} catch (err: any) {
-			await sweetMixinErrorAlert(err?.graphQLErrors?.[0]?.message || err?.message || ui('Failed to save service'));
+			await sweetMixinErrorAlert(err?.graphQLErrors?.[0]?.message || err?.message || ui('errors.failedToSaveService'));
 		} finally {
 			setSvcSaving(false);
 		}
@@ -486,7 +486,7 @@ const MyPage: NextPage = () => {
 			await sweetMixinSuccessAlert(`Status updated to ${status}`);
 			refetchAgencyApps();
 		} catch (err: any) {
-			await sweetMixinErrorAlert(err?.message || ui('Failed to update status'));
+			await sweetMixinErrorAlert(err?.message || ui('errors.failedToUpdateStatus'));
 		}
 	};
 
@@ -510,7 +510,7 @@ const MyPage: NextPage = () => {
 			refetchMyAgency();
 			await sweetMixinSuccessAlert(ui('mypage.coverPhotoUpdated'));
 		} catch (err: any) {
-			await sweetMixinErrorAlert(err?.message || ui('Failed to upload cover photo'));
+			await sweetMixinErrorAlert(err?.message || ui('errors.failedToUploadCoverPhoto'));
 		} finally {
 			setCoverUploading(false);
 			if (coverInputRef.current) coverInputRef.current.value = '';
@@ -529,7 +529,7 @@ const MyPage: NextPage = () => {
 	const handleSaveAgencyInfo = async (e: React.FormEvent) => {
 		e.preventDefault();
 		const countries = editAgencyCountries.split(',').map((c) => c.trim()).filter(Boolean);
-		if (!countries.length) return sweetMixinErrorAlert(ui('At least one operating country is required'));
+		if (!countries.length) return sweetMixinErrorAlert(ui('errors.atLeastOneOperatingCountry'));
 		setInfoSaving(true);
 		try {
 			await updateMyAgency({
@@ -547,7 +547,7 @@ const MyPage: NextPage = () => {
 			setEditInfoMode(false);
 			await sweetMixinSuccessAlert(ui('mypage.agencyInfoUpdated'));
 		} catch (err: any) {
-			await sweetMixinErrorAlert(toFriendlyError(err, ui('Failed to update agency info')));
+			await sweetMixinErrorAlert(toFriendlyError(err, ui('errors.failedToUpdateAgencyInfo')));
 		} finally {
 			setInfoSaving(false);
 		}
@@ -576,7 +576,7 @@ const MyPage: NextPage = () => {
 			refetchMyAgency();
 			await sweetMixinSuccessAlert(ui('mypage.logoUpdated'));
 		} catch (err: any) {
-			const msg = err?.graphQLErrors?.[0]?.message || err?.message || ui('Failed to upload logo');
+			const msg = err?.graphQLErrors?.[0]?.message || err?.message || ui('errors.failedToUploadLogo');
 			await sweetMixinErrorAlert(msg);
 		} finally {
 			setLogoUploading(false);
@@ -592,9 +592,9 @@ const MyPage: NextPage = () => {
 		{ icon: <PeopleIcon />, label: ui('agency.following'), count: followings.length },
 		{ icon: <ChatIcon />, label: ui('mypage.messages'), count: conversations.filter((c: any) => c.unreadCount > 0).length || conversations.length },
 		...(isAgencyAdmin ? [
-			{ icon: <BusinessIcon />, label: ui('My Agency'), count: null },
+			{ icon: <BusinessIcon />, label: ui('mypage.myAgency'), count: null },
 			{ icon: <MiscellaneousServicesIcon />, label: ui('agency.services'), count: agencyServices.length },
-			{ icon: <WorkOutlineIcon />, label: ui('Applications Received'), count: agencyApplications.filter((a: any) => a.status === 'SUBMITTED').length || null },
+			{ icon: <WorkOutlineIcon />, label: ui('mypage.applicationsReceived'), count: agencyApplications.filter((a: any) => a.status === 'SUBMITTED').length || null },
 		] : []),
 	];
 
@@ -786,7 +786,7 @@ const MyPage: NextPage = () => {
 						)}
 						{tab === 4 && isAgencyAdmin && (
 							<Box>
-								<div className="content-head"><span>{ui('mypage.agencyManagement')}</span><h2>{ui('My Agency')}</h2></div>
+								<div className="content-head"><span>{ui('mypage.agencyManagement')}</span><h2>{ui('mypage.myAgency')}</h2></div>
 
 								{myAgency ? (
 									<Box>
@@ -849,7 +849,7 @@ const MyPage: NextPage = () => {
 											<Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
 												<strong style={{ fontSize: 15 }}>{ui('mypage.agencyInformation')}</strong>
 												{!editInfoMode && (
-													<Button size="small" startIcon={<EditIcon />} onClick={() => openInfoEdit(myAgency)}>{ui('Edit')}</Button>
+													<Button size="small" startIcon={<EditIcon />} onClick={() => openInfoEdit(myAgency)}>{ui('common.edit')}</Button>
 												)}
 											</Box>
 
@@ -895,7 +895,7 @@ const MyPage: NextPage = () => {
 												<strong style={{ fontSize: 15 }}>{ui('mypage.location')}</strong>
 												{!editingLocation && (
 													<Button size="small" startIcon={<EditIcon />} onClick={() => handleEditLocation(myAgency)}>
-														{myAgency.latitude && myAgency.longitude ? ui('Edit') : ui('mypage.addToMap')}
+														{myAgency.latitude && myAgency.longitude ? ui('common.edit') : ui('mypage.addToMap')}
 													</Button>
 												)}
 											</Box>
@@ -1064,7 +1064,7 @@ const MyPage: NextPage = () => {
 										<DialogActions sx={{ px: 3, pb: 2 }}>
 											<Button onClick={() => setShowServiceForm(false)}>{ui('agency.cancel')}</Button>
 											<Button type="submit" variant="contained" disabled={svcSaving}>
-												{svcSaving ? ui('mypage.saving') : editingService ? ui('Update') : ui('Create')}
+												{svcSaving ? ui('mypage.saving') : editingService ? ui('common.update') : ui('common.create')}
 											</Button>
 										</DialogActions>
 									</Box>
@@ -1078,12 +1078,12 @@ const MyPage: NextPage = () => {
 								<Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
 									<div className="content-head" style={{ marginBottom: 0 }}>
 										<span>{ui('mypage.incomingRequests')}</span>
-										<h2>{ui('Applications Received')}</h2>
+										<h2>{ui('mypage.applicationsReceived')}</h2>
 									</div>
 									<FormControl size="small" sx={{ minWidth: 160 }}>
 										<InputLabel>{ui('mypage.status')}</InputLabel>
 										<Select value={appStatusFilter} label={ui('mypage.status')} onChange={(e) => setAppStatusFilter(e.target.value)}>
-											<MenuItem value="">{ui('All')}</MenuItem>
+											<MenuItem value="">{ui('common.all')}</MenuItem>
 											<MenuItem value="SUBMITTED">{ui('mypage.submitted')}</MenuItem>
 											<MenuItem value="UNDER_REVIEW">{ui('mypage.underReview')}</MenuItem>
 											<MenuItem value="APPROVED">{ui('mypage.approved')}</MenuItem>
@@ -1104,7 +1104,7 @@ const MyPage: NextPage = () => {
 										<Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
 											<Chip label={app.status} size="small" sx={{ bgcolor: applicationStatusColors[app.status] || '#9e9e9e', color: '#fff', fontWeight: 700 }} />
 											{app.status === 'SUBMITTED' && (
-												<Button size="small" variant="outlined" onClick={() => handleUpdateAppStatus(app._id, 'UNDER_REVIEW')}>{ui('Review')}</Button>
+												<Button size="small" variant="outlined" onClick={() => handleUpdateAppStatus(app._id, 'UNDER_REVIEW')}>{ui('common.review')}</Button>
 											)}
 											{app.status === 'UNDER_REVIEW' && (
 												<>

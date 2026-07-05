@@ -222,10 +222,10 @@ const AgencyHome: NextPage = () => {
 							{ui('agency.mapView')}
 						</Button>
 						<FormControl size="small" sx={{ minWidth: 190 }}>
-							<InputLabel>{ui('Sort by')}</InputLabel>
+							<InputLabel>{ui('common.sortBy')}</InputLabel>
 							<Select
 								value={sort}
-								label={ui('Sort by')}
+								label={ui('common.sortBy')}
 								onChange={(event) => handleSortChange(event.target.value as AgencySortField)}
 							>
 								{sortOptions.map((option) => (

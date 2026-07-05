@@ -1,15 +1,23 @@
 import Swal from 'sweetalert2';
+import { i18n } from 'next-i18next';
 
-export const sweetErrorAlert = (msg: string = 'Something went wrong!') => {
+// Non-hook module: translate through the global i18next instance at call time,
+// falling back to English before i18n has initialized (SSR/early client).
+const tr = (key: string, fallback: string): string => {
+	const value = i18n?.t(key, { ns: 'common' });
+	return value && value !== key ? value : fallback;
+};
+
+export const sweetErrorAlert = (msg?: string) => {
 	return Swal.fire({
 		icon: 'error',
-		title: 'Error',
-		text: msg,
+		title: tr('common.errorTitle', 'Error'),
+		text: msg ?? tr('errors.somethingWentWrong', 'Something went wrong!'),
 		confirmButtonColor: '#1649ff',
 	});
 };
 
-export const sweetMixinErrorAlert = async (msg: string = 'Something went wrong!') => {
+export const sweetMixinErrorAlert = async (msg?: string) => {
 	await Swal.fire({
 		toast: true,
 		position: 'top-end',
@@ -17,11 +25,11 @@ export const sweetMixinErrorAlert = async (msg: string = 'Something went wrong!'
 		timer: 3000,
 		timerProgressBar: true,
 		icon: 'error',
-		title: msg,
+		title: msg ?? tr('errors.somethingWentWrong', 'Something went wrong!'),
 	});
 };
 
-export const sweetMixinSuccessAlert = async (msg: string = 'Success!') => {
+export const sweetMixinSuccessAlert = async (msg?: string) => {
 	await Swal.fire({
 		toast: true,
 		position: 'top-end',
@@ -29,19 +37,19 @@ export const sweetMixinSuccessAlert = async (msg: string = 'Success!') => {
 		timer: 3000,
 		timerProgressBar: true,
 		icon: 'success',
-		title: msg,
+		title: msg ?? tr('common.success', 'Success!'),
 	});
 };
 
-export const sweetConfirmAlert = async (msg: string = 'Are you sure?'): Promise<boolean> => {
+export const sweetConfirmAlert = async (msg?: string): Promise<boolean> => {
 	const result = await Swal.fire({
-		title: msg,
+		title: msg ?? tr('common.areYouSure', 'Are you sure?'),
 		icon: 'warning',
 		showCancelButton: true,
 		confirmButtonColor: '#1649ff',
 		cancelButtonColor: '#d33',
-		confirmButtonText: 'Yes',
-		cancelButtonText: 'No',
+		confirmButtonText: tr('common.yes', 'Yes'),
+		cancelButtonText: tr('common.no', 'No'),
 	});
 	return result.isConfirmed;
 };

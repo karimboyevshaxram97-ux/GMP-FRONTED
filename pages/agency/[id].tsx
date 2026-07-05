@@ -350,7 +350,7 @@ const AgencyDetail: NextPage = () => {
 										startIcon={msgSending ? undefined : <SendIcon />}
 										disabled={!msgText.trim() || msgSending}
 									>
-										{msgSending ? ui('agency.sending') : ui('Send')}
+										{msgSending ? ui('agency.sending') : ui('common.send')}
 									</Button>
 								</Box>
 							</Box>
