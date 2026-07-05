@@ -5,7 +5,6 @@ import Top from '../Top';
 import Footer from '../Footer';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { getJwtToken, updateUserInfo } from '../../auth';
-import LanguageSwitcher from '../common/LanguageSwitcher';
 import Chat from '../Chat';
 
 const withLayoutMain = (Component: any) => {
@@ -28,7 +27,6 @@ const withLayoutMain = (Component: any) => {
 						<Stack id={'main'}><Component {...props} /></Stack>
 						<Stack id={'footer'}><Footer /></Stack>
 					</Stack>
-					<LanguageSwitcher />
 				</>
 			);
 		}
@@ -43,7 +41,6 @@ const withLayoutMain = (Component: any) => {
 					<Stack id={'main'}><Component {...props} /></Stack>
 					<Stack id={'footer'}><Footer /></Stack>
 				</Stack>
-				<LanguageSwitcher />
 				<Chat />
 			</>
 		);

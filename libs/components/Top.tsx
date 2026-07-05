@@ -16,6 +16,7 @@ import { GET_MY_NOTIFICATIONS, GET_UNREAD_NOTIFICATION_COUNT } from '../../apoll
 import { MARK_ALL_NOTIFICATIONS_AS_READ } from '../../apollo/user/mutation';
 import { useUiLang } from '../utils/translations';
 import { NotificationType } from '../enums/common.enum';
+import LanguageSwitcher from './common/LanguageSwitcher';
 
 const navLinks = [
 	{ label: 'Home', href: '/home', match: (p: string, q: any) => p === '/home' || p === '/' },
@@ -132,6 +133,7 @@ const Top = () => {
 	if (device === 'mobile') {
 		return (
 			<Stack className={'top'}>
+				<LanguageSwitcher />
 				<Link href={'/home'}><div>{ui('nav.home')}</div></Link>
 				<Link href={'/service?type=STUDY_ABROAD'}><div>{ui('nav.study')}</div></Link>
 				<Link href={'/service?type=WORK_ABROAD'}><div>{ui('nav.work')}</div></Link>
@@ -172,7 +174,9 @@ const Top = () => {
 						)}
 					</Box>
 
-					{/* RIGHT: Login (guest) OR Avatar + notifications (logged in) */}
+					{/* RIGHT: Language selector + Login (guest) OR Avatar + notifications (logged in) */}
+					<Box className={'navbar-right'}>
+					<LanguageSwitcher />
 					{!user?._id ? (
 						<Link href={'/account/join'}>
 							<div className={'join-box'}>
@@ -263,6 +267,7 @@ const Top = () => {
 							</Menu>
 						</Box>
 					)}
+					</Box>
 
 				</div>
 			</div>
