@@ -64,11 +64,11 @@ const Chat = () => {
 
 	const onClickHandler = () => {
 		if (!messageInput.trim()) {
-			sweetErrorAlert(ui('Please enter a message!'));
+			sweetErrorAlert(ui('chat.pleaseEnterAMessage'));
 			return;
 		}
 		if (!socket || socket.readyState !== WebSocket.OPEN) {
-			sweetErrorAlert(ui('Chat is not connected!'));
+			sweetErrorAlert(ui('chat.chatIsNotConnected'));
 			return;
 		}
 		socket.send(JSON.stringify({ event: 'message', data: messageInput.trim() }));
@@ -109,15 +109,15 @@ const Chat = () => {
 			<div className={`chat-frame${open ? ' open' : ''}`}>
 				{/* Top */}
 				<div className="chat-top">
-					<span>{ui('Live Chat')}</span>
-					<span className="chat-online-count">{onlineUsers} {ui('online')}</span>
+					<span>{ui('chat.liveChat')}</span>
+					<span className="chat-online-count">{onlineUsers} {ui('chat.online')}</span>
 				</div>
 
 				{/* Content */}
 				<div className="chat-content" ref={contentRef}>
 					<div className="chat-main">
 						{messagesList.length === 0 && (
-							<p className="chat-empty-text">{ui('No messages yet. Say hi!')} 👋</p>
+							<p className="chat-empty-text">{ui('chat.noMessagesYetSayHi')} 👋</p>
 						)}
 						{messagesList.map((msg, idx) => {
 							const mine = !!user?._id && msg.authUser?._id === user._id;
@@ -125,7 +125,7 @@ const Chat = () => {
 							const initials = getInitials(msg.authUser);
 							const name = msg.authUser
 								? `${msg.authUser.firstName} ${msg.authUser.lastName}`
-								: ui('Guest');
+								: ui('chat.guest');
 
 							return (
 								<div key={idx} className={mine ? 'msg-right-wrap' : 'msg-left-wrap'}>
@@ -153,7 +153,7 @@ const Chat = () => {
 					<input
 						className="msg-input"
 						type="text"
-						placeholder={user?._id ? ui('Type a message...') : ui('Log in to chat')}
+						placeholder={user?._id ? ui('mypage.typeAMessage') : ui('chat.logInToChat')}
 						value={messageInput}
 						onChange={(e) => setMessageInput(e.target.value)}
 						onKeyDown={handleKeyDown}

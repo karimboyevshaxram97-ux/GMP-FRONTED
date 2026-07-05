@@ -60,7 +60,7 @@ const OnlineChatSection = () => {
 	}, [messages]);
 
 	const handleSend = () => {
-		if (!input.trim()) { sweetErrorAlert(ui('Please enter a message!')); return; }
+		if (!input.trim()) { sweetErrorAlert(ui('chat.pleaseEnterAMessage')); return; }
 		if (!socket || socket.readyState !== WebSocket.OPEN) return;
 		socket.send(JSON.stringify({ event: 'message', data: input.trim() }));
 		setInput('');
@@ -86,29 +86,29 @@ const OnlineChatSection = () => {
 				<div className="hlc-left">
 					<div className="hlc-badge">
 						<span className={`hlc-dot ${connected ? 'live' : 'off'}`} />
-						{connected ? ui('Live Now') : ui('Connecting...')}
+						{connected ? ui('chat.liveNow') : ui('chat.connecting')}
 					</div>
 					<h2 className="hlc-title">
-						{ui('Community')}<br />
-						<span className="hlc-title-accent">{ui('Live Chat')}</span>
+						{ui('chat.community')}<br />
+						<span className="hlc-title-accent">{ui('chat.liveChat')}</span>
 					</h2>
 					<p className="hlc-desc">
-						{ui('Connect with travelers, students, and expats in real time. Ask questions, share experiences, and get instant answers from the GMP community.')}
+						{ui('chat.connectWithTravelersStudentsAnd')}
 					</p>
 					<div className="hlc-stats">
 						<div className="hlc-stat">
 							<span className="hlc-stat-num">{onlineUsers}</span>
-							<span className="hlc-stat-label">{ui('Online now')}</span>
+							<span className="hlc-stat-label">{ui('chat.onlineNow')}</span>
 						</div>
 						<div className="hlc-stat-sep" />
 						<div className="hlc-stat">
 							<span className="hlc-stat-num">{messages.length}</span>
-							<span className="hlc-stat-label">{ui('Messages')}</span>
+							<span className="hlc-stat-label">{ui('mypage.messages')}</span>
 						</div>
 					</div>
 					{!user?._id && (
 						<Link href="/account/join" className="hlc-join-btn">
-							{ui('Join to Chat')}
+							{ui('chat.joinToChat')}
 							<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
 								<line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
 							</svg>
@@ -124,11 +124,11 @@ const OnlineChatSection = () => {
 							<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
 								<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
 							</svg>
-							{ui('Global Chat')}
+							{ui('chat.globalChat')}
 						</div>
 						<div className="hlc-widget-online">
 							<span className="hlc-dot live small" />
-							{onlineUsers} {ui('online')}
+							{onlineUsers} {ui('chat.online')}
 						</div>
 					</div>
 
@@ -136,7 +136,7 @@ const OnlineChatSection = () => {
 					<div className="hlc-messages" ref={listRef}>
 						{messages.length === 0 ? (
 							<div className="hlc-empty">
-								<p>{ui('No messages yet. Be the first!')} 👋</p>
+								<p>{ui('chat.noMessagesYetBeThe')} 👋</p>
 							</div>
 						) : (
 							messages.map((msg, idx) => {
@@ -145,7 +145,7 @@ const OnlineChatSection = () => {
 								const initials = getInitials(msg.authUser);
 								const name = msg.authUser
 									? `${msg.authUser.firstName} ${msg.authUser.lastName}`
-									: ui('Guest');
+									: ui('chat.guest');
 
 								return (
 									<div key={idx} className={`hlc-msg ${mine ? 'mine' : 'theirs'}`}>
@@ -174,7 +174,7 @@ const OnlineChatSection = () => {
 							<>
 								<input
 									className="hlc-input"
-									placeholder={ui('Type a message...')}
+									placeholder={ui('mypage.typeAMessage')}
 									value={input}
 									onChange={(e) => setInput(e.target.value)}
 									onKeyDown={(e) => e.key === 'Enter' && handleSend()}
@@ -193,7 +193,7 @@ const OnlineChatSection = () => {
 							</>
 						) : (
 							<Link href="/account/join" className="hlc-login-prompt">
-								{ui('Log in to join the conversation')} →
+								{ui('chat.logInToJoinThe')} →
 							</Link>
 						)}
 					</div>

@@ -59,10 +59,10 @@ const AdminAgencies: NextPage = () => {
 	const pageCount = Math.max(1, Math.ceil(total / LIMIT));
 
 	const handleApprove = async (agencyId: string) => {
-		const ok = await sweetConfirmAlert(ui('Approve this agency?'));
+		const ok = await sweetConfirmAlert(ui('admin.approveThisAgency'));
 		if (!ok) return;
 		await approveAgency({ variables: { input: { agencyId } } });
-		await sweetMixinSuccessAlert(ui('Agency approved!'));
+		await sweetMixinSuccessAlert(ui('admin.agencyApproved'));
 		setDetailAgency(null);
 		refetch();
 	};
@@ -76,34 +76,34 @@ const AdminAgencies: NextPage = () => {
 	const handleRejectConfirm = async () => {
 		if (!rejectTarget) return;
 		await rejectAgency({ variables: { input: { agencyId: rejectTarget, reason: rejectReason || 'Does not meet requirements' } } });
-		await sweetMixinSuccessAlert(ui('Agency rejected'));
+		await sweetMixinSuccessAlert(ui('admin.agencyRejected'));
 		setRejectTarget(null);
 		refetch();
 	};
 
 	const handleSuspend = async (agencyId: string) => {
-		const ok = await sweetConfirmAlert(ui('Suspend this agency? Users will not see it.'));
+		const ok = await sweetConfirmAlert(ui('admin.suspendThisAgencyUsersWill'));
 		if (!ok) return;
 		await suspendAgency({ variables: { input: { agencyId } } });
-		await sweetMixinSuccessAlert(ui('Agency suspended'));
+		await sweetMixinSuccessAlert(ui('admin.agencySuspended'));
 		setDetailAgency(null);
 		refetch();
 	};
 
 	const handleActivate = async (agencyId: string) => {
-		const ok = await sweetConfirmAlert(ui('Activate this agency?'));
+		const ok = await sweetConfirmAlert(ui('admin.activateThisAgency'));
 		if (!ok) return;
 		await activateAgency({ variables: { agencyId } });
-		await sweetMixinSuccessAlert(ui('Agency activated'));
+		await sweetMixinSuccessAlert(ui('admin.agencyActivated'));
 		setDetailAgency(null);
 		refetch();
 	};
 
 	const handleDelete = async (agencyId: string, name: string) => {
-		const ok = await sweetConfirmAlert(`${ui('Permanently delete')} "${name}"? ${ui('This cannot be undone.')}`);
+		const ok = await sweetConfirmAlert(`${ui('admin.permanentlyDelete')} "${name}"? ${ui('admin.thisCannotBeUndone')}`);
 		if (!ok) return;
 		await deleteAgency({ variables: { agencyId } });
-		await sweetMixinSuccessAlert(ui('Agency deleted'));
+		await sweetMixinSuccessAlert(ui('admin.agencyDeleted'));
 		setDetailAgency(null);
 		refetch();
 	};
@@ -113,50 +113,50 @@ const AdminAgencies: NextPage = () => {
 
 	return (
 		<div>
-			<div className="page-title">{ui('Agencies Management')}</div>
+			<div className="page-title">{ui('admin.agenciesManagement')}</div>
 
 			<Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap', alignItems: 'center' }}>
 				<TextField
 					size="small"
-					placeholder={ui('Search by name / email')}
+					placeholder={ui('admin.searchByNameEmail')}
 					value={text}
 					onChange={(e) => setText(e.target.value)}
 					sx={{ minWidth: 240 }}
 					InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon fontSize="small" /></InputAdornment> }}
 				/>
 				<Select size="small" value={status} onChange={(e) => setStatus(e.target.value)} displayEmpty sx={{ minWidth: 130 }}>
-					<MenuItem value="">{ui('All statuses')}</MenuItem>
-					<MenuItem value="ACTIVE">{ui('Active')}</MenuItem>
-					<MenuItem value="SUSPENDED">{ui('Suspended')}</MenuItem>
-					<MenuItem value="INACTIVE">{ui('Inactive')}</MenuItem>
+					<MenuItem value="">{ui('admin.allStatuses')}</MenuItem>
+					<MenuItem value="ACTIVE">{ui('admin.active')}</MenuItem>
+					<MenuItem value="SUSPENDED">{ui('admin.suspended')}</MenuItem>
+					<MenuItem value="INACTIVE">{ui('admin.inactive')}</MenuItem>
 				</Select>
 				<Select size="small" value={verificationStatus} onChange={(e) => setVerificationStatus(e.target.value)} displayEmpty sx={{ minWidth: 145 }}>
-					<MenuItem value="">{ui('All verifications')}</MenuItem>
-					<MenuItem value="PENDING">{ui('Pending')}</MenuItem>
-					<MenuItem value="VERIFIED">{ui('Verified')}</MenuItem>
-					<MenuItem value="REJECTED">{ui('Rejected')}</MenuItem>
+					<MenuItem value="">{ui('admin.allVerifications')}</MenuItem>
+					<MenuItem value="PENDING">{ui('admin.pending')}</MenuItem>
+					<MenuItem value="VERIFIED">{ui('admin.verified')}</MenuItem>
+					<MenuItem value="REJECTED">{ui('mypage.rejected')}</MenuItem>
 				</Select>
-				<Box sx={{ ml: 'auto', color: '#888', fontSize: 13 }}>{ui('Total')}: <b>{total}</b></Box>
+				<Box sx={{ ml: 'auto', color: '#888', fontSize: 13 }}>{ui('admin.total')}: <b>{total}</b></Box>
 			</Box>
 
 			<TableContainer component={Paper} sx={{ borderRadius: 2, mb: 3 }}>
 				<Table>
 					<TableHead>
 						<TableRow sx={{ bgcolor: '#f5f7fa' }}>
-							<TableCell><b>{ui('Agency')}</b></TableCell>
-							<TableCell><b>{ui('Email')}</b></TableCell>
-							<TableCell><b>{ui('Services')}</b></TableCell>
-							<TableCell><b>{ui('Rating')}</b></TableCell>
-							<TableCell><b>{ui('Status')}</b></TableCell>
-							<TableCell><b>{ui('Verification')}</b></TableCell>
-							<TableCell><b>{ui('Created')}</b></TableCell>
-							<TableCell><b>{ui('Actions')}</b></TableCell>
+							<TableCell><b>{ui('auth.agency')}</b></TableCell>
+							<TableCell><b>{ui('help.email')}</b></TableCell>
+							<TableCell><b>{ui('agency.services')}</b></TableCell>
+							<TableCell><b>{ui('mypage.rating')}</b></TableCell>
+							<TableCell><b>{ui('mypage.status')}</b></TableCell>
+							<TableCell><b>{ui('admin.verification')}</b></TableCell>
+							<TableCell><b>{ui('admin.created')}</b></TableCell>
+							<TableCell><b>{ui('admin.actions')}</b></TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
 						{agencies.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={8} sx={{ textAlign: 'center', py: 5, color: '#aaa' }}>{ui('No agencies found')}</TableCell>
+								<TableCell colSpan={8} sx={{ textAlign: 'center', py: 5, color: '#aaa' }}>{ui('agency.noAgenciesFound')}</TableCell>
 							</TableRow>
 						) : agencies.map((agency: any) => (
 							<TableRow key={agency._id} hover>
@@ -186,16 +186,16 @@ const AdminAgencies: NextPage = () => {
 									<Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
 										{agency.verificationStatus === 'PENDING' && (
 											<>
-												<Button size="small" variant="outlined" color="success" onClick={() => handleApprove(agency._id)}>{ui('Approve')}</Button>
-												<Button size="small" variant="outlined" color="error" onClick={() => openRejectModal(agency._id)}>{ui('Reject')}</Button>
+												<Button size="small" variant="outlined" color="success" onClick={() => handleApprove(agency._id)}>{ui('mypage.approve')}</Button>
+												<Button size="small" variant="outlined" color="error" onClick={() => openRejectModal(agency._id)}>{ui('mypage.reject')}</Button>
 											</>
 										)}
 										{agency.status === 'SUSPENDED' ? (
-											<Button size="small" variant="outlined" color="success" onClick={() => handleActivate(agency._id)}>{ui('Activate')}</Button>
+											<Button size="small" variant="outlined" color="success" onClick={() => handleActivate(agency._id)}>{ui('admin.activate')}</Button>
 										) : (
-											<Button size="small" variant="outlined" color="warning" onClick={() => handleSuspend(agency._id)}>{ui('Suspend')}</Button>
+											<Button size="small" variant="outlined" color="warning" onClick={() => handleSuspend(agency._id)}>{ui('admin.suspend')}</Button>
 										)}
-										<Button size="small" variant="outlined" color="error" onClick={() => handleDelete(agency._id, tr(agency.name))}>{ui('Delete')}</Button>
+										<Button size="small" variant="outlined" color="error" onClick={() => handleDelete(agency._id, tr(agency.name))}>{ui('admin.delete')}</Button>
 									</Box>
 								</TableCell>
 							</TableRow>
@@ -229,22 +229,22 @@ const AdminAgencies: NextPage = () => {
 						</Box>
 						{tr(detailAgency.description) && (
 							<Box sx={{ mb: 2, p: '10px 14px', background: '#f7f9fc', borderRadius: 2 }}>
-								<Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>{ui('Description')}</Typography>
+								<Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>{ui('mypage.description')}</Typography>
 								<Typography variant="body2">{tr(detailAgency.description)}</Typography>
 							</Box>
 						)}
 						<Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, mb: 2 }}>
-							<Box><Typography variant="caption" color="text.secondary">{ui('Email')}</Typography><Typography variant="body2">{detailAgency.email || '—'}</Typography></Box>
-							<Box><Typography variant="caption" color="text.secondary">{ui('Phone')}</Typography><Typography variant="body2">{detailAgency.phoneNumber || '—'}</Typography></Box>
-							<Box><Typography variant="caption" color="text.secondary">{ui('Website')}</Typography><Typography variant="body2">{detailAgency.website || '—'}</Typography></Box>
-							<Box><Typography variant="caption" color="text.secondary">{ui('Location')}</Typography><Typography variant="body2">{[detailAgency.city, detailAgency.country].filter(Boolean).join(', ') || '—'}</Typography></Box>
-							<Box><Typography variant="caption" color="text.secondary">{ui('Services / Reviews')}</Typography><Typography variant="body2">{detailAgency.totalServices ?? 0} {ui('services')} · {detailAgency.totalReviews ?? 0} {ui('reviews')}</Typography></Box>
-							<Box><Typography variant="caption" color="text.secondary">{ui('Rating')}</Typography><Typography variant="body2">{(detailAgency.averageRating ?? 0).toFixed(1)} ★</Typography></Box>
-							<Box><Typography variant="caption" color="text.secondary">{ui('Registered')}</Typography><Typography variant="body2">{new Date(detailAgency.createdAt).toLocaleDateString()}</Typography></Box>
+							<Box><Typography variant="caption" color="text.secondary">{ui('help.email')}</Typography><Typography variant="body2">{detailAgency.email || '—'}</Typography></Box>
+							<Box><Typography variant="caption" color="text.secondary">{ui('help.phone')}</Typography><Typography variant="body2">{detailAgency.phoneNumber || '—'}</Typography></Box>
+							<Box><Typography variant="caption" color="text.secondary">{ui('mypage.website')}</Typography><Typography variant="body2">{detailAgency.website || '—'}</Typography></Box>
+							<Box><Typography variant="caption" color="text.secondary">{ui('mypage.location')}</Typography><Typography variant="body2">{[detailAgency.city, detailAgency.country].filter(Boolean).join(', ') || '—'}</Typography></Box>
+							<Box><Typography variant="caption" color="text.secondary">{ui('admin.servicesReviews')}</Typography><Typography variant="body2">{detailAgency.totalServices ?? 0} {ui('admin.services')} · {detailAgency.totalReviews ?? 0} {ui('agency.reviews2')}</Typography></Box>
+							<Box><Typography variant="caption" color="text.secondary">{ui('mypage.rating')}</Typography><Typography variant="body2">{(detailAgency.averageRating ?? 0).toFixed(1)} ★</Typography></Box>
+							<Box><Typography variant="caption" color="text.secondary">{ui('admin.registered')}</Typography><Typography variant="body2">{new Date(detailAgency.createdAt).toLocaleDateString()}</Typography></Box>
 						</Box>
 						{detailAgency.operatingCountries?.length > 0 && (
 							<Box sx={{ mb: 2 }}>
-								<Typography variant="caption" color="text.secondary">{ui('Operating Countries')}</Typography>
+								<Typography variant="caption" color="text.secondary">{ui('admin.operatingCountries')}</Typography>
 								<Typography variant="body2">{detailAgency.operatingCountries.join(', ')}</Typography>
 							</Box>
 						)}
@@ -255,16 +255,16 @@ const AdminAgencies: NextPage = () => {
 						<DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
 							{detailAgency.verificationStatus === 'PENDING' && (
 								<>
-									<Button color="success" variant="contained" size="small" onClick={() => handleApprove(detailAgency._id)}>{ui('Approve')}</Button>
-									<Button color="error" variant="outlined" size="small" onClick={() => openRejectModal(detailAgency._id)}>{ui('Reject')}</Button>
+									<Button color="success" variant="contained" size="small" onClick={() => handleApprove(detailAgency._id)}>{ui('mypage.approve')}</Button>
+									<Button color="error" variant="outlined" size="small" onClick={() => openRejectModal(detailAgency._id)}>{ui('mypage.reject')}</Button>
 								</>
 							)}
 							{detailAgency.status === 'SUSPENDED' ? (
-								<Button color="success" variant="outlined" size="small" onClick={() => handleActivate(detailAgency._id)}>{ui('Activate')}</Button>
+								<Button color="success" variant="outlined" size="small" onClick={() => handleActivate(detailAgency._id)}>{ui('admin.activate')}</Button>
 							) : (
-								<Button color="warning" variant="outlined" size="small" onClick={() => handleSuspend(detailAgency._id)}>{ui('Suspend')}</Button>
+								<Button color="warning" variant="outlined" size="small" onClick={() => handleSuspend(detailAgency._id)}>{ui('admin.suspend')}</Button>
 							)}
-							<Button onClick={() => setDetailAgency(null)}>{ui('Close')}</Button>
+							<Button onClick={() => setDetailAgency(null)}>{ui('admin.close')}</Button>
 						</DialogActions>
 					</>
 				)}
@@ -272,20 +272,20 @@ const AdminAgencies: NextPage = () => {
 
 			{/* Reject reason modal */}
 			<Dialog open={!!rejectTarget} onClose={() => setRejectTarget(null)} maxWidth="sm" fullWidth>
-				<DialogTitle>{ui('Reject Agency')}</DialogTitle>
+				<DialogTitle>{ui('admin.rejectAgency')}</DialogTitle>
 				<DialogContent>
 					<TextField
 						fullWidth multiline rows={3}
-						label={ui('Rejection reason')}
-						placeholder={ui('Explain why this agency is being rejected...')}
+						label={ui('admin.rejectionReason')}
+						placeholder={ui('admin.explainWhyThisAgencyIs')}
 						value={rejectReason}
 						onChange={(e) => setRejectReason(e.target.value)}
 						sx={{ mt: 1 }}
 					/>
 				</DialogContent>
 				<DialogActions sx={{ px: 3, pb: 2 }}>
-					<Button onClick={() => setRejectTarget(null)}>{ui('Cancel')}</Button>
-					<Button variant="contained" color="error" onClick={handleRejectConfirm}>{ui('Reject Agency')}</Button>
+					<Button onClick={() => setRejectTarget(null)}>{ui('agency.cancel')}</Button>
+					<Button variant="contained" color="error" onClick={handleRejectConfirm}>{ui('admin.rejectAgency')}</Button>
 				</DialogActions>
 			</Dialog>
 		</div>

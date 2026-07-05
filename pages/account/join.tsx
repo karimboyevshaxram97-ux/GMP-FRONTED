@@ -101,9 +101,9 @@ const Join: NextPage = () => {
 		} catch (err: any) {
 			const msg = err?.graphQLErrors?.[0]?.message ?? '';
 			if (msg.toLowerCase().includes('banned') || msg.toLowerCase().includes('forbidden')) {
-				setError(ui("Sizning hisobingiz bloklangan. Qo'llab-quvvatlash bilan bog'laning."));
+				setError(ui('auth.sizningHisobingizBloklanganQollabQuvvatlash'));
 			} else {
-				setError(ui("Telefon/email yoki parol noto'g'ri."));
+				setError(ui('auth.telefonEmailYokiParolNotogri'));
 			}
 		} finally {
 			setLoading(false);
@@ -121,11 +121,11 @@ const Join: NextPage = () => {
 		} catch (err: any) {
 			const msg = err?.graphQLErrors?.[0]?.message || err?.message || '';
 			if (msg.toLowerCase().includes('already') || msg.toLowerCase().includes('exist') || msg.toLowerCase().includes('duplicate')) {
-				setError(ui("Bu telefon raqam allaqachon ro'yxatdan o'tgan."));
+				setError(ui('auth.buTelefonRaqamAllaqachonRoyxatdan'));
 			} else if (msg) {
 				setError(msg);
 			} else {
-				setError(ui("Ro'yxatdan o'tishda xato. Qayta urinib ko'ring."));
+				setError(ui('auth.royxatdanOtishdaXatoQaytaUrinib'));
 			}
 		} finally {
 			setLoading(false);
@@ -154,13 +154,13 @@ const Join: NextPage = () => {
 						</div>
 
 						<h1>
-							{ui('Your global')}<br />
-							<em>{ui('migration')}</em><br />
-							{ui('journey starts.')}
+							{ui('auth.yourGlobal')}<br />
+							<em>{ui('auth.migration')}</em><br />
+							{ui('auth.journeyStarts')}
 						</h1>
 
 						<p className="jl-sub">
-							{ui('Connect with verified agencies, explore services in 30+ countries, and manage your entire application in one place.')}
+							{ui('auth.connectWithVerifiedAgenciesExplore')}
 						</p>
 
 						<ul className="jl-features">
@@ -190,16 +190,16 @@ const Join: NextPage = () => {
 						<div className="jr-logo">GMP</div>
 
 						<div className="jr-heading">
-							<p className="jr-eyebrow">{ui('Welcome back')}</p>
-							<h2>{isAdminMode ? ui('Admin sign in') : tab === 'login' ? ui('Sign in to your account') : ui('Create your account')}</h2>
+							<p className="jr-eyebrow">{ui('auth.welcomeBack')}</p>
+							<h2>{isAdminMode ? ui('auth.adminSignIn') : tab === 'login' ? ui('auth.signInToYourAccount') : ui('auth.createYourAccount')}</h2>
 						</div>
 
 						<div className="jr-tabs">
 							<button className={tab === 'login' ? 'active' : ''} onClick={() => switchTab('login')} type="button">
-								{ui('Sign in')}
+								{ui('auth.signIn')}
 							</button>
 							<button className={tab === 'register' ? 'active' : ''} onClick={() => switchTab('register')} type="button">
-								{ui('Register')}
+								{ui('auth.register')}
 							</button>
 						</div>
 
@@ -208,7 +208,7 @@ const Join: NextPage = () => {
 						{tab === 'login' && (
 							<Box component="form" className="jr-form" onSubmit={handleLogin}>
 								<div className="jr-field">
-									<label>{ui('Phone number or email')}</label>
+									<label>{ui('auth.phoneNumberOrEmail')}</label>
 									<input
 										type="text"
 										placeholder="+998901234567 or admin@gmp.com"
@@ -218,7 +218,7 @@ const Join: NextPage = () => {
 									/>
 								</div>
 								<div className="jr-field">
-									<label>{ui('Password')}</label>
+									<label>{ui('auth.password')}</label>
 									<input
 										type="password"
 										placeholder="Enter your password"
@@ -228,14 +228,14 @@ const Join: NextPage = () => {
 									/>
 								</div>
 								<button type="submit" className="jr-btn" disabled={loading}>
-									{loading ? ui('Signing in...') : ui('Sign in')}
+									{loading ? ui('auth.signingIn') : ui('auth.signIn')}
 								</button>
 								<p className="jr-switch">
-									{ui('No account?')}{' '}
-									<button type="button" onClick={() => switchTab('register')}>{ui('Create one')}</button>
+									{ui('auth.noAccount')}{' '}
+									<button type="button" onClick={() => switchTab('register')}>{ui('auth.createOne')}</button>
 								</p>
 								<p className="jr-switch">
-									{isAdminMode ? ui('User account?') : ui('Are you an admin?')}{' '}
+									{isAdminMode ? ui('auth.userAccount') : ui('auth.areYouAnAdmin')}{' '}
 									<button
 										type="button"
 										onClick={() => {
@@ -243,7 +243,7 @@ const Join: NextPage = () => {
 											else router.push('/account/join?mode=admin');
 										}}
 									>
-										{isAdminMode ? ui('User sign in') : ui('Admin panel')}
+										{isAdminMode ? ui('auth.userSignIn') : ui('auth.adminPanel')}
 									</button>
 								</p>
 							</Box>
@@ -258,8 +258,8 @@ const Join: NextPage = () => {
 									>
 										<PersonIcon />
 										<div>
-											<strong>{ui('User')}</strong>
-											<span>{ui('Apply for services')}</span>
+											<strong>{ui('auth.user')}</strong>
+											<span>{ui('auth.applyForServices')}</span>
 										</div>
 									</div>
 									<div
@@ -268,39 +268,39 @@ const Join: NextPage = () => {
 									>
 										<BusinessIcon />
 										<div>
-											<strong>{ui('Agency')}</strong>
-											<span>{ui('Manage services')}</span>
+											<strong>{ui('auth.agency')}</strong>
+											<span>{ui('auth.manageServices')}</span>
 										</div>
 									</div>
 								</div>
 
 								<div className="jr-grid-2">
 									<div className="jr-field">
-										<label>{ui('First name')}</label>
+										<label>{ui('auth.firstName')}</label>
 										<input placeholder="John" value={regFirstName} onChange={(e) => setRegFirstName(e.target.value)} required />
 									</div>
 									<div className="jr-field">
-										<label>{ui('Last name')}</label>
+										<label>{ui('auth.lastName')}</label>
 										<input placeholder="Doe" value={regLastName} onChange={(e) => setRegLastName(e.target.value)} required />
 									</div>
 								</div>
 
 								<div className="jr-field">
-									<label>{ui('Phone number')}</label>
+									<label>{ui('auth.phoneNumber')}</label>
 									<input type="tel" placeholder="+998901234567" value={regPhone} onChange={(e) => setRegPhone(e.target.value)} required />
 								</div>
 
 								<div className="jr-field">
-									<label>{ui('Password')}</label>
+									<label>{ui('auth.password')}</label>
 									<input type="password" placeholder="Min 8 characters" value={regPassword} onChange={(e) => setRegPassword(e.target.value)} required />
 								</div>
 
 								<button type="submit" className="jr-btn" disabled={loading}>
-									{loading ? ui('Creating...') : regRole === UserRole.AGENCY_ADMIN ? ui('Create agency account') : ui('Create account')}
+									{loading ? ui('auth.creating') : regRole === UserRole.AGENCY_ADMIN ? ui('auth.createAgencyAccount') : ui('auth.createAccount')}
 								</button>
 								<p className="jr-switch">
-									{ui('Already registered?')}{' '}
-									<button type="button" onClick={() => switchTab('login')}>{ui('Sign in')}</button>
+									{ui('auth.alreadyRegistered')}{' '}
+									<button type="button" onClick={() => switchTab('login')}>{ui('auth.signIn')}</button>
 								</p>
 							</Box>
 						)}

@@ -96,7 +96,7 @@ const AgencyDetail: NextPage = () => {
 		} else {
 			await followAgency({ variables: { agencyId: agency._id } });
 		}
-		await sweetMixinSuccessAlert(followed ? ui('Unfollowed') : ui('Following agency!'));
+		await sweetMixinSuccessAlert(followed ? ui('agency.unfollowed') : ui('agency.followingAgency'));
 		refetch();
 	};
 
@@ -147,10 +147,10 @@ const AgencyDetail: NextPage = () => {
 			<div className="agency-detail">
 				<Stack className="container">
 					<Box className="agency-not-found">
-						<h1>{ui('Agency not found')}</h1>
-						<p>{ui('This profile may have been removed or is no longer available.')}</p>
+						<h1>{ui('agency.agencyNotFound')}</h1>
+						<p>{ui('agency.thisProfileMayHaveBeen')}</p>
 						<Button variant="contained" onClick={() => router.push('/agency')}>
-							{ui('Back to agencies')}
+							{ui('agency.backToAgencies')}
 						</Button>
 					</Box>
 				</Stack>
@@ -172,7 +172,7 @@ const AgencyDetail: NextPage = () => {
 				<Box className="cover-overlay" />
 				<Stack className="container">
 					<Button className="back-button" startIcon={<ArrowBackIcon />} onClick={() => router.push('/agency')}>
-						{ui('Agencies')}
+						{ui('agency.agencies')}
 					</Button>
 
 					<Box className="profile-hero-grid">
@@ -181,16 +181,16 @@ const AgencyDetail: NextPage = () => {
 							<Box>
 								<Box className="badge-row">
 									{agency.verificationStatus === AgencyVerificationStatus.VERIFIED && (
-										<Chip icon={<VerifiedIcon />} label={ui('Verified agency')} className="verified-chip" />
+										<Chip icon={<VerifiedIcon />} label={ui('agency.verifiedAgency')} className="verified-chip" />
 									)}
 									<Chip label={agency.status} className="status-chip" />
 								</Box>
-								<h1>{tr(agency.name) || ui('Agency')}</h1>
+								<h1>{tr(agency.name) || ui('auth.agency')}</h1>
 								<p>{tr(agency.description) || ui('A verified agency profile for migration, travel, study, and work services.')}</p>
 								<Box className="rating-summary">
 									<Rating value={agency.averageRating || 0} precision={0.1} readOnly />
 									<strong>{(agency.averageRating || 0).toFixed(1)}</strong>
-									<span>{agency.totalReviews || 0} {ui('reviews')}</span>
+									<span>{agency.totalReviews || 0} {ui('agency.reviews2')}</span>
 								</Box>
 							</Box>
 						</Box>
@@ -198,17 +198,17 @@ const AgencyDetail: NextPage = () => {
 						<Box className="profile-metrics">
 							<Box>
 								<WorkOutlineIcon />
-								<span>{ui('Services')}</span>
+								<span>{ui('agency.services')}</span>
 								<strong>{agency.totalServices || 0}</strong>
 							</Box>
 							<Box>
 								<VisibilityIcon />
-								<span>{ui('Views')}</span>
+								<span>{ui('agency.views')}</span>
 								<strong>{agency.viewCount || 0}</strong>
 							</Box>
 							<Box>
 								<FavoriteBorderIcon />
-								<span>{ui('Likes')}</span>
+								<span>{ui('agency.likes')}</span>
 								<strong>{agency.likeCount || 0}</strong>
 							</Box>
 						</Box>
@@ -220,18 +220,18 @@ const AgencyDetail: NextPage = () => {
 				<Box className="detail-layout">
 					<Box className="profile-main">
 						<Tabs value={tab} onChange={(_, value) => setTab(value)} className="profile-tabs">
-							<Tab label={ui('About')} />
-							<Tab label={`${ui('Reviews')} (${reviews.length})`} />
+							<Tab label={ui('agency.about')} />
+							<Tab label={`${ui('agency.reviews')} (${reviews.length})`} />
 						</Tabs>
 
 						{tab === 0 && (
 							<Box className="profile-section">
-								<h2>{ui('About this agency')}</h2>
-								<p>{tr(agency.description) || ui('No description has been added for this agency yet.')}</p>
+								<h2>{ui('agency.aboutThisAgency')}</h2>
+								<p>{tr(agency.description) || ui('agency.noDescriptionHasBeenAdded')}</p>
 
 								<Divider sx={{ my: 3 }} />
 
-								<h3>{ui('Operating countries')}</h3>
+								<h3>{ui('agency.operatingCountries')}</h3>
 								{agency.operatingCountries?.length ? (
 									<Box className="country-list">
 										{agency.operatingCountries.map((country: string) => (
@@ -239,14 +239,14 @@ const AgencyDetail: NextPage = () => {
 										))}
 									</Box>
 								) : (
-									<Box className="empty-inline">{ui('No operating countries listed yet.')}</Box>
+									<Box className="empty-inline">{ui('agency.noOperatingCountriesListedYet')}</Box>
 								)}
 							</Box>
 						)}
 
 						{tab === 1 && (
 							<Box className="profile-section">
-								<h2>{ui('Client reviews')}</h2>
+								<h2>{ui('agency.clientReviews')}</h2>
 								{reviewsLoading ? (
 									<Box>
 										<Skeleton height={72} />
@@ -259,19 +259,19 @@ const AgencyDetail: NextPage = () => {
 												<Rating value={review.rating} size="small" readOnly />
 												<span>{new Date(review.createdAt).toLocaleDateString()}</span>
 											</Box>
-											<p>{review.comment || ui('No comment provided.')}</p>
+											<p>{review.comment || ui('agency.noCommentProvided')}</p>
 										</Box>
 									))
 								) : (
-									<Box className="empty-inline">{ui('No reviews yet.')}</Box>
+									<Box className="empty-inline">{ui('agency.noReviewsYet')}</Box>
 								)}
 							</Box>
 						)}
 					</Box>
 
 					<Box className="contact-card">
-						<h3>{ui('Contact agency')}</h3>
-						<p>{ui('Use the available channels or start a private conversation.')}</p>
+						<h3>{ui('agency.contactAgency')}</h3>
+						<p>{ui('agency.useTheAvailableChannelsOr')}</p>
 
 						<Box className="contact-list">
 							{agency.email && (
@@ -295,31 +295,31 @@ const AgencyDetail: NextPage = () => {
 								</Box>
 							)}
 							{!agency.email && !agency.phoneNumber && !agency.website && (
-								<Box className="empty-contact">{ui('No public contact details yet.')}</Box>
+								<Box className="empty-contact">{ui('agency.noPublicContactDetailsYet')}</Box>
 							)}
 						</Box>
 
 						{isOwnAgency ? (
 							<Button fullWidth variant="outlined" disabled>
-								{ui('This is your agency')}
+								{ui('agency.thisIsYourAgency')}
 							</Button>
 						) : !showMsgBox ? (
 							<Button fullWidth variant="contained" startIcon={<SendIcon />} onClick={handleMessageBtn}>
-								{ui('Send message')}
+								{ui('agency.sendMessage')}
 							</Button>
 						) : msgSent ? (
 							<Box className="msg-sent-box">
-								<span>{ui('Message sent!')}</span>
+								<span>{ui('agency.messageSent')}</span>
 								<Box className="msg-sent-actions">
 									<Button size="small" onClick={() => { setShowMsgBox(false); setMsgSent(false); setSentConversationId(''); }}>
-										{ui('Send another')}
+										{ui('agency.sendAnother')}
 									</Button>
 									<Button
 										size="small"
 										variant="contained"
 										onClick={() => router.push(sentConversationId ? `/mypage/messages?id=${sentConversationId}` : '/mypage/messages')}
 									>
-										{ui('Open messages')}
+										{ui('agency.openMessages')}
 									</Button>
 								</Box>
 							</Box>
@@ -327,7 +327,7 @@ const AgencyDetail: NextPage = () => {
 							<Box component="form" className="inline-msg-box" onSubmit={handleSendMsg}>
 								<textarea
 									className="inline-msg-textarea"
-									placeholder={ui('Write your message to this agency...')}
+									placeholder={ui('agency.writeYourMessageToThis')}
 									rows={4}
 									value={msgText}
 									onChange={(e) => setMsgText(e.target.value)}
@@ -341,7 +341,7 @@ const AgencyDetail: NextPage = () => {
 								/>
 								<Box className="inline-msg-footer">
 									<Button size="small" onClick={() => setShowMsgBox(false)}>
-										{ui('Cancel')}
+										{ui('agency.cancel')}
 									</Button>
 									<Button
 										type="submit"
@@ -350,7 +350,7 @@ const AgencyDetail: NextPage = () => {
 										startIcon={msgSending ? undefined : <SendIcon />}
 										disabled={!msgText.trim() || msgSending}
 									>
-										{msgSending ? ui('Sending...') : ui('Send')}
+										{msgSending ? ui('agency.sending') : ui('Send')}
 									</Button>
 								</Box>
 							</Box>
@@ -361,7 +361,7 @@ const AgencyDetail: NextPage = () => {
 							startIcon={isFollowed(agency.meFollowed) ? <CheckIcon /> : <PersonAddIcon />}
 							onClick={handleFollow}
 						>
-							{isFollowed(agency.meFollowed) ? ui('Following') : ui('Follow agency')}
+							{isFollowed(agency.meFollowed) ? ui('agency.following') : ui('agency.followAgency')}
 						</Button>
 						<Button
 							fullWidth
@@ -370,7 +370,7 @@ const AgencyDetail: NextPage = () => {
 							onClick={handleLike}
 							className={isLiked(agency.meLiked) ? 'liked-action' : ''}
 						>
-							{agency.likeCount || 0} {ui('likes')}
+							{agency.likeCount || 0} {ui('agency.likes2')}
 						</Button>
 					</Box>
 				</Box>

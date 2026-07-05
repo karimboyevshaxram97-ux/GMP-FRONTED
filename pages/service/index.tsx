@@ -169,16 +169,16 @@ const ServiceList: NextPage = () => {
 					</div>
 					<h1>{ui(heroTitle)}</h1>
 					<p className="hero-subtitle">
-						{serviceType === ServiceType.STUDY_ABROAD && ui('Find the best study abroad programs tailored to your goals and destination.')}
-						{serviceType === ServiceType.WORK_ABROAD && ui('Discover work abroad opportunities matched to your skills and career goals.')}
-						{serviceType === ServiceType.TRAVEL && ui('Explore travel packages and guided tours around the world.')}
-						{serviceType === ServiceType.VISA_SERVICES && ui('Professional visa assistance for every country and purpose.')}
-						{!serviceType && ui('Search visa, study, work, and travel services by price, destination, and popularity.')}
+						{serviceType === ServiceType.STUDY_ABROAD && ui('service.findTheBestStudyAbroad')}
+						{serviceType === ServiceType.WORK_ABROAD && ui('service.discoverWorkAbroadOpportunitiesMatched')}
+						{serviceType === ServiceType.TRAVEL && ui('service.exploreTravelPackagesAndGuided')}
+						{serviceType === ServiceType.VISA_SERVICES && ui('service.professionalVisaAssistanceForEvery')}
+						{!serviceType && ui('service.searchVisaStudyWorkAnd')}
 					</p>
 					<Box component="form" className="service-hero-search" onSubmit={handleSearch}>
 						<TextField
 							fullWidth
-							placeholder={ui('Search by service name or destination...')}
+							placeholder={ui('service.searchByServiceNameOr')}
 							value={inputValue}
 							onChange={(event) => setInputValue(event.target.value)}
 							InputProps={{
@@ -190,18 +190,18 @@ const ServiceList: NextPage = () => {
 							}}
 						/>
 						<Button type="submit" variant="contained" size="large">
-							{ui('Search')}
+							{ui('agency.search')}
 						</Button>
 					</Box>
 					<Box className="hero-stats">
 						<div className="stat-item">
 							<div className="number">{total || '200'}+</div>
-							<div className="label">{ui('Services available')}</div>
+							<div className="label">{ui('service.servicesAvailable')}</div>
 						</div>
 						<div className="stat-divider" />
 						<div className="stat-item">
 							<div className="number">4</div>
-							<div className="label">{ui('Service categories')}</div>
+							<div className="label">{ui('service.serviceCategories')}</div>
 						</div>
 						<div className="stat-divider" />
 						<div className="stat-item">
@@ -214,7 +214,7 @@ const ServiceList: NextPage = () => {
 					<div className="scroll-dot" />
 					<div className="scroll-dot" />
 					<div className="scroll-dot" />
-					<span className="scroll-text">{ui('Scroll')}</span>
+					<span className="scroll-text">{ui('agency.scroll')}</span>
 				</div>
 			</div>
 
@@ -241,16 +241,16 @@ const ServiceList: NextPage = () => {
 					<Box className="service-filter-panel">
 						<Box className="panel-title">
 							<TuneIcon />
-							<span>{ui('Filters')}</span>
+							<span>{ui('service.filters')}</span>
 						</Box>
 
 						<label>{ui('Sort by')}</label>
 						<FormControl fullWidth size="small">
 							<Select value={sort} onChange={(event) => setSort(event.target.value as ServiceSortField)}>
-								<MenuItem value={ServiceSortField.SERVICE_RANK}>{ui('Top ranked')}</MenuItem>
-								<MenuItem value={ServiceSortField.PRICE}>{ui('Price')}</MenuItem>
-								<MenuItem value={ServiceSortField.AVERAGE_RATING}>{ui('Best rated')}</MenuItem>
-								<MenuItem value={ServiceSortField.CREATED_AT}>{ui('Newest first')}</MenuItem>
+								<MenuItem value={ServiceSortField.SERVICE_RANK}>{ui('service.topRanked')}</MenuItem>
+								<MenuItem value={ServiceSortField.PRICE}>{ui('service.price')}</MenuItem>
+								<MenuItem value={ServiceSortField.AVERAGE_RATING}>{ui('service.bestRated')}</MenuItem>
+								<MenuItem value={ServiceSortField.CREATED_AT}>{ui('service.newestFirst')}</MenuItem>
 							</Select>
 						</FormControl>
 
@@ -269,25 +269,25 @@ const ServiceList: NextPage = () => {
 						/>
 
 						<Button fullWidth variant="outlined" onClick={resetFilters}>
-							{ui('Reset filters')}
+							{ui('service.resetFilters')}
 						</Button>
 					</Box>
 
 					<Box>
 						<Box className="service-results-head">
 							<Box>
-								<span>{ui('Service directory')}</span>
-								<h2>{search ? `${ui('Results for')} "${search}"` : ui('Available services')}</h2>
-								<p>{total} {ui('services found')}</p>
+								<span>{ui('service.serviceDirectory')}</span>
+								<h2>{search ? `${ui('agency.resultsFor')} "${search}"` : ui('service.availableServices')}</h2>
+								<p>{total} {ui('service.servicesFound')}</p>
 							</Box>
 							{search && <Chip label={search} onDelete={() => pushServiceFilters({ type: serviceType, country })} />}
 						</Box>
 
 						<Box className="related-agencies-panel">
 							<Box className="related-agencies-head">
-								<span>{serviceType ? ui(getServiceTypeLabel(serviceType)) : ui('Verified partners')}</span>
-								<h2>{serviceType ? ui('Agencies for this service') : ui('Recommended agencies')}</h2>
-								<p>{serviceType ? ui('Verified agencies offering this category.') : ui('Verified agencies across all service categories.')}</p>
+								<span>{serviceType ? ui(getServiceTypeLabel(serviceType)) : ui('service.verifiedPartners')}</span>
+								<h2>{serviceType ? ui('service.agenciesForThisService') : ui('service.recommendedAgencies')}</h2>
+								<p>{serviceType ? ui('service.verifiedAgenciesOfferingThisCategory') : ui('service.verifiedAgenciesAcrossAllService')}</p>
 							</Box>
 							{agenciesLoading ? (
 								<Grid container spacing={2.5}>
@@ -317,7 +317,7 @@ const ServiceList: NextPage = () => {
 									))}
 								</Grid>
 							) : (
-								<Box className="related-agencies-empty">{ui('No verified agencies found for this category yet.')}</Box>
+								<Box className="related-agencies-empty">{ui('service.noVerifiedAgenciesFoundFor')}</Box>
 							)}
 						</Box>
 
@@ -345,10 +345,10 @@ const ServiceList: NextPage = () => {
 						) : (
 							<Box className="empty-services">
 								<SearchIcon />
-								<h3>{ui('No services found')}</h3>
-								<p>{ui('Try another keyword, service type, or price range.')}</p>
+								<h3>{ui('service.noServicesFound')}</h3>
+								<p>{ui('service.tryAnotherKeywordServiceType')}</p>
 								<Button variant="outlined" onClick={resetFilters}>
-									{ui('Clear filters')}
+									{ui('service.clearFilters')}
 								</Button>
 							</Box>
 						)}

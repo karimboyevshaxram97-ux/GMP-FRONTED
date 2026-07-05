@@ -20,9 +20,9 @@ const Destinations = () => {
 		<section className="home-destinations">
 			<div className="container">
 				<div className="home-destinations__header">
-					<span className="section-tag">{ui('Explore Destinations')}</span>
-					<h2>{ui('Popular Destinations')}</h2>
-					<p>{ui("Discover opportunities in the world's most sought-after destinations for study, work, and travel.")}</p>
+					<span className="section-tag">{ui('home.exploreDestinations')}</span>
+					<h2>{ui('home.popularDestinations')}</h2>
+					<p>{ui('home.discoverOpportunitiesInTheWorlds')}</p>
 				</div>
 
 				<div className="home-destinations__grid">
@@ -32,7 +32,7 @@ const Destinations = () => {
 								<span className="dest-card__flag">{dest.flag}</span>
 								<div className="dest-card__info">
 									<div className="dest-card__name">{ui(dest.name)}</div>
-									<div className="dest-card__count">{dest.count} {ui('services')}</div>
+									<div className="dest-card__count">{dest.count} {ui('admin.services')}</div>
 								</div>
 							</div>
 						</Link>

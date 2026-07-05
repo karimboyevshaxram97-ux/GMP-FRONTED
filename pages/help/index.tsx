@@ -409,7 +409,7 @@ const HelpPage: NextPage = () => {
 			setSent(true);
 			setForm({ name: '', email: '', message: '' });
 		} catch (err: any) {
-			setSubmitError(err?.graphQLErrors?.[0]?.message || err?.message || ui('Failed to send message'));
+			setSubmitError(err?.graphQLErrors?.[0]?.message || err?.message || ui('help.failedToSendMessage'));
 		}
 	};
 
@@ -423,14 +423,14 @@ const HelpPage: NextPage = () => {
 				<div className="hp-hero-glow glow-2" />
 				<div className="hp-hero-glow glow-3" />
 				<Container maxWidth="md" sx={{ position: 'relative', zIndex: 1 }}>
-					<div className="hero-badge">{ui('Support Center')}</div>
-					<h1 className="hero-title">{ui('How can we')} <span>{ui('help you?')}</span></h1>
-					<p className="hero-sub">{ui('Search our knowledge base or browse topics below')}</p>
+					<div className="hero-badge">{ui('help.supportCenter')}</div>
+					<h1 className="hero-title">{ui('help.howCanWe')} <span>{ui('help.helpYou')}</span></h1>
+					<p className="hero-sub">{ui('help.searchOurKnowledgeBaseOr')}</p>
 					<div className="hero-search">
 						<SearchIcon className="search-icon" />
 						<input
 							type="text"
-							placeholder={ui('Search for answers...')}
+							placeholder={ui('help.searchForAnswers')}
 							value={search}
 							onChange={(e) => setSearch(e.target.value)}
 						/>
@@ -446,7 +446,7 @@ const HelpPage: NextPage = () => {
 							<div key={i} className="cat-card">
 								<div className="cat-emoji">{cat.icon}</div>
 								<div className="cat-label">{ui(cat.label)}</div>
-								<div className="cat-count">{cat.count} {ui('articles')}</div>
+								<div className="cat-count">{cat.count} {ui('help.articles')}</div>
 							</div>
 						))}
 					</div>
@@ -458,15 +458,15 @@ const HelpPage: NextPage = () => {
 				<Container maxWidth="lg">
 					<div className="hp-section-head">
 						<div className="hp-section-tag">FAQ</div>
-						<h2>{ui('Frequently Asked Questions')}</h2>
-						<p>{ui('Quick answers to the most common questions')}</p>
+						<h2>{ui('help.frequentlyAskedQuestions')}</h2>
+						<p>{ui('help.quickAnswersToTheMost')}</p>
 					</div>
 
 					<div className="faq-list">
 						{filtered.length === 0 && (
 							<div className="faq-empty">
 								<SearchIcon />
-								<p>{ui('No results found for')} &quot;<strong>{search}</strong>&quot;</p>
+								<p>{ui('help.noResultsFoundFor')} &quot;<strong>{search}</strong>&quot;</p>
 							</div>
 						)}
 						{filtered.map((faq, i) => (
@@ -501,57 +501,57 @@ const HelpPage: NextPage = () => {
 
 						{/* Left */}
 						<div className="contact-left">
-							<div className="hp-section-tag light">{ui('Contact Us')}</div>
-							<h2>{ui('Still need help?')}</h2>
-							<p>{ui('Our support team typically replies within a few hours.')}</p>
+							<div className="hp-section-tag light">{ui('help.contactUs')}</div>
+							<h2>{ui('help.stillNeedHelp')}</h2>
+							<p>{ui('help.ourSupportTeamTypicallyReplies')}</p>
 
 							<div className="contact-items">
 								<div className="contact-item">
 									<div className="ci-icon"><EmailOutlinedIcon /></div>
 									<div>
-										<div className="ci-label">{ui('Email')}</div>
+										<div className="ci-label">{ui('help.email')}</div>
 										<div className="ci-val">support@gmp.com</div>
 									</div>
 								</div>
 								<div className="contact-item">
 									<div className="ci-icon"><PhoneOutlinedIcon /></div>
 									<div>
-										<div className="ci-label">{ui('Phone')}</div>
+										<div className="ci-label">{ui('help.phone')}</div>
 										<div className="ci-val">+998 90 123 45 67</div>
 									</div>
 								</div>
 								<div className="contact-item">
 									<div className="ci-icon"><LocationOnOutlinedIcon /></div>
 									<div>
-										<div className="ci-label">{ui('Office')}</div>
-										<div className="ci-val">{ui('Tashkent, Uzbekistan')}</div>
+										<div className="ci-label">{ui('help.office')}</div>
+										<div className="ci-val">{ui('help.tashkentUzbekistan')}</div>
 									</div>
 								</div>
 								<div className="contact-item">
 									<div className="ci-icon"><AccessTimeIcon /></div>
 									<div>
-										<div className="ci-label">{ui('Working Hours')}</div>
-										<div className="ci-val">{ui('Mon-Fri, 9:00-18:00')}</div>
+										<div className="ci-label">{ui('help.workingHours')}</div>
+										<div className="ci-val">{ui('help.monFri90018')}</div>
 									</div>
 								</div>
 							</div>
 
 							<div className="contact-badges">
-								<div className="c-badge"><CheckCircleOutlineIcon /> {ui('Verified Agencies')}</div>
-								<div className="c-badge"><ChatBubbleOutlineIcon /> {ui('Live Support')}</div>
+								<div className="c-badge"><CheckCircleOutlineIcon /> {ui('help.verifiedAgencies')}</div>
+								<div className="c-badge"><ChatBubbleOutlineIcon /> {ui('help.liveSupport')}</div>
 							</div>
 						</div>
 
 						{/* Right — form */}
 						<div className="contact-right">
 							<div className="contact-form-head">
-								<h3>{ui('Send us a message')}</h3>
-								<p>{ui("We'll get back to you as soon as possible")}</p>
+								<h3>{ui('help.sendUsAMessage')}</h3>
+								<p>{ui('help.wellGetBackToYou')}</p>
 							</div>
 							<Box component="form" onSubmit={handleSubmit} className="cf-form">
 								<div className="cf-row">
 									<div className="cf-field">
-										<label>{ui('Your name')}</label>
+										<label>{ui('help.yourName')}</label>
 										<input
 											type="text"
 											placeholder="John Doe"
@@ -562,7 +562,7 @@ const HelpPage: NextPage = () => {
 										/>
 									</div>
 									<div className="cf-field">
-										<label>{ui('Email address')}</label>
+										<label>{ui('help.emailAddress')}</label>
 										<input
 											type="email"
 											placeholder="john@example.com"
@@ -574,9 +574,9 @@ const HelpPage: NextPage = () => {
 									</div>
 								</div>
 								<div className="cf-field">
-									<label>{ui('Message')}</label>
+									<label>{ui('help.message')}</label>
 									<textarea
-										placeholder={ui('Describe your issue or question...')}
+										placeholder={ui('help.describeYourIssueOrQuestion')}
 										value={form.message}
 										onChange={(e) => setForm({ ...form, message: e.target.value })}
 										required
@@ -585,7 +585,7 @@ const HelpPage: NextPage = () => {
 								</div>
 								{submitError && <Alert severity="error">{submitError}</Alert>}
 								<button type="submit" className="cf-submit" disabled={sending}>
-									{sending ? ui('Sending...') : ui('Send Message')}
+									{sending ? ui('agency.sending') : ui('help.sendMessage')}
 									<span className="cf-arrow">→</span>
 								</button>
 							</Box>
@@ -602,7 +602,7 @@ const HelpPage: NextPage = () => {
 				anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
 			>
 				<Alert severity="success" onClose={() => setSent(false)} sx={{ borderRadius: 2, fontFamily: 'Poppins' }}>
-					{ui("Message sent! We'll get back to you within 24 hours.")}
+					{ui('help.messageSentWellGetBack')}
 				</Alert>
 			</Snackbar>
 		</div>

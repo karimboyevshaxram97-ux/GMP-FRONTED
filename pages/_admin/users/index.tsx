@@ -55,14 +55,14 @@ const AdminUsers: NextPage = () => {
 	const [unbanUser] = useMutation(UNBAN_USER);
 
 	const handleBan = async (userId: string, isBanned: boolean) => {
-		const ok = await sweetConfirmAlert(isBanned ? ui('Unban this user?') : ui('Ban this user?'));
+		const ok = await sweetConfirmAlert(isBanned ? ui('admin.unbanThisUser') : ui('admin.banThisUser'));
 		if (!ok) return;
 		if (isBanned) {
 			await unbanUser({ variables: { userId } });
 		} else {
 			await banUser({ variables: { input: { userId } } });
 		}
-		await sweetMixinSuccessAlert(isBanned ? ui('User unbanned') : ui('User banned'));
+		await sweetMixinSuccessAlert(isBanned ? ui('admin.userUnbanned') : ui('admin.userBanned'));
 		refetch();
 	};
 
@@ -79,12 +79,12 @@ const AdminUsers: NextPage = () => {
 
 	const handleBulkBan = async () => {
 		if (!selected.length) return;
-		const ok = await sweetConfirmAlert(`${ui('Ban')} ${selected.length} ${ui('selected')}?`);
+		const ok = await sweetConfirmAlert(`${ui('admin.ban')} ${selected.length} ${ui('admin.selected')}?`);
 		if (!ok) return;
 		for (const userId of selected) {
 			await banUser({ variables: { input: { userId } } });
 		}
-		await sweetMixinSuccessAlert(`${selected.length} ${ui('users banned')}`);
+		await sweetMixinSuccessAlert(`${selected.length} ${ui('admin.usersBanned')}`);
 		setSelected([]);
 		refetch();
 	};
@@ -94,41 +94,41 @@ const AdminUsers: NextPage = () => {
 
 	return (
 		<div>
-			<div className="page-title">{ui('Users Management')}</div>
+			<div className="page-title">{ui('admin.usersManagement')}</div>
 
 			<Box className="admin-filter-bar">
 				<TextField
 					size="small"
-					placeholder={ui('Search name / email / phone')}
+					placeholder={ui('admin.searchNameEmailPhone')}
 					value={text}
 					onChange={(e) => { setText(e.target.value); setPage(1); }}
 					sx={{ minWidth: 240 }}
 					InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon fontSize="small" /></InputAdornment> }}
 				/>
 				<Select size="small" value={status} onChange={(e) => { setStatus(e.target.value); setPage(1); }} displayEmpty sx={{ minWidth: 130 }}>
-					<MenuItem value="">{ui('All statuses')}</MenuItem>
-					<MenuItem value="ACTIVE">{ui('Active')}</MenuItem>
-					<MenuItem value="BANNED">{ui('Banned')}</MenuItem>
-					<MenuItem value="INACTIVE">{ui('Inactive')}</MenuItem>
+					<MenuItem value="">{ui('admin.allStatuses')}</MenuItem>
+					<MenuItem value="ACTIVE">{ui('admin.active')}</MenuItem>
+					<MenuItem value="BANNED">{ui('admin.banned')}</MenuItem>
+					<MenuItem value="INACTIVE">{ui('admin.inactive')}</MenuItem>
 				</Select>
 				<Select size="small" value={role} onChange={(e) => { setRole(e.target.value); setPage(1); }} displayEmpty sx={{ minWidth: 130 }}>
-					<MenuItem value="">{ui('All roles')}</MenuItem>
-					<MenuItem value="USER">{ui('User')}</MenuItem>
-					<MenuItem value="AGENCY_ADMIN">{ui('Agency Admin')}</MenuItem>
-					<MenuItem value="SUPER_ADMIN">{ui('Super Admin')}</MenuItem>
+					<MenuItem value="">{ui('admin.allRoles')}</MenuItem>
+					<MenuItem value="USER">{ui('auth.user')}</MenuItem>
+					<MenuItem value="AGENCY_ADMIN">{ui('admin.agencyAdmin')}</MenuItem>
+					<MenuItem value="SUPER_ADMIN">{ui('admin.superAdmin')}</MenuItem>
 				</Select>
-				<Box className="filter-total">{ui('Total')}: <b>{total}</b></Box>
+				<Box className="filter-total">{ui('admin.total')}: <b>{total}</b></Box>
 			</Box>
 
 			{selected.length > 0 && (
 				<Box className="admin-bulk-bar">
-					<span className="bulk-count">{selected.length} {ui('selected')}</span>
-					<Tooltip title={ui('Ban all selected')}>
+					<span className="bulk-count">{selected.length} {ui('admin.selected')}</span>
+					<Tooltip title={ui('admin.banAllSelected')}>
 						<Button size="small" variant="outlined" color="warning" startIcon={<BlockIcon />} onClick={handleBulkBan}>
-							{ui('Ban all')}
+							{ui('admin.banAll')}
 						</Button>
 					</Tooltip>
-					<Button size="small" onClick={() => setSelected([])}>{ui('Clear')}</Button>
+					<Button size="small" onClick={() => setSelected([])}>{ui('admin.clear')}</Button>
 				</Box>
 			)}
 
@@ -144,19 +144,19 @@ const AdminUsers: NextPage = () => {
 									onChange={toggleAll}
 								/>
 							</TableCell>
-							<TableCell><b>{ui('Name')}</b></TableCell>
-							<TableCell><b>{ui('Email')}</b></TableCell>
-							<TableCell><b>{ui('Phone')}</b></TableCell>
-							<TableCell><b>{ui('Role')}</b></TableCell>
-							<TableCell><b>{ui('Status')}</b></TableCell>
-							<TableCell><b>{ui('Joined')}</b></TableCell>
-							<TableCell><b>{ui('Actions')}</b></TableCell>
+							<TableCell><b>{ui('admin.name')}</b></TableCell>
+							<TableCell><b>{ui('help.email')}</b></TableCell>
+							<TableCell><b>{ui('help.phone')}</b></TableCell>
+							<TableCell><b>{ui('admin.role')}</b></TableCell>
+							<TableCell><b>{ui('mypage.status')}</b></TableCell>
+							<TableCell><b>{ui('admin.joined')}</b></TableCell>
+							<TableCell><b>{ui('admin.actions')}</b></TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
 						{users.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={8} sx={{ textAlign: 'center', py: 5, color: '#aaa' }}>{ui('No users found')}</TableCell>
+								<TableCell colSpan={8} sx={{ textAlign: 'center', py: 5, color: '#aaa' }}>{ui('admin.noUsersFound')}</TableCell>
 							</TableRow>
 						) : users.map((user: any) => (
 							<TableRow key={user._id} hover selected={selected.includes(user._id)}>
@@ -185,7 +185,7 @@ const AdminUsers: NextPage = () => {
 											color={user.status === 'BANNED' ? 'success' : 'warning'}
 											onClick={() => handleBan(user._id, user.status === 'BANNED')}
 										>
-											{user.status === 'BANNED' ? ui('Unban') : ui('Ban')}
+											{user.status === 'BANNED' ? ui('admin.unban') : ui('admin.ban')}
 										</Button>
 									)}
 								</TableCell>
@@ -203,7 +203,7 @@ const AdminUsers: NextPage = () => {
 			<Dialog open={!!detailUser} onClose={() => setDetailUser(null)} maxWidth="xs" fullWidth>
 				{detailUser && (
 					<>
-						<DialogTitle sx={{ fontWeight: 700, pb: 1 }}>{ui('User Profile')}</DialogTitle>
+						<DialogTitle sx={{ fontWeight: 700, pb: 1 }}>{ui('admin.userProfile')}</DialogTitle>
 						<DialogContent>
 							<Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
 								<Avatar
@@ -225,16 +225,16 @@ const AdminUsers: NextPage = () => {
 
 							{detailUser.bio && (
 								<Box sx={{ mb: 2, p: '10px 14px', background: '#f7f9fc', borderRadius: 2 }}>
-									<Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>{ui('Bio')}</Typography>
+									<Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>{ui('mypage.bio')}</Typography>
 									<Typography variant="body2">{detailUser.bio}</Typography>
 								</Box>
 							)}
 
 							<Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
-								<Box><Typography variant="caption" color="text.secondary">{ui('Email')}</Typography><Typography variant="body2">{detailUser.email || '—'}</Typography></Box>
-								<Box><Typography variant="caption" color="text.secondary">{ui('Phone')}</Typography><Typography variant="body2">{detailUser.phoneNumber || '—'}</Typography></Box>
-								<Box><Typography variant="caption" color="text.secondary">{ui('Nationality')}</Typography><Typography variant="body2">{detailUser.nationality || '—'}</Typography></Box>
-								<Box><Typography variant="caption" color="text.secondary">{ui('Joined')}</Typography><Typography variant="body2">{new Date(detailUser.createdAt).toLocaleDateString()}</Typography></Box>
+								<Box><Typography variant="caption" color="text.secondary">{ui('help.email')}</Typography><Typography variant="body2">{detailUser.email || '—'}</Typography></Box>
+								<Box><Typography variant="caption" color="text.secondary">{ui('help.phone')}</Typography><Typography variant="body2">{detailUser.phoneNumber || '—'}</Typography></Box>
+								<Box><Typography variant="caption" color="text.secondary">{ui('mypage.nationality')}</Typography><Typography variant="body2">{detailUser.nationality || '—'}</Typography></Box>
+								<Box><Typography variant="caption" color="text.secondary">{ui('admin.joined')}</Typography><Typography variant="body2">{new Date(detailUser.createdAt).toLocaleDateString()}</Typography></Box>
 							</Box>
 							<Divider sx={{ mt: 2, mb: 1 }} />
 							<Typography variant="caption" color="text.secondary">ID: </Typography>
@@ -246,10 +246,10 @@ const AdminUsers: NextPage = () => {
 									color={detailUser.status === 'BANNED' ? 'success' : 'warning'}
 									onClick={() => { handleBan(detailUser._id, detailUser.status === 'BANNED'); setDetailUser(null); }}
 								>
-									{detailUser.status === 'BANNED' ? ui('Unban') : ui('Ban')}
+									{detailUser.status === 'BANNED' ? ui('admin.unban') : ui('admin.ban')}
 								</Button>
 							)}
-							<Button onClick={() => setDetailUser(null)}>{ui('Close')}</Button>
+							<Button onClick={() => setDetailUser(null)}>{ui('admin.close')}</Button>
 						</DialogActions>
 					</>
 				)}

@@ -32,11 +32,11 @@ const FeaturedServices = () => {
 			<div className="container">
 				<div className="home-featured-services__header">
 					<div className="header-left">
-						<h2>{ui('Popular Services')}</h2>
-						<p>{ui('Hand-picked top-rated services to get you started')}</p>
+						<h2>{ui('home.popularServices')}</h2>
+						<p>{ui('home.handPickedTopRatedServices')}</p>
 					</div>
 					<Link href="/service" className="view-all-link">
-						{ui('View All')} <ArrowForwardIcon />
+						{ui('home.viewAll')} <ArrowForwardIcon />
 					</Link>
 				</div>
 
@@ -78,7 +78,7 @@ const FeaturedServices = () => {
 									</div>
 									<div className="service-footer">
 										<div className="service-price">
-											{service.price ? `$${service.price.toLocaleString()}` : ui('Contact Us')}
+											{service.price ? `$${service.price.toLocaleString()}` : ui('help.contactUs')}
 										</div>
 										<span className="service-arrow">
 											<ArrowForwardIcon />

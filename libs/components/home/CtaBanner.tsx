@@ -10,23 +10,23 @@ const CtaBanner = () => {
 	return (
 		<section className="home-cta">
 			<div className="container">
-				<div className="home-cta__tag">{ui('Join GMP Today')}</div>
+				<div className="home-cta__tag">{ui('home.joinGmpToday')}</div>
 				<h2>
-					{ui('Ready to Start Your')}<br />
-					{ui('Global Journey?')}
+					{ui('home.readyToStartYour')}<br />
+					{ui('home.globalJourney')}
 				</h2>
 				<p>
-					{ui("Whether you're a traveler seeking new horizons or an agency wanting to reach thousands of clients — GMP is the platform where opportunity meets ambition.")}
+					{ui('home.whetherYoureATravelerSeeking')}
 				</p>
 				<div className="home-cta__actions">
 					<Link href="/account/join">
 						<button className="cta-btn cta-btn--white">
-							{ui('Get Started Free')} <ArrowForwardIcon />
+							{ui('home.getStartedFree')} <ArrowForwardIcon />
 						</button>
 					</Link>
 					<Link href="/agency">
 						<button className="cta-btn cta-btn--outline">
-							<BusinessOutlinedIcon /> {ui('Browse Agencies')}
+							<BusinessOutlinedIcon /> {ui('home.browseAgencies')}
 						</button>
 					</Link>
 				</div>

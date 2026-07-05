@@ -51,7 +51,7 @@ const Footer = () => {
 							<div className="logo-glow" />
 						</div>
 						<p className="footer-tagline">
-							{ui('Global Migration Platform - connecting people with trusted immigration and travel agencies worldwide.')}
+							{ui('footer.globalMigrationPlatformConnectingPeople')}
 						</p>
 						<div className="footer-socials">
 							<a href="https://x.com" target="_blank" rel="noopener noreferrer" className="social-btn" aria-label="Twitter / X">
@@ -79,31 +79,31 @@ const Footer = () => {
 
 					{/* Services links */}
 					<div className="footer-links-group animate-in delay-1">
-						<h4>{ui('Services')}</h4>
+						<h4>{ui('agency.services')}</h4>
 						<ul>
 							<li>
 								<Link href="/service?type=VISA_SERVICES">
-									<span>{ui('Visa Services')}</span>
+									<span>{ui('mypage.visaServices')}</span>
 								</Link>
 							</li>
 							<li>
 								<Link href="/service?type=STUDY_ABROAD">
-									<span>{ui('Study Abroad')}</span>
+									<span>{ui('mypage.studyAbroad')}</span>
 								</Link>
 							</li>
 							<li>
 								<Link href="/service?type=WORK_ABROAD">
-									<span>{ui('Work Abroad')}</span>
+									<span>{ui('mypage.workAbroad')}</span>
 								</Link>
 							</li>
 							<li>
 								<Link href="/service?type=TRAVEL">
-									<span>{ui('Travel')}</span>
+									<span>{ui('mypage.travel')}</span>
 								</Link>
 							</li>
 							<li>
 								<Link href="/service">
-									<span>{ui('All Services')}</span>
+									<span>{ui('footer.allServices')}</span>
 								</Link>
 							</li>
 						</ul>
@@ -111,26 +111,26 @@ const Footer = () => {
 
 					{/* Company links */}
 					<div className="footer-links-group animate-in delay-2">
-						<h4>{ui('Company')}</h4>
+						<h4>{ui('footer.company')}</h4>
 						<ul>
 							<li>
 								<Link href="/agency">
-									<span>{ui('Agencies')}</span>
+									<span>{ui('agency.agencies')}</span>
 								</Link>
 							</li>
 							<li>
 								<Link href="/agency/map">
-									<span>{ui('Agency Map')}</span>
+									<span>{ui('footer.agencyMap')}</span>
 								</Link>
 							</li>
 							<li>
 								<Link href="/about">
-									<span>{ui('About Us')}</span>
+									<span>{ui('footer.aboutUs')}</span>
 								</Link>
 							</li>
 							<li>
 								<Link href="/contact">
-									<span>{ui('Contact')}</span>
+									<span>{ui('footer.contact')}</span>
 								</Link>
 							</li>
 						</ul>
@@ -138,21 +138,21 @@ const Footer = () => {
 
 					{/* Account links */}
 					<div className="footer-links-group animate-in delay-3">
-						<h4>{ui('Account')}</h4>
+						<h4>{ui('footer.account')}</h4>
 						<ul>
 							<li>
 								<Link href="/account/join">
-									<span>{ui('Sign In')}</span>
+									<span>{ui('footer.signIn')}</span>
 								</Link>
 							</li>
 							<li>
 								<Link href="/account/join">
-									<span>{ui('Register')}</span>
+									<span>{ui('auth.register')}</span>
 								</Link>
 							</li>
 							<li>
 								<Link href="/mypage">
-									<span>{ui('My Profile')}</span>
+									<span>{ui('footer.myProfile')}</span>
 								</Link>
 							</li>
 							<li>
@@ -165,11 +165,11 @@ const Footer = () => {
 
 					{/* Newsletter */}
 					<div className="footer-newsletter animate-in delay-4">
-						<h4>{ui('Stay Updated')}</h4>
-						<p>{ui('Get the latest migration news and service updates directly to your inbox.')}</p>
+						<h4>{ui('footer.stayUpdated')}</h4>
+						<p>{ui('footer.getTheLatestMigrationNews')}</p>
 						<form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
-							<input type="email" placeholder={ui('Your email address')} />
-							<button type="submit" aria-label={ui('Subscribe')}>
+							<input type="email" placeholder={ui('footer.yourEmailAddress')} />
+							<button type="submit" aria-label={ui('footer.subscribe')}>
 								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
 									<line x1="22" y1="2" x2="11" y2="13" />
 									<polygon points="22 2 15 22 11 13 2 9 22 2" />
@@ -177,9 +177,9 @@ const Footer = () => {
 							</button>
 						</form>
 						<div className="footer-trust-badges">
-							<span className="trust-badge">{ui('Secure')}</span>
-							<span className="trust-badge">{ui('Verified')}</span>
-							<span className="trust-badge">{ui('Global')}</span>
+							<span className="trust-badge">{ui('footer.secure')}</span>
+							<span className="trust-badge">{ui('admin.verified')}</span>
+							<span className="trust-badge">{ui('service.global')}</span>
 						</div>
 					</div>
 				</div>
@@ -188,32 +188,32 @@ const Footer = () => {
 				<div className="footer-stats animate-in">
 					<div className="fstat">
 						<span className="fstat-num">200+</span>
-						<span className="fstat-label">{ui('Services')}</span>
+						<span className="fstat-label">{ui('agency.services')}</span>
 					</div>
 					<div className="fstat-sep" />
 					<div className="fstat">
 						<span className="fstat-num">50+</span>
-						<span className="fstat-label">{ui('Agencies')}</span>
+						<span className="fstat-label">{ui('agency.agencies')}</span>
 					</div>
 					<div className="fstat-sep" />
 					<div className="fstat">
 						<span className="fstat-num">30+</span>
-						<span className="fstat-label">{ui('Countries')}</span>
+						<span className="fstat-label">{ui('mypage.countries')}</span>
 					</div>
 					<div className="fstat-sep" />
 					<div className="fstat">
 						<span className="fstat-num">10k+</span>
-						<span className="fstat-label">{ui('Clients Served')}</span>
+						<span className="fstat-label">{ui('footer.clientsServed')}</span>
 					</div>
 				</div>
 
 				{/* Bottom bar */}
 				<div className="footer-bottom-bar">
-					<span>© {new Date().getFullYear()} GMP - {ui('Global Migration Platform. All rights reserved.')}</span>
+					<span>© {new Date().getFullYear()} GMP - {ui('footer.globalMigrationPlatformAllRights')}</span>
 					<div className="footer-legal-links">
-						<Link href="/privacy">{ui('Privacy Policy')}</Link>
-						<Link href="/terms">{ui('Terms of Service')}</Link>
-						<Link href="/cookies">{ui('Cookies')}</Link>
+						<Link href="/privacy">{ui('footer.privacyPolicy')}</Link>
+						<Link href="/terms">{ui('footer.termsOfService')}</Link>
+						<Link href="/cookies">{ui('footer.cookies')}</Link>
 					</div>
 				</div>
 			</div>

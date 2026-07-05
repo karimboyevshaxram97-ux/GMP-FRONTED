@@ -59,25 +59,25 @@ const AuditLogPage: NextPage = () => {
 
 	return (
 		<div>
-			<div className="page-title">{ui('Audit Log')}</div>
-			<Box sx={{ mb: 1, color: '#888', fontSize: 13 }}>{ui('Total actions')}: <b>{total}</b></Box>
+			<div className="page-title">{ui('admin.auditLog')}</div>
+			<Box sx={{ mb: 1, color: '#888', fontSize: 13 }}>{ui('admin.totalActions')}: <b>{total}</b></Box>
 
 			<TableContainer component={Paper} sx={{ borderRadius: 2, mb: 3 }}>
 				<Table>
 					<TableHead>
 						<TableRow sx={{ bgcolor: '#f5f7fa' }}>
-							<TableCell><b>{ui('Action')}</b></TableCell>
-							<TableCell><b>{ui('Target')}</b></TableCell>
-							<TableCell><b>{ui('Target Type')}</b></TableCell>
-							<TableCell><b>{ui('Reason')}</b></TableCell>
-							<TableCell><b>{ui('Date & Time')}</b></TableCell>
+							<TableCell><b>{ui('admin.action')}</b></TableCell>
+							<TableCell><b>{ui('admin.target')}</b></TableCell>
+							<TableCell><b>{ui('admin.targetType')}</b></TableCell>
+							<TableCell><b>{ui('admin.reason')}</b></TableCell>
+							<TableCell><b>{ui('admin.dateTime')}</b></TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
 						{logs.length === 0 ? (
 							<TableRow>
 								<TableCell colSpan={5} sx={{ textAlign: 'center', py: 5, color: '#aaa' }}>
-									{ui('No actions recorded yet')}
+									{ui('admin.noActionsRecordedYet')}
 								</TableCell>
 							</TableRow>
 						) : logs.map((log: any) => (

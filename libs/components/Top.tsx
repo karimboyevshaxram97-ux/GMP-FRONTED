@@ -132,14 +132,14 @@ const Top = () => {
 	if (device === 'mobile') {
 		return (
 			<Stack className={'top'}>
-				<Link href={'/home'}><div>{ui('Home')}</div></Link>
-				<Link href={'/service?type=STUDY_ABROAD'}><div>{ui('Study')}</div></Link>
-				<Link href={'/service?type=WORK_ABROAD'}><div>{ui('Work')}</div></Link>
-				<Link href={'/service?type=TRAVEL'}><div>{ui('Travel')}</div></Link>
-				<Link href={'/service?type=VISA_SERVICES'}><div>{ui('Visa')}</div></Link>
-				<Link href={'/service'}><div>{ui('All Services')}</div></Link>
-				<Link href={'/agency/map'}><div>{ui('Map')}</div></Link>
-				{user?._id && <Link href={'/mypage'}><div>{ui('My Page')}</div></Link>}
+				<Link href={'/home'}><div>{ui('nav.home')}</div></Link>
+				<Link href={'/service?type=STUDY_ABROAD'}><div>{ui('nav.study')}</div></Link>
+				<Link href={'/service?type=WORK_ABROAD'}><div>{ui('nav.work')}</div></Link>
+				<Link href={'/service?type=TRAVEL'}><div>{ui('mypage.travel')}</div></Link>
+				<Link href={'/service?type=VISA_SERVICES'}><div>{ui('nav.visa')}</div></Link>
+				<Link href={'/service'}><div>{ui('footer.allServices')}</div></Link>
+				<Link href={'/agency/map'}><div>{ui('nav.map')}</div></Link>
+				{user?._id && <Link href={'/mypage'}><div>{ui('nav.myPage')}</div></Link>}
 			</Stack>
 		);
 	}
@@ -167,7 +167,7 @@ const Top = () => {
 						))}
 						{user?._id && (
 							<Link href={'/mypage'}>
-								<div className={isMyPage ? 'active' : ''}>{ui('My Page')}</div>
+								<div className={isMyPage ? 'active' : ''}>{ui('nav.myPage')}</div>
 							</Link>
 						)}
 					</Box>
@@ -177,13 +177,13 @@ const Top = () => {
 						<Link href={'/account/join'}>
 							<div className={'join-box'}>
 								<AccountCircleOutlinedIcon />
-								<span>{ui('Login / Register')}</span>
+								<span>{ui('nav.loginRegister')}</span>
 							</div>
 						</Link>
 					) : (
 						<Box className={'user-box'}>
 							{/* Notification Bell */}
-							<Tooltip title={ui('Notifications')}>
+							<Tooltip title={ui('nav.notifications')}>
 								<IconButton className={'notification-icon'} onClick={handleNotifOpen} size="small">
 									<Badge badgeContent={unreadCount} color="error" max={99}>
 										{unreadCount > 0 ? <NotificationsIcon /> : <NotificationsOutlinedIcon />}
@@ -200,7 +200,7 @@ const Top = () => {
 								PaperProps={{ sx: { width: 340, maxHeight: 440, borderRadius: '12px', boxShadow: '0 8px 32px rgba(0,0,0,0.15)' } }}
 							>
 								<Box sx={{ px: 2, py: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-									<Typography fontWeight={700} fontSize={14}>{ui('Notifications')}</Typography>
+									<Typography fontWeight={700} fontSize={14}>{ui('nav.notifications')}</Typography>
 									{unreadCount > 0 && (
 										<Typography
 											fontSize={12}
@@ -208,7 +208,7 @@ const Top = () => {
 											sx={{ cursor: 'pointer', fontWeight: 600 }}
 											onClick={handleMarkAllRead}
 										>
-											{ui('Mark all read')}
+											{ui('nav.markAllRead')}
 										</Typography>
 									)}
 								</Box>
@@ -216,7 +216,7 @@ const Top = () => {
 								{notifications.length === 0 ? (
 									<Box sx={{ px: 2, py: 3, textAlign: 'center' }}>
 										<CheckCircleOutlineIcon sx={{ color: '#ccc', fontSize: 36, mb: 1 }} />
-										<Typography fontSize={13} color="text.secondary">{ui('All caught up!')}</Typography>
+										<Typography fontSize={13} color="text.secondary">{ui('nav.allCaughtUp')}</Typography>
 									</Box>
 								) : (
 									notifications.map((n: any) => (
@@ -255,10 +255,10 @@ const Top = () => {
 								onClose={() => setLogoutAnchor(null)}
 								sx={{ mt: '5px' }}
 							>
-								<MenuItem onClick={() => { router.push('/mypage'); setLogoutAnchor(null); }}>{ui('My Page')}</MenuItem>
+								<MenuItem onClick={() => { router.push('/mypage'); setLogoutAnchor(null); }}>{ui('nav.myPage')}</MenuItem>
 								<MenuItem onClick={() => logOut()}>
 									<Logout fontSize="small" style={{ color: '#1649ff', marginRight: 8 }} />
-									{ui('Logout')}
+									{ui('admin.logout')}
 								</MenuItem>
 							</Menu>
 						</Box>

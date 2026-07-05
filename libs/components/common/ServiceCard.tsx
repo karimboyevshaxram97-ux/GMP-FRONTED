@@ -30,7 +30,7 @@ const ServiceCard = ({ service, onClick, onLike }: Props) => {
 
 				<Box className="service-meta">
 					<PublicIcon className="meta-icon" />
-					<span>{service.destinationCountry || ui('Global')}</span>
+					<span>{service.destinationCountry || ui('service.global')}</span>
 					{service.processingTime && (
 						<>
 							<span className="meta-dot">·</span>

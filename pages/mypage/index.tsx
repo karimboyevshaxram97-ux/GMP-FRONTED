@@ -50,12 +50,12 @@ function FollowingAgencyRow({ follow, onOpen }: { follow: any; onOpen: () => voi
 					? <img src={`${REACT_APP_API_URL}/uploads/${agency.logo}`} alt="" style={{ width: 36, height: 36, borderRadius: 8, objectFit: 'cover' }} />
 					: <BusinessIcon sx={{ fontSize: 28, color: '#aaa' }} />}
 				<div>
-					<strong>{agency ? tr(agency.name) : ui('Agency')}</strong>
+					<strong>{agency ? tr(agency.name) : ui('auth.agency')}</strong>
 					<span style={{ display: 'block', fontSize: 12, color: '#888' }}>
 						{agency?.email || follow.agency}
 					</span>
 					<span style={{ fontSize: 11, color: '#aaa' }}>
-						{ui('Followed')}: {new Date(follow.followedAt).toLocaleDateString()}
+						{ui('mypage.followed')}: {new Date(follow.followedAt).toLocaleDateString()}
 					</span>
 				</div>
 			</Box>
@@ -70,14 +70,14 @@ function ApplicationRow({ app, onOpen }: { app: any; onOpen: () => void }) {
 		<Box key={app._id} className="list-row">
 			<div style={{ flex: 1 }}>
 				<strong style={{ display: 'block', cursor: 'pointer', color: '#1649ff' }} onClick={onOpen}>
-					{ui('Application')} #{app._id.slice(-6)}
+					{ui('mypage.application')} #{app._id.slice(-6)}
 				</strong>
 				<span style={{ display: 'block', fontSize: 12, color: '#888' }}>
-					{ui('Applied')}: {new Date(app.appliedAt).toLocaleDateString()}
+					{ui('mypage.applied')}: {new Date(app.appliedAt).toLocaleDateString()}
 				</span>
 				{app.paymentStatus && (
 					<span className="payment-badge" data-status={app.paymentStatus}>
-						{ui('Payment')}: {ui(app.paymentStatus)}
+						{ui('mypage.payment')}: {ui(app.paymentStatus)}
 					</span>
 				)}
 				{app.notes && <span style={{ display: 'block', fontSize: 12, color: '#666', marginTop: 2 }}>{app.notes}</span>}
@@ -286,7 +286,7 @@ const MyPage: NextPage = () => {
 			const updatedUser = result?.data?.updateMe;
 			userVar({ ...userVar(), ...updatedUser, avatar: updatedUser?.avatar ?? filename });
 			await refreshAuthTokens();
-			await sweetMixinSuccessAlert(ui('Avatar updated!'));
+			await sweetMixinSuccessAlert(ui('mypage.avatarUpdated'));
 		} catch (err: any) {
 			const msg = err?.graphQLErrors?.[0]?.message || err?.message || ui('Failed to upload photo');
 			await sweetMixinErrorAlert(msg);
@@ -303,7 +303,7 @@ const MyPage: NextPage = () => {
 			const updatedUser = result?.data?.updateMe;
 			if (updatedUser) userVar({ ...userVar(), ...updatedUser });
 			await refreshAuthTokens();
-			await sweetMixinSuccessAlert(ui('Profile updated!'));
+			await sweetMixinSuccessAlert(ui('mypage.profileUpdated'));
 		} catch (err: any) {
 			await sweetMixinErrorAlert(toFriendlyError(err, ui('Failed to update profile')));
 		}
@@ -366,7 +366,7 @@ const MyPage: NextPage = () => {
 			setNewCover(null);
 			await refetchMyAgency();
 			await refreshAuthTokens();
-			await sweetMixinSuccessAlert(ui('Agency created! Pending admin approval.'));
+			await sweetMixinSuccessAlert(ui('mypage.agencyCreatedPendingAdminApproval'));
 		} catch (err: any) {
 			setAgencyError(toFriendlyError(err, ui('Failed to create agency. Please try again.')));
 		} finally {
@@ -400,7 +400,7 @@ const MyPage: NextPage = () => {
 			});
 			await refetchMyAgency();
 			setEditingLocation(false);
-			await sweetMixinSuccessAlert(ui('Location updated!'));
+			await sweetMixinSuccessAlert(ui('mypage.locationUpdated'));
 		} catch (err: any) {
 			await sweetMixinErrorAlert(err?.message || ui('Failed to update location.'));
 		} finally {
@@ -449,7 +449,7 @@ const MyPage: NextPage = () => {
 						},
 					},
 				});
-				await sweetMixinSuccessAlert(ui('Service updated!'));
+				await sweetMixinSuccessAlert(ui('mypage.serviceUpdated'));
 			} else {
 				await createService({
 					variables: {
@@ -457,7 +457,7 @@ const MyPage: NextPage = () => {
 						input: { name: nameObj, description: descObj, serviceType: svcType, destinationCountry: svcDest, sourceCountries, price: svcPrice ? parseFloat(svcPrice) : undefined, processingTime: svcProcessing || undefined },
 					},
 				});
-				await sweetMixinSuccessAlert(ui('Service created!'));
+				await sweetMixinSuccessAlert(ui('mypage.serviceCreated'));
 			}
 			setShowServiceForm(false);
 			refetchAgencyServices();
@@ -473,10 +473,10 @@ const MyPage: NextPage = () => {
 		if (!ok) return;
 		try {
 			await deleteService({ variables: { id: serviceId } });
-			await sweetMixinSuccessAlert(ui('Service deleted'));
+			await sweetMixinSuccessAlert(ui('mypage.serviceDeleted'));
 			refetchAgencyServices();
 		} catch (err: any) {
-			await sweetMixinErrorAlert(err?.message || ui('Failed to delete service'));
+			await sweetMixinErrorAlert(err?.message || ui('mypage.failedToDeleteService'));
 		}
 	};
 
@@ -508,7 +508,7 @@ const MyPage: NextPage = () => {
 			await updateMyAgency({ variables: { input: { coverImage: filename } } });
 			setLocalCover(filename);
 			refetchMyAgency();
-			await sweetMixinSuccessAlert(ui('Cover photo updated!'));
+			await sweetMixinSuccessAlert(ui('mypage.coverPhotoUpdated'));
 		} catch (err: any) {
 			await sweetMixinErrorAlert(err?.message || ui('Failed to upload cover photo'));
 		} finally {
@@ -545,7 +545,7 @@ const MyPage: NextPage = () => {
 			});
 			await refetchMyAgency();
 			setEditInfoMode(false);
-			await sweetMixinSuccessAlert(ui('Agency info updated!'));
+			await sweetMixinSuccessAlert(ui('mypage.agencyInfoUpdated'));
 		} catch (err: any) {
 			await sweetMixinErrorAlert(toFriendlyError(err, ui('Failed to update agency info')));
 		} finally {
@@ -574,7 +574,7 @@ const MyPage: NextPage = () => {
 			await updateMyAgency({ variables: { input: { logo: filename } } });
 			setLocalLogo(filename);
 			refetchMyAgency();
-			await sweetMixinSuccessAlert(ui('Logo updated!'));
+			await sweetMixinSuccessAlert(ui('mypage.logoUpdated'));
 		} catch (err: any) {
 			const msg = err?.graphQLErrors?.[0]?.message || err?.message || ui('Failed to upload logo');
 			await sweetMixinErrorAlert(msg);
@@ -584,16 +584,16 @@ const MyPage: NextPage = () => {
 		}
 	};
 
-	const accountRoleLabel = isAgencyAdmin ? ui('Agency account') : ui('User account');
+	const accountRoleLabel = isAgencyAdmin ? ui('mypage.agencyAccount') : ui('mypage.userAccount');
 
 	const menuItems = [
-		{ icon: <PersonIcon />, label: ui('Profile'), count: null },
-		{ icon: <AssignmentIcon />, label: ui('Applications'), count: applications.length },
-		{ icon: <PeopleIcon />, label: ui('Following'), count: followings.length },
-		{ icon: <ChatIcon />, label: ui('Messages'), count: conversations.filter((c: any) => c.unreadCount > 0).length || conversations.length },
+		{ icon: <PersonIcon />, label: ui('mypage.profile'), count: null },
+		{ icon: <AssignmentIcon />, label: ui('mypage.applications'), count: applications.length },
+		{ icon: <PeopleIcon />, label: ui('agency.following'), count: followings.length },
+		{ icon: <ChatIcon />, label: ui('mypage.messages'), count: conversations.filter((c: any) => c.unreadCount > 0).length || conversations.length },
 		...(isAgencyAdmin ? [
 			{ icon: <BusinessIcon />, label: ui('My Agency'), count: null },
-			{ icon: <MiscellaneousServicesIcon />, label: ui('Services'), count: agencyServices.length },
+			{ icon: <MiscellaneousServicesIcon />, label: ui('agency.services'), count: agencyServices.length },
 			{ icon: <WorkOutlineIcon />, label: ui('Applications Received'), count: agencyApplications.filter((a: any) => a.status === 'SUBMITTED').length || null },
 		] : []),
 	];
@@ -609,8 +609,8 @@ const MyPage: NextPage = () => {
 								alt="avatar"
 							/>
 							<Box>
-								<span>{ui('My account')}</span>
-								<h1>{user?.firstName || ui('User')} {user?.lastName || ''}</h1>
+								<span>{ui('mypage.myAccount')}</span>
+								<h1>{user?.firstName || ui('auth.user')} {user?.lastName || ''}</h1>
 								<p>{user?.email}</p>
 								<div className={`account-role-badge ${isAgencyAdmin ? 'agency' : 'user'}`}>
 									{accountRoleLabel}
@@ -618,9 +618,9 @@ const MyPage: NextPage = () => {
 							</Box>
 						</Box>
 						<Box className="account-stats">
-							<div><strong>{applications.length}</strong><span>{ui('Applications')}</span></div>
-							<div><strong>{followings.length}</strong><span>{ui('Following')}</span></div>
-							<div><strong>{conversations.length}</strong><span>{ui('Messages')}</span></div>
+							<div><strong>{applications.length}</strong><span>{ui('mypage.applications')}</span></div>
+							<div><strong>{followings.length}</strong><span>{ui('agency.following')}</span></div>
+							<div><strong>{conversations.length}</strong><span>{ui('mypage.messages')}</span></div>
 						</Box>
 					</Box>
 				</Stack>
@@ -651,8 +651,8 @@ const MyPage: NextPage = () => {
 						{tab === 0 && (
 							<Box className="profile-form">
 								<div className="content-head">
-									<span>{ui('Personal details')}</span>
-									<h2>{ui('Edit profile')}</h2>
+									<span>{ui('mypage.personalDetails')}</span>
+									<h2>{ui('mypage.editProfile')}</h2>
 								</div>
 
 								{/* Avatar upload */}
@@ -678,36 +678,36 @@ const MyPage: NextPage = () => {
 												: <CameraAltIcon />}
 										</Box>
 									</Box>
-									<p className="avatar-hint">{ui('Click to change photo')}</p>
+									<p className="avatar-hint">{ui('mypage.clickToChangePhoto')}</p>
 								</Box>
 
 								<Box component="form" onSubmit={handleUpdateProfile} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
 									<div className="form-grid">
-										<TextField label={ui('First name')} value={firstName} onChange={(e) => setFirstName(e.target.value)} fullWidth />
-										<TextField label={ui('Last name')} value={lastName} onChange={(e) => setLastName(e.target.value)} fullWidth />
+										<TextField label={ui('auth.firstName')} value={firstName} onChange={(e) => setFirstName(e.target.value)} fullWidth />
+										<TextField label={ui('auth.lastName')} value={lastName} onChange={(e) => setLastName(e.target.value)} fullWidth />
 									</div>
-									<TextField label={ui('Bio')} value={bio} onChange={(e) => setBio(e.target.value)} fullWidth multiline rows={3} />
-									<TextField label={ui('Nationality')} value={nationality} onChange={(e) => setNationality(e.target.value)} fullWidth />
-									<Button type="submit" variant="contained">{ui('Save changes')}</Button>
+									<TextField label={ui('mypage.bio')} value={bio} onChange={(e) => setBio(e.target.value)} fullWidth multiline rows={3} />
+									<TextField label={ui('mypage.nationality')} value={nationality} onChange={(e) => setNationality(e.target.value)} fullWidth />
+									<Button type="submit" variant="contained">{ui('mypage.saveChanges')}</Button>
 								</Box>
 							</Box>
 						)}
 
 						{tab === 1 && (
 							<Box>
-								<div className="content-head"><span>{ui('Application center')}</span><h2>{ui('My applications')}</h2></div>
+								<div className="content-head"><span>{ui('mypage.applicationCenter')}</span><h2>{ui('mypage.myApplications')}</h2></div>
 								{applications.length ? applications.map((app: any) => (
 									<ApplicationRow key={app._id} app={app} onOpen={() => router.push(`/service/detail?id=${app.service}`)} />
-								)) : <Box className="empty-state">{ui('No applications yet.')}</Box>}
+								)) : <Box className="empty-state">{ui('mypage.noApplicationsYet')}</Box>}
 							</Box>
 						)}
 
 						{tab === 2 && (
 							<Box>
-								<div className="content-head"><span>{ui('Saved agencies')}</span><h2>{ui('Following agencies')}</h2></div>
+								<div className="content-head"><span>{ui('mypage.savedAgencies')}</span><h2>{ui('mypage.followingAgencies')}</h2></div>
 								{followings.length ? followings.map((follow: any) => (
 									<FollowingAgencyRow key={follow._id} follow={follow} onOpen={() => router.push(`/agency/${follow.agency}`)} />
-								)) : <Box className="empty-state">{ui('Not following any agencies yet.')}</Box>}
+								)) : <Box className="empty-state">{ui('mypage.notFollowingAnyAgenciesYet')}</Box>}
 							</Box>
 						)}
 
@@ -715,7 +715,7 @@ const MyPage: NextPage = () => {
 							<Box className="chat-panel">
 								{!activeConversation ? (
 									<>
-										<div className="content-head"><span>{ui('Conversations')}</span><h2>{ui('Messages')}</h2></div>
+										<div className="content-head"><span>{ui('mypage.conversations')}</span><h2>{ui('mypage.messages')}</h2></div>
 										{conversations.length ? conversations.map((conv: any) => (
 											<Box
 												key={conv._id}
@@ -726,14 +726,14 @@ const MyPage: NextPage = () => {
 													<ChatIcon />
 												</Box>
 												<div className="chat-preview-text">
-													<strong>{ui('Conversation with agency')}</strong>
-													<span>{conv.lastMessage || ui('No messages yet')}</span>
+													<strong>{ui('mypage.conversationWithAgency')}</strong>
+													<span>{conv.lastMessage || ui('mypage.noMessagesYet')}</span>
 												</div>
 												{conv.unreadCount > 0 && (
 													<Chip label={conv.unreadCount} color="primary" size="small" />
 												)}
 											</Box>
-										)) : <Box className="empty-state">{ui('No conversations yet. Message an agency to start chatting.')}</Box>}
+										)) : <Box className="empty-state">{ui('mypage.noConversationsYetMessageAn')}</Box>}
 									</>
 								) : (
 									<Box className="chat-window">
@@ -741,7 +741,7 @@ const MyPage: NextPage = () => {
 											<IconButton size="small" onClick={() => setActiveConversation(null)}>
 												<ArrowBackIcon />
 											</IconButton>
-											<strong>{ui('Conversation')}</strong>
+											<strong>{ui('mypage.conversation')}</strong>
 										</Box>
 
 										<Box className="chat-messages">
@@ -771,7 +771,7 @@ const MyPage: NextPage = () => {
 											<TextField
 												fullWidth
 												size="small"
-												placeholder={ui('Type a message...')}
+												placeholder={ui('mypage.typeAMessage')}
 												value={messageText}
 												onChange={(e) => setMessageText(e.target.value)}
 												onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSendMessage(e as any); } }}
@@ -786,7 +786,7 @@ const MyPage: NextPage = () => {
 						)}
 						{tab === 4 && isAgencyAdmin && (
 							<Box>
-								<div className="content-head"><span>{ui('Agency management')}</span><h2>{ui('My Agency')}</h2></div>
+								<div className="content-head"><span>{ui('mypage.agencyManagement')}</span><h2>{ui('My Agency')}</h2></div>
 
 								{myAgency ? (
 									<Box>
@@ -800,7 +800,7 @@ const MyPage: NextPage = () => {
 												{!(localCover || myAgency.coverImage) && (
 													<Box className="cover-empty-hint">
 														<CameraAltIcon />
-														<span>{ui('No cover photo')}</span>
+														<span>{ui('mypage.noCoverPhoto')}</span>
 													</Box>
 												)}
 												<Button
@@ -811,14 +811,14 @@ const MyPage: NextPage = () => {
 													onClick={() => !coverUploading && coverInputRef.current?.click()}
 													disabled={coverUploading}
 												>
-													{coverUploading ? ui('Uploading...') : (localCover || myAgency.coverImage) ? ui('Change cover photo') : ui('Add cover photo')}
+													{coverUploading ? ui('mypage.uploading') : (localCover || myAgency.coverImage) ? ui('mypage.changeCoverPhoto') : ui('mypage.addCoverPhoto')}
 												</Button>
 											</Box>
 										</Box>
 
 										{/* ── Logo + basic info ─────────────────── */}
 										<Box className="agency-identity-row">
-											<Box className="agency-card-logo" onClick={() => !logoUploading && logoInputRef.current?.click()} sx={{ cursor: 'pointer' }} title={ui('Click to change logo')}>
+											<Box className="agency-card-logo" onClick={() => !logoUploading && logoInputRef.current?.click()} sx={{ cursor: 'pointer' }} title={ui('mypage.clickToChangeLogo')}>
 												<input ref={logoInputRef} type="file" accept="image/jpeg,image/png,image/webp" style={{ display: 'none' }} onChange={handleLogoChange} />
 												{(localLogo || myAgency.logo) ? <img src={`${REACT_APP_API_URL}/uploads/${localLogo || myAgency.logo}`} alt="logo" /> : <BusinessIcon />}
 												<Box className="avatar-overlay">
@@ -832,22 +832,22 @@ const MyPage: NextPage = () => {
 												</Box>
 												<p style={{ margin: '4px 0 0', color: '#64748b', fontSize: 13 }}>{myAgency.email}</p>
 												<Box className="agency-stats-row" sx={{ mt: 1.5 }}>
-													<div><strong>{myAgency.totalServices ?? 0}</strong><span>{ui('Services')}</span></div>
-													<div><strong>{myAgency.totalReviews ?? 0}</strong><span>{ui('Reviews')}</span></div>
-													<div><strong>{(myAgency.averageRating ?? 0).toFixed(1)}</strong><span>{ui('Rating')}</span></div>
-													<div><strong>{myAgency.viewCount ?? 0}</strong><span>{ui('Views')}</span></div>
+													<div><strong>{myAgency.totalServices ?? 0}</strong><span>{ui('agency.services')}</span></div>
+													<div><strong>{myAgency.totalReviews ?? 0}</strong><span>{ui('agency.reviews')}</span></div>
+													<div><strong>{(myAgency.averageRating ?? 0).toFixed(1)}</strong><span>{ui('mypage.rating')}</span></div>
+													<div><strong>{myAgency.viewCount ?? 0}</strong><span>{ui('agency.views')}</span></div>
 												</Box>
 											</Box>
 										</Box>
 
 										{myAgency.verificationStatus === 'PENDING' && (
-											<Alert severity="info" sx={{ mt: 2 }}>{ui('Your agency is pending admin approval. You will be notified once verified.')}</Alert>
+											<Alert severity="info" sx={{ mt: 2 }}>{ui('mypage.yourAgencyIsPendingAdmin')}</Alert>
 										)}
 
 										{/* ── Agency info editing ───────────────── */}
 										<Box sx={{ mt: 2, borderTop: '1px solid #e2e8f0', pt: 2 }}>
 											<Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
-												<strong style={{ fontSize: 15 }}>{ui('Agency Information')}</strong>
+												<strong style={{ fontSize: 15 }}>{ui('mypage.agencyInformation')}</strong>
 												{!editInfoMode && (
 													<Button size="small" startIcon={<EditIcon />} onClick={() => openInfoEdit(myAgency)}>{ui('Edit')}</Button>
 												)}
@@ -855,35 +855,35 @@ const MyPage: NextPage = () => {
 
 											{editInfoMode ? (
 												<Box component="form" className="profile-form" onSubmit={handleSaveAgencyInfo}>
-													<TextField label={ui('Agency name')} value={editAgencyName} onChange={(e) => setEditAgencyName(e.target.value)} fullWidth required />
-													<TextField label={ui('Description')} value={editAgencyDesc} onChange={(e) => setEditAgencyDesc(e.target.value)} fullWidth multiline rows={3} />
+													<TextField label={ui('mypage.agencyName')} value={editAgencyName} onChange={(e) => setEditAgencyName(e.target.value)} fullWidth required />
+													<TextField label={ui('mypage.description')} value={editAgencyDesc} onChange={(e) => setEditAgencyDesc(e.target.value)} fullWidth multiline rows={3} />
 													<div className="form-grid">
-														<TextField label={ui('Phone number')} value={editAgencyPhone} onChange={(e) => setEditAgencyPhone(e.target.value)} fullWidth />
-														<TextField label={ui('Website')} value={editAgencyWebsite} onChange={(e) => setEditAgencyWebsite(e.target.value)} fullWidth />
+														<TextField label={ui('auth.phoneNumber')} value={editAgencyPhone} onChange={(e) => setEditAgencyPhone(e.target.value)} fullWidth />
+														<TextField label={ui('mypage.website')} value={editAgencyWebsite} onChange={(e) => setEditAgencyWebsite(e.target.value)} fullWidth />
 													</div>
 													<TextField
-														label={ui('Operating countries')}
+														label={ui('agency.operatingCountries')}
 														value={editAgencyCountries}
 														onChange={(e) => setEditAgencyCountries(e.target.value)}
 														fullWidth
 														required
-														helperText={ui('Comma-separated: Uzbekistan, Turkey, UAE')}
+														helperText={ui('mypage.commaSeparatedUzbekistanTurkeyUae')}
 													/>
 													<Box sx={{ display: 'flex', gap: 1 }}>
-														<Button type="submit" variant="contained" disabled={infoSaving}>{infoSaving ? ui('Saving...') : ui('Save changes')}</Button>
-														<Button variant="text" onClick={() => setEditInfoMode(false)}>{ui('Cancel')}</Button>
+														<Button type="submit" variant="contained" disabled={infoSaving}>{infoSaving ? ui('mypage.saving') : ui('mypage.saveChanges')}</Button>
+														<Button variant="text" onClick={() => setEditInfoMode(false)}>{ui('agency.cancel')}</Button>
 													</Box>
 												</Box>
 											) : (
 												<Box className="agency-info-display">
 													{myAgency.description && <p>{tr(myAgency.description)}</p>}
-													{myAgency.phoneNumber && <Box className="info-row"><strong>{ui('Phone')}:</strong> {myAgency.phoneNumber}</Box>}
-													{myAgency.website && <Box className="info-row"><strong>{ui('Website')}:</strong> <a href={myAgency.website} target="_blank" rel="noopener noreferrer">{myAgency.website}</a></Box>}
+													{myAgency.phoneNumber && <Box className="info-row"><strong>{ui('help.phone')}:</strong> {myAgency.phoneNumber}</Box>}
+													{myAgency.website && <Box className="info-row"><strong>{ui('mypage.website')}:</strong> <a href={myAgency.website} target="_blank" rel="noopener noreferrer">{myAgency.website}</a></Box>}
 													{myAgency.operatingCountries?.length > 0 && (
-														<Box className="info-row"><strong>{ui('Countries')}:</strong> {myAgency.operatingCountries.join(', ')}</Box>
+														<Box className="info-row"><strong>{ui('mypage.countries')}:</strong> {myAgency.operatingCountries.join(', ')}</Box>
 													)}
 													{!myAgency.description && !myAgency.phoneNumber && !myAgency.website && (
-														<Box className="empty-state" sx={{ py: 1.5 }}>{ui('No info added yet. Click Edit to fill in details.')}</Box>
+														<Box className="empty-state" sx={{ py: 1.5 }}>{ui('mypage.noInfoAddedYetClick')}</Box>
 													)}
 												</Box>
 											)}
@@ -892,35 +892,35 @@ const MyPage: NextPage = () => {
 										{/* ── Location editing ──────────────────── */}
 										<Box sx={{ mt: 2, borderTop: '1px solid #e2e8f0', pt: 2 }}>
 											<Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
-												<strong style={{ fontSize: 15 }}>{ui('Location')}</strong>
+												<strong style={{ fontSize: 15 }}>{ui('mypage.location')}</strong>
 												{!editingLocation && (
 													<Button size="small" startIcon={<EditIcon />} onClick={() => handleEditLocation(myAgency)}>
-														{myAgency.latitude && myAgency.longitude ? ui('Edit') : ui('Add to map')}
+														{myAgency.latitude && myAgency.longitude ? ui('Edit') : ui('mypage.addToMap')}
 													</Button>
 												)}
 											</Box>
 											{myAgency.city || myAgency.country || myAgency.address ? (
 												<Box className="agency-info-display">
-													{myAgency.address && <Box className="info-row"><strong>{ui('Address')}:</strong> {myAgency.address}</Box>}
-													{(myAgency.city || myAgency.country) && <Box className="info-row"><strong>{ui('City/Country')}:</strong> {[myAgency.city, myAgency.country].filter(Boolean).join(', ')}</Box>}
+													{myAgency.address && <Box className="info-row"><strong>{ui('mypage.address')}:</strong> {myAgency.address}</Box>}
+													{(myAgency.city || myAgency.country) && <Box className="info-row"><strong>{ui('mypage.cityCountry')}:</strong> {[myAgency.city, myAgency.country].filter(Boolean).join(', ')}</Box>}
 												</Box>
 											) : !editingLocation ? (
-												<Box className="empty-state" sx={{ py: 1.5 }}>{ui('No location set. Click Add to map to appear on the map.')}</Box>
+												<Box className="empty-state" sx={{ py: 1.5 }}>{ui('mypage.noLocationSetClickAdd')}</Box>
 											) : null}
 											{editingLocation && (
 												<Box component="form" className="profile-form" onSubmit={handleSaveLocation}>
 													<div className="form-grid">
-														<TextField label={ui('City')} value={editCity} onChange={(e) => setEditCity(e.target.value)} fullWidth />
-														<TextField label={ui('Country (HQ)')} value={editHqCountry} onChange={(e) => setEditHqCountry(e.target.value)} fullWidth />
+														<TextField label={ui('mypage.city')} value={editCity} onChange={(e) => setEditCity(e.target.value)} fullWidth />
+														<TextField label={ui('mypage.countryHq')} value={editHqCountry} onChange={(e) => setEditHqCountry(e.target.value)} fullWidth />
 													</div>
-													<TextField label={ui('Address')} value={editAddress} onChange={(e) => setEditAddress(e.target.value)} fullWidth />
+													<TextField label={ui('mypage.address')} value={editAddress} onChange={(e) => setEditAddress(e.target.value)} fullWidth />
 													<div className="form-grid">
-														<TextField label={ui('Latitude')} type="number" value={editLat} onChange={(e) => setEditLat(e.target.value)} fullWidth helperText="e.g. 41.2995" inputProps={{ step: 'any' }} />
-														<TextField label={ui('Longitude')} type="number" value={editLng} onChange={(e) => setEditLng(e.target.value)} fullWidth helperText="e.g. 69.2401" inputProps={{ step: 'any' }} />
+														<TextField label={ui('mypage.latitude')} type="number" value={editLat} onChange={(e) => setEditLat(e.target.value)} fullWidth helperText="e.g. 41.2995" inputProps={{ step: 'any' }} />
+														<TextField label={ui('mypage.longitude')} type="number" value={editLng} onChange={(e) => setEditLng(e.target.value)} fullWidth helperText="e.g. 69.2401" inputProps={{ step: 'any' }} />
 													</div>
 													<Box sx={{ display: 'flex', gap: 1 }}>
-														<Button type="submit" variant="contained" disabled={locationSaving}>{locationSaving ? ui('Saving...') : ui('Save location')}</Button>
-														<Button variant="text" onClick={() => setEditingLocation(false)}>{ui('Cancel')}</Button>
+														<Button type="submit" variant="contained" disabled={locationSaving}>{locationSaving ? ui('mypage.saving') : ui('mypage.saveLocation')}</Button>
+														<Button variant="text" onClick={() => setEditingLocation(false)}>{ui('agency.cancel')}</Button>
 													</Box>
 												</Box>
 											)}
@@ -928,13 +928,13 @@ const MyPage: NextPage = () => {
 
 										{/* ── Actions ───────────────────────────── */}
 										<Box sx={{ mt: 2, display: 'flex', gap: 1.5, flexWrap: 'wrap', borderTop: '1px solid #e2e8f0', pt: 2 }}>
-											<Button variant="outlined" onClick={() => router.push(`/agency/${myAgency._id}`)}>{ui('View public profile')}</Button>
-											<Button variant="outlined" onClick={() => setTab(3)} sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>{ui('Messages')}</Button>
+											<Button variant="outlined" onClick={() => router.push(`/agency/${myAgency._id}`)}>{ui('mypage.viewPublicProfile')}</Button>
+											<Button variant="outlined" onClick={() => setTab(3)} sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>{ui('mypage.messages')}</Button>
 										</Box>
 									</Box>
 								) : (
 									<Box component="form" className="profile-form" onSubmit={handleCreateAgency}>
-										<p className="form-hint">{ui('Register your agency on GMP. After submission, an admin will review and verify your profile.')}</p>
+										<p className="form-hint">{ui('mypage.registerYourAgencyOnGmp')}</p>
 										{agencyError && <Alert severity="error" sx={{ mb: 2 }}>{agencyError}</Alert>}
 
 										{/* Cover + logo upload */}
@@ -954,7 +954,7 @@ const MyPage: NextPage = () => {
 											>
 												{newImgUploading === 'cover'
 													? <CircularProgress size={22} />
-													: !newCover && <span><CameraAltIcon fontSize="small" sx={{ verticalAlign: 'middle', mr: 0.5 }} /> {ui('Add cover photo')}</span>}
+													: !newCover && <span><CameraAltIcon fontSize="small" sx={{ verticalAlign: 'middle', mr: 0.5 }} /> {ui('mypage.addCoverPhoto')}</span>}
 											</Box>
 											<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mt: -3.5, ml: 2, position: 'relative', zIndex: 1 }}>
 												<Box
@@ -973,29 +973,29 @@ const MyPage: NextPage = () => {
 														: <BusinessIcon />}
 												</Box>
 												<span style={{ fontSize: 12, color: '#64748b', marginTop: 18 }}>
-													{newLogo ? ui('Logo added - click to change') : ui('Click circle to add logo')}
+													{newLogo ? ui('mypage.logoAddedClickToChange') : ui('mypage.clickCircleToAddLogo')}
 												</span>
 											</Box>
 										</Box>
 
-										<TextField label={ui('Agency name')} value={agencyName} onChange={(e) => setAgencyName(e.target.value)} fullWidth required />
-										<TextField label={ui('Business email')} type="email" value={agencyEmail} onChange={(e) => setAgencyEmail(e.target.value)} fullWidth required />
-										<TextField label={ui('Description')} value={agencyDesc} onChange={(e) => setAgencyDesc(e.target.value)} fullWidth multiline rows={3} />
+										<TextField label={ui('mypage.agencyName')} value={agencyName} onChange={(e) => setAgencyName(e.target.value)} fullWidth required />
+										<TextField label={ui('mypage.businessEmail')} type="email" value={agencyEmail} onChange={(e) => setAgencyEmail(e.target.value)} fullWidth required />
+										<TextField label={ui('mypage.description')} value={agencyDesc} onChange={(e) => setAgencyDesc(e.target.value)} fullWidth multiline rows={3} />
 										<div className="form-grid">
-											<TextField label={ui('Phone number')} value={agencyPhone} onChange={(e) => setAgencyPhone(e.target.value)} fullWidth />
-											<TextField label={ui('Website')} value={agencyWebsite} onChange={(e) => setAgencyWebsite(e.target.value)} fullWidth />
+											<TextField label={ui('auth.phoneNumber')} value={agencyPhone} onChange={(e) => setAgencyPhone(e.target.value)} fullWidth />
+											<TextField label={ui('mypage.website')} value={agencyWebsite} onChange={(e) => setAgencyWebsite(e.target.value)} fullWidth />
 										</div>
-										<TextField label={ui('Operating countries')} value={agencyCountries} onChange={(e) => setAgencyCountries(e.target.value)} fullWidth required helperText={ui('Comma-separated: Uzbekistan, Turkey, UAE')} />
+										<TextField label={ui('agency.operatingCountries')} value={agencyCountries} onChange={(e) => setAgencyCountries(e.target.value)} fullWidth required helperText={ui('mypage.commaSeparatedUzbekistanTurkeyUae')} />
 										<div className="form-grid">
-											<TextField label={ui('City')} value={agencyCity} onChange={(e) => setAgencyCity(e.target.value)} fullWidth />
-											<TextField label={ui('Country (HQ)')} value={agencyHqCountry} onChange={(e) => setAgencyHqCountry(e.target.value)} fullWidth />
+											<TextField label={ui('mypage.city')} value={agencyCity} onChange={(e) => setAgencyCity(e.target.value)} fullWidth />
+											<TextField label={ui('mypage.countryHq')} value={agencyHqCountry} onChange={(e) => setAgencyHqCountry(e.target.value)} fullWidth />
 										</div>
-										<TextField label={ui('Address')} value={agencyAddress} onChange={(e) => setAgencyAddress(e.target.value)} fullWidth />
+										<TextField label={ui('mypage.address')} value={agencyAddress} onChange={(e) => setAgencyAddress(e.target.value)} fullWidth />
 										<div className="form-grid">
-											<TextField label={ui('Latitude')} type="number" value={agencyLat} onChange={(e) => setAgencyLat(e.target.value)} fullWidth helperText="e.g. 41.2995 (for map)" inputProps={{ step: 'any' }} />
-											<TextField label={ui('Longitude')} type="number" value={agencyLng} onChange={(e) => setAgencyLng(e.target.value)} fullWidth helperText="e.g. 69.2401 (for map)" inputProps={{ step: 'any' }} />
+											<TextField label={ui('mypage.latitude')} type="number" value={agencyLat} onChange={(e) => setAgencyLat(e.target.value)} fullWidth helperText="e.g. 41.2995 (for map)" inputProps={{ step: 'any' }} />
+											<TextField label={ui('mypage.longitude')} type="number" value={agencyLng} onChange={(e) => setAgencyLng(e.target.value)} fullWidth helperText="e.g. 69.2401 (for map)" inputProps={{ step: 'any' }} />
 										</div>
-										<Button type="submit" variant="contained" disabled={agencyCreating}>{agencyCreating ? ui('Submitting...') : ui('Register agency')}</Button>
+										<Button type="submit" variant="contained" disabled={agencyCreating}>{agencyCreating ? ui('mypage.submitting') : ui('mypage.registerAgency')}</Button>
 									</Box>
 								)}
 							</Box>
@@ -1005,25 +1005,25 @@ const MyPage: NextPage = () => {
 							<Box>
 								<Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
 									<div className="content-head" style={{ marginBottom: 0 }}>
-										<span>{ui('Service catalog')}</span>
-										<h2>{ui('My Services')}</h2>
+										<span>{ui('mypage.serviceCatalog')}</span>
+										<h2>{ui('mypage.myServices')}</h2>
 									</div>
 									{myAgency && isAgencyVerified && (
 										<Button variant="contained" startIcon={<AddIcon />} onClick={() => openServiceForm()}>
-											{ui('New service')}
+											{ui('mypage.newService')}
 										</Button>
 									)}
 								</Box>
 								{!myAgency ? (
-									<Alert severity="warning">{ui('Please register your agency first.')}</Alert>
+									<Alert severity="warning">{ui('mypage.pleaseRegisterYourAgencyFirst')}</Alert>
 								) : !isAgencyVerified ? (
-									<Alert severity="info">{ui('Your agency must be approved by a super admin before you can create services.')}</Alert>
+									<Alert severity="info">{ui('mypage.yourAgencyMustBeApproved')}</Alert>
 								) : agencyServices.length === 0 ? (
-									<Box className="empty-state">{ui('No services yet. Create your first service!')}</Box>
+									<Box className="empty-state">{ui('mypage.noServicesYetCreateYour')}</Box>
 								) : agencyServices.map((svc: any) => (
 									<Box key={svc._id} className="list-row">
 										<div style={{ flex: 1 }}>
-											<strong>{svc.name?.en || svc.name?.uz || ui('Service')}</strong>
+											<strong>{svc.name?.en || svc.name?.uz || ui('mypage.service')}</strong>
 											<span style={{ display: 'block', fontSize: 12, color: '#888' }}>
 												{svc.serviceType} · {svc.destinationCountry}{svc.price != null ? ` · $${svc.price}` : ''}
 											</span>
@@ -1036,35 +1036,35 @@ const MyPage: NextPage = () => {
 									</Box>
 								))}
 								<Dialog open={showServiceForm} onClose={() => setShowServiceForm(false)} maxWidth="sm" fullWidth>
-									<DialogTitle>{editingService ? ui('Edit service') : ui('Create new service')}</DialogTitle>
+									<DialogTitle>{editingService ? ui('mypage.editService') : ui('mypage.createNewService')}</DialogTitle>
 									<Box component="form" onSubmit={handleSaveService}>
 										<DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-											<TextField label={ui('Service name')} value={svcName} onChange={(e) => setSvcName(e.target.value)} fullWidth required />
-											<TextField label={ui('Description')} value={svcDesc} onChange={(e) => setSvcDesc(e.target.value)} fullWidth multiline rows={3} />
+											<TextField label={ui('mypage.serviceName')} value={svcName} onChange={(e) => setSvcName(e.target.value)} fullWidth required />
+											<TextField label={ui('mypage.description')} value={svcDesc} onChange={(e) => setSvcDesc(e.target.value)} fullWidth multiline rows={3} />
 											{!editingService && (
 												<>
 													<FormControl fullWidth required>
-														<InputLabel>{ui('Service type')}</InputLabel>
-														<Select value={svcType} label={ui('Service type')} onChange={(e) => setSvcType(e.target.value)}>
-															<MenuItem value={ServiceType.VISA_SERVICES}>{ui('Visa Services')}</MenuItem>
-															<MenuItem value={ServiceType.STUDY_ABROAD}>{ui('Study Abroad')}</MenuItem>
-															<MenuItem value={ServiceType.WORK_ABROAD}>{ui('Work Abroad')}</MenuItem>
-															<MenuItem value={ServiceType.TRAVEL}>{ui('Travel')}</MenuItem>
+														<InputLabel>{ui('mypage.serviceType')}</InputLabel>
+														<Select value={svcType} label={ui('mypage.serviceType')} onChange={(e) => setSvcType(e.target.value)}>
+															<MenuItem value={ServiceType.VISA_SERVICES}>{ui('mypage.visaServices')}</MenuItem>
+															<MenuItem value={ServiceType.STUDY_ABROAD}>{ui('mypage.studyAbroad')}</MenuItem>
+															<MenuItem value={ServiceType.WORK_ABROAD}>{ui('mypage.workAbroad')}</MenuItem>
+															<MenuItem value={ServiceType.TRAVEL}>{ui('mypage.travel')}</MenuItem>
 														</Select>
 													</FormControl>
-													<TextField label={ui('Destination country')} value={svcDest} onChange={(e) => setSvcDest(e.target.value)} fullWidth required helperText="e.g. United States" />
-													<TextField label={ui('Source countries')} value={svcSources} onChange={(e) => setSvcSources(e.target.value)} fullWidth helperText={ui('Comma-separated: Uzbekistan, Turkey')} />
+													<TextField label={ui('mypage.destinationCountry')} value={svcDest} onChange={(e) => setSvcDest(e.target.value)} fullWidth required helperText="e.g. United States" />
+													<TextField label={ui('mypage.sourceCountries')} value={svcSources} onChange={(e) => setSvcSources(e.target.value)} fullWidth helperText={ui('mypage.commaSeparatedUzbekistanTurkey')} />
 												</>
 											)}
 											<div className="form-grid">
-												<TextField label={ui('Price (USD)')} type="number" value={svcPrice} onChange={(e) => setSvcPrice(e.target.value)} fullWidth inputProps={{ min: 0, step: 'any' }} />
-												<TextField label={ui('Processing time')} value={svcProcessing} onChange={(e) => setSvcProcessing(e.target.value)} fullWidth placeholder="e.g. 2-4 weeks" />
+												<TextField label={ui('mypage.priceUsd')} type="number" value={svcPrice} onChange={(e) => setSvcPrice(e.target.value)} fullWidth inputProps={{ min: 0, step: 'any' }} />
+												<TextField label={ui('mypage.processingTime')} value={svcProcessing} onChange={(e) => setSvcProcessing(e.target.value)} fullWidth placeholder="e.g. 2-4 weeks" />
 											</div>
 										</DialogContent>
 										<DialogActions sx={{ px: 3, pb: 2 }}>
-											<Button onClick={() => setShowServiceForm(false)}>{ui('Cancel')}</Button>
+											<Button onClick={() => setShowServiceForm(false)}>{ui('agency.cancel')}</Button>
 											<Button type="submit" variant="contained" disabled={svcSaving}>
-												{svcSaving ? ui('Saving...') : editingService ? ui('Update') : ui('Create')}
+												{svcSaving ? ui('mypage.saving') : editingService ? ui('Update') : ui('Create')}
 											</Button>
 										</DialogActions>
 									</Box>
@@ -1077,28 +1077,28 @@ const MyPage: NextPage = () => {
 							<Box>
 								<Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
 									<div className="content-head" style={{ marginBottom: 0 }}>
-										<span>{ui('Incoming requests')}</span>
+										<span>{ui('mypage.incomingRequests')}</span>
 										<h2>{ui('Applications Received')}</h2>
 									</div>
 									<FormControl size="small" sx={{ minWidth: 160 }}>
-										<InputLabel>{ui('Status')}</InputLabel>
-										<Select value={appStatusFilter} label={ui('Status')} onChange={(e) => setAppStatusFilter(e.target.value)}>
+										<InputLabel>{ui('mypage.status')}</InputLabel>
+										<Select value={appStatusFilter} label={ui('mypage.status')} onChange={(e) => setAppStatusFilter(e.target.value)}>
 											<MenuItem value="">{ui('All')}</MenuItem>
-											<MenuItem value="SUBMITTED">{ui('Submitted')}</MenuItem>
-											<MenuItem value="UNDER_REVIEW">{ui('Under review')}</MenuItem>
-											<MenuItem value="APPROVED">{ui('Approved')}</MenuItem>
-											<MenuItem value="REJECTED">{ui('Rejected')}</MenuItem>
-											<MenuItem value="COMPLETED">{ui('Completed')}</MenuItem>
+											<MenuItem value="SUBMITTED">{ui('mypage.submitted')}</MenuItem>
+											<MenuItem value="UNDER_REVIEW">{ui('mypage.underReview')}</MenuItem>
+											<MenuItem value="APPROVED">{ui('mypage.approved')}</MenuItem>
+											<MenuItem value="REJECTED">{ui('mypage.rejected')}</MenuItem>
+											<MenuItem value="COMPLETED">{ui('mypage.completed')}</MenuItem>
 										</Select>
 									</FormControl>
 								</Box>
 								{agencyApplications.length === 0 ? (
-									<Box className="empty-state">{ui('No applications received yet.')}</Box>
+									<Box className="empty-state">{ui('mypage.noApplicationsReceivedYet')}</Box>
 								) : agencyApplications.filter((a: any) => !appStatusFilter || a.status === appStatusFilter).map((app: any) => (
 									<Box key={app._id} className="list-row">
 										<div style={{ flex: 1 }}>
-											<strong>{ui('Application')} #{app._id.slice(-6)}</strong>
-											<span style={{ display: 'block', fontSize: 12, color: '#888' }}>{ui('Applied')}: {new Date(app.appliedAt).toLocaleDateString()}</span>
+											<strong>{ui('mypage.application')} #{app._id.slice(-6)}</strong>
+											<span style={{ display: 'block', fontSize: 12, color: '#888' }}>{ui('mypage.applied')}: {new Date(app.appliedAt).toLocaleDateString()}</span>
 											{app.notes && <span style={{ display: 'block', fontSize: 12, color: '#666' }}>{app.notes}</span>}
 										</div>
 										<Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -1108,12 +1108,12 @@ const MyPage: NextPage = () => {
 											)}
 											{app.status === 'UNDER_REVIEW' && (
 												<>
-													<Button size="small" variant="outlined" color="success" onClick={() => handleUpdateAppStatus(app._id, 'APPROVED')}>{ui('Approve')}</Button>
-													<Button size="small" variant="outlined" color="error" onClick={() => handleUpdateAppStatus(app._id, 'REJECTED')}>{ui('Reject')}</Button>
+													<Button size="small" variant="outlined" color="success" onClick={() => handleUpdateAppStatus(app._id, 'APPROVED')}>{ui('mypage.approve')}</Button>
+													<Button size="small" variant="outlined" color="error" onClick={() => handleUpdateAppStatus(app._id, 'REJECTED')}>{ui('mypage.reject')}</Button>
 												</>
 											)}
 											{app.status === 'APPROVED' && (
-												<Button size="small" variant="outlined" color="primary" onClick={() => handleUpdateAppStatus(app._id, 'COMPLETED')}>{ui('Complete')}</Button>
+												<Button size="small" variant="outlined" color="primary" onClick={() => handleUpdateAppStatus(app._id, 'COMPLETED')}>{ui('mypage.complete')}</Button>
 											)}
 										</Box>
 									</Box>

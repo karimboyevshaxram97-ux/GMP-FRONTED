@@ -120,13 +120,13 @@ const withLayoutAdmin = (Component: any) => {
 				userVar({ ...userVar(), preferredLanguage: savedLang });
 				setCurrentUser((prev: any) => ({ ...(prev ?? {}), preferredLanguage: savedLang }));
 				setLang(savedLang);
-				await sweetMixinSuccessAlert(ui('Language updated'));
+				await sweetMixinSuccessAlert(ui('admin.languageUpdated'));
 			} catch (err) {
 				if (process.env.NODE_ENV !== 'production') console.warn('update language failed', err);
 				setLang(previous);
 				userVar({ ...userVar(), preferredLanguage: previous });
 				setCurrentUser((prev: any) => ({ ...(prev ?? {}), preferredLanguage: previous }));
-				await sweetMixinErrorAlert(ui('Failed to update language'));
+				await sweetMixinErrorAlert(ui('admin.failedToUpdateLanguage'));
 			}
 		};
 
@@ -160,7 +160,7 @@ const withLayoutAdmin = (Component: any) => {
 								<div className="brand-dot">G</div>
 								<h2>GMP Admin</h2>
 							</div>
-							<div className="brand-sub">{ui('Management Panel')}</div>
+							<div className="brand-sub">{ui('admin.managementPanel')}</div>
 						</div>
 
 						<Box className="lang-select-wrap">
@@ -209,12 +209,12 @@ const withLayoutAdmin = (Component: any) => {
 									<div className="su-name">
 										{currentUser ? `${currentUser.firstName} ${currentUser.lastName}` : 'Admin'}
 									</div>
-									<div className="su-role">{ui('Super Admin')}</div>
+									<div className="su-role">{ui('admin.superAdmin')}</div>
 								</div>
 							</div>
 							<div className="menu-item danger" onClick={() => logOut()}>
 								<LogoutIcon />
-								<span className="menu-label">{ui('Logout')}</span>
+								<span className="menu-label">{ui('admin.logout')}</span>
 							</div>
 						</div>
 

@@ -137,16 +137,16 @@ const AgencyHome: NextPage = () => {
 				<Box className="hero-content">
 					<div className="hero-badge">
 						<VerifiedIcon style={{ fontSize: 14 }} />
-						{ui('Verified agency marketplace')}
+						{ui('agency.verifiedAgencyMarketplace')}
 					</div>
-					<h1>{ui('Find the right migration')}<br />{ui('agency with confidence')}</h1>
+					<h1>{ui('agency.findTheRightMigration')}<br />{ui('agency.agencyWithConfidence')}</h1>
 					<p className="hero-subtitle">
-						{ui('Compare trusted agencies by reviews, services, countries, and profile details before you start your journey.')}
+						{ui('agency.compareTrustedAgenciesByReviews')}
 					</p>
 					<Box component="form" className="agency-hero-search" onSubmit={handleSearch}>
 						<TextField
 							fullWidth
-							placeholder={ui('Search by agency name or country...')}
+							placeholder={ui('agency.searchByAgencyNameOr')}
 							value={inputValue}
 							onChange={(event) => setInputValue(event.target.value)}
 							InputProps={{
@@ -158,23 +158,23 @@ const AgencyHome: NextPage = () => {
 							}}
 						/>
 						<Button type="submit" variant="contained" size="large">
-							{ui('Search')}
+							{ui('agency.search')}
 						</Button>
 					</Box>
 					<Box className="hero-stats">
 						<div className="stat-item">
 							<div className="number">{total || '100'}+</div>
-							<div className="label">{ui('Agencies listed')}</div>
+							<div className="label">{ui('agency.agenciesListed')}</div>
 						</div>
 						<div className="stat-divider" />
 						<div className="stat-item">
 							<div className="number">{visibleCountries || '40'}+</div>
-							<div className="label">{ui('Countries covered')}</div>
+							<div className="label">{ui('agency.countriesCovered')}</div>
 						</div>
 						<div className="stat-divider" />
 						<div className="stat-item">
 							<div className="number">{averageRating}</div>
-							<div className="label">{ui('Average rating')}</div>
+							<div className="label">{ui('agency.averageRating')}</div>
 						</div>
 					</Box>
 				</Box>
@@ -182,7 +182,7 @@ const AgencyHome: NextPage = () => {
 					<div className="scroll-dot" />
 					<div className="scroll-dot" />
 					<div className="scroll-dot" />
-					<span className="scroll-text">{ui('Scroll')}</span>
+					<span className="scroll-text">{ui('agency.scroll')}</span>
 				</div>
 			</div>
 
@@ -191,8 +191,8 @@ const AgencyHome: NextPage = () => {
 				{featuredAgencies.length > 0 && !search && (
 					<Box className="featured-strip">
 						<Box className="section-heading">
-							<span>{ui('Recommended first')}</span>
-							<h2>{ui('Top verified agencies')}</h2>
+							<span>{ui('agency.recommendedFirst')}</span>
+							<h2>{ui('agency.topVerifiedAgencies')}</h2>
 						</Box>
 						<Grid container spacing={2.5}>
 							{featuredAgencies.map((agency) => (
@@ -206,20 +206,20 @@ const AgencyHome: NextPage = () => {
 
 				<Box className="agency-toolbar">
 					<Box>
-						<span className="eyebrow">{ui('Agency directory')}</span>
-						<h2>{search ? `${ui('Results for')} "${search}"` : ui('All verified agencies')}</h2>
-						<p>{total} {ui('agencies found')}</p>
+						<span className="eyebrow">{ui('agency.agencyDirectory')}</span>
+						<h2>{search ? `${ui('agency.resultsFor')} "${search}"` : ui('agency.allVerifiedAgencies')}</h2>
+						<p>{total} {ui('agency.agenciesFound')}</p>
 					</Box>
 					<Box className="toolbar-actions">
 						{search && <Chip label={search} onDelete={clearSearch} />}
-						<Chip icon={<VerifiedIcon />} label={ui('Verified only')} className="verified-filter" />
+						<Chip icon={<VerifiedIcon />} label={ui('agency.verifiedOnly')} className="verified-filter" />
 						<Button
 							variant="outlined"
 							startIcon={<MapIcon />}
 							onClick={() => router.push('/agency/map')}
 							sx={{ borderRadius: '10px', fontWeight: 700, textTransform: 'none', borderColor: '#1649ff', color: '#1649ff', '&:hover': { background: '#f0f4ff' } }}
 						>
-							{ui('Map View')}
+							{ui('agency.mapView')}
 						</Button>
 						<FormControl size="small" sx={{ minWidth: 190 }}>
 							<InputLabel>{ui('Sort by')}</InputLabel>
@@ -266,11 +266,11 @@ const AgencyHome: NextPage = () => {
 						) : (
 							<Box className="empty-agencies">
 								<SearchIcon />
-								<h3>{ui('No agencies found')}</h3>
-								<p>{ui('Try another keyword or clear the current search.')}</p>
+								<h3>{ui('agency.noAgenciesFound')}</h3>
+								<p>{ui('agency.tryAnotherKeywordOrClear')}</p>
 								{search && (
 									<Button variant="outlined" onClick={clearSearch}>
-										{ui('Clear search')}
+										{ui('agency.clearSearch')}
 									</Button>
 								)}
 							</Box>

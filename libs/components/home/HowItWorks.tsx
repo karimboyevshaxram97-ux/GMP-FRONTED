@@ -29,9 +29,9 @@ const HowItWorks = () => {
 		<section className="home-how">
 			<div className="container">
 				<div className="home-how__header">
-					<span className="section-tag">{ui('Simple Process')}</span>
-					<h2>{ui('How It Works')}</h2>
-					<p>{ui('Three simple steps to launch your global journey with confidence.')}</p>
+					<span className="section-tag">{ui('home.simpleProcess')}</span>
+					<h2>{ui('home.howItWorks')}</h2>
+					<p>{ui('home.threeSimpleStepsToLaunch')}</p>
 				</div>
 
 				<div className="home-how__steps">

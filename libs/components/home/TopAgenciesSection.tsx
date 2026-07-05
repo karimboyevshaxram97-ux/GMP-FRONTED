@@ -35,14 +35,14 @@ const TopAgenciesSection = () => {
 		<section className="top-agencies">
 			<div className="container">
 				<div className="top-agencies__head">
-					<span className="top-agencies__tag">{ui('Verified Partners')}</span>
-					<h2>{ui('Top 5 Agencies')}</h2>
-					<p>{ui('The highest-rated agencies trusted by the GMP community.')}</p>
+					<span className="top-agencies__tag">{ui('home.verifiedPartners')}</span>
+					<h2>{ui('home.top5Agencies')}</h2>
+					<p>{ui('home.theHighestRatedAgenciesTrusted')}</p>
 				</div>
 
 				<div className="top-agencies__grid">
 					{agencies.map((agency, idx) => {
-						const name = tr(agency.name) || ui('Agency');
+						const name = tr(agency.name) || ui('auth.agency');
 						const image = agency.coverImage || agency.logo;
 						const rating = agency.averageRating ?? agency.memberData?.memberRank ?? null;
 

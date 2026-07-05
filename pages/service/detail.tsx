@@ -71,7 +71,7 @@ const ServiceDetail: NextPage = () => {
 		setApplying(true);
 		try {
 			await createApplication({ variables: { input: { serviceId: service._id } } });
-			await sweetMixinSuccessAlert(ui('Application submitted successfully!'));
+			await sweetMixinSuccessAlert(ui('service.applicationSubmittedSuccessfully'));
 			refetch();
 		} catch (err: any) {
 			await sweetMixinErrorAlert(applicationErrorMessage(err));
@@ -82,16 +82,16 @@ const ServiceDetail: NextPage = () => {
 
 	const handleReview = async () => {
 		if (!requireLogin() || !service || reviewSubmitting) return;
-		if (!reviewComment.trim()) return sweetMixinErrorAlert(ui('Please write a comment'));
+		if (!reviewComment.trim()) return sweetMixinErrorAlert(ui('service.pleaseWriteAComment'));
 		setReviewSubmitting(true);
 		try {
 			await createReview({
 				variables: { input: { agencyId: service.agency, serviceId: service._id, rating: reviewRating, comment: reviewComment } },
 			});
 			setReviewComment('');
-			await sweetMixinSuccessAlert(ui('Your review was sent for moderation'));
+			await sweetMixinSuccessAlert(ui('service.yourReviewWasSentFor'));
 		} catch (err: any) {
-			await sweetMixinErrorAlert(toFriendlyError(err, ui('Failed to submit review')));
+			await sweetMixinErrorAlert(toFriendlyError(err, ui('service.failedToSubmitReview')));
 		} finally {
 			setReviewSubmitting(false);
 		}
@@ -116,10 +116,10 @@ const ServiceDetail: NextPage = () => {
 			<div className="service-detail-page">
 				<Stack className="container">
 					<Box className="service-detail-empty">
-						<h1>{ui('Service not found')}</h1>
-						<p>{ui('This service may no longer be available.')}</p>
+						<h1>{ui('service.serviceNotFound')}</h1>
+						<p>{ui('service.thisServiceMayNoLonger')}</p>
 						<Button variant="contained" onClick={() => router.push('/service')}>
-							{ui('Back to services')}
+							{ui('service.backToServices')}
 						</Button>
 					</Box>
 				</Stack>
@@ -132,25 +132,25 @@ const ServiceDetail: NextPage = () => {
 			<Box className="service-detail-hero">
 				<Stack className="container">
 					<Button className="back-button" startIcon={<ArrowBackIcon />} onClick={() => router.push('/service')}>
-						{ui('Services')}
+						{ui('agency.services')}
 					</Button>
 					<Box className="service-detail-grid">
 						<Box className="service-intro">
 							<Chip icon={<VerifiedIcon />} label={ui(getServiceTypeLabel(service.serviceType))} className="service-type-chip" />
 							<h1>{tr(service.name)}</h1>
-							<p>{tr(service.description) || ui('A trusted service designed to support your migration journey.')}</p>
+							<p>{tr(service.description) || ui('service.aTrustedServiceDesignedTo')}</p>
 							<Box className="service-rating">
 								<Rating value={service.averageRating || 0} precision={0.1} readOnly />
 								<strong>{(service.averageRating || 0).toFixed(1)}</strong>
-								<span>{service.totalReviews || 0} {ui('reviews')}</span>
+								<span>{service.totalReviews || 0} {ui('agency.reviews2')}</span>
 							</Box>
 						</Box>
 						<Box className="price-panel">
-							<span>{ui('Service price')}</span>
+							<span>{ui('service.servicePrice')}</span>
 							<strong>{formatPrice(service.price)}</strong>
-							<p>{service.processingTime ? `${ui('Processing')}: ${service.processingTime}` : ui('Processing time depends on the case.')}</p>
+							<p>{service.processingTime ? `${ui('service.processing')}: ${service.processingTime}` : ui('service.processingTimeDependsOnThe')}</p>
 							<Button fullWidth variant="contained" onClick={handleApply} disabled={applying || isServiceFull}>
-								{applying ? ui('Submitting...') : isServiceFull ? ui('Application limit reached') : ui('Apply now')}
+								{applying ? ui('mypage.submitting') : isServiceFull ? ui('service.applicationLimitReached') : ui('service.applyNow')}
 							</Button>
 							<Button
 								fullWidth
@@ -158,7 +158,7 @@ const ServiceDetail: NextPage = () => {
 								startIcon={isLiked(service.meLiked) ? <FavoriteIcon /> : <FavoriteBorderIcon />}
 								onClick={handleLike}
 							>
-								{service.likeCount || 0} {ui('likes')}
+								{service.likeCount || 0} {ui('agency.likes2')}
 							</Button>
 						</Box>
 					</Box>
@@ -168,26 +168,26 @@ const ServiceDetail: NextPage = () => {
 			<Stack className="container">
 				<Box className="service-content-layout">
 					<Box className="service-main-card">
-						<h2>{ui('Service details')}</h2>
-						<p>{tr(service.description) || ui('No description provided.')}</p>
+						<h2>{ui('service.serviceDetails')}</h2>
+						<p>{tr(service.description) || ui('service.noDescriptionProvided')}</p>
 						<Divider sx={{ my: 3 }} />
 						<Box className="service-facts">
 							<Box>
 								<PublicIcon />
-								<span>{ui('Destination')}</span>
+								<span>{ui('service.destination')}</span>
 								<strong>{service.destinationCountry}</strong>
 							</Box>
 							{service.processingTime && (
 								<Box>
 									<ScheduleIcon />
-									<span>{ui('Processing time')}</span>
+									<span>{ui('mypage.processingTime')}</span>
 									<strong>{service.processingTime}</strong>
 								</Box>
 							)}
 						</Box>
 						{service.sourceCountries?.length > 0 && (
 							<Box className="eligible-countries">
-								<h3>{ui('Eligible countries')}</h3>
+								<h3>{ui('service.eligibleCountries')}</h3>
 								<Box>
 									{service.sourceCountries.map((country: string) => (
 										<Chip key={country} label={country} />
@@ -198,32 +198,32 @@ const ServiceDetail: NextPage = () => {
 					</Box>
 
 					<Box className="service-main-card">
-						<h2>{ui('Reviews')} ({reviews.length})</h2>
+						<h2>{ui('agency.reviews')} ({reviews.length})</h2>
 						{reviews.length ? (
 							reviews.map((review: any) => (
 								<Box key={review._id} className="service-review">
 									<Rating value={review.rating} size="small" readOnly />
-									<p>{review.comment || ui('No comment provided.')}</p>
+									<p>{review.comment || ui('agency.noCommentProvided')}</p>
 								</Box>
 							))
 						) : (
-							<Box className="empty-services">{ui('No reviews yet.')}</Box>
+							<Box className="empty-services">{ui('agency.noReviewsYet')}</Box>
 						)}
 
 						{user?._id && (
 							<Box className="review-form">
-								<h3>{ui('Write a review')}</h3>
+								<h3>{ui('service.writeAReview')}</h3>
 								<Rating value={reviewRating} onChange={(_, value) => setReviewRating(value ?? 5)} />
 								<TextField
 									fullWidth
 									multiline
 									rows={3}
-									placeholder={ui('Share your experience...')}
+									placeholder={ui('service.shareYourExperience')}
 									value={reviewComment}
 									onChange={(event) => setReviewComment(event.target.value)}
 								/>
 								<Button variant="contained" startIcon={<SendIcon />} onClick={handleReview} disabled={reviewSubmitting}>
-									{reviewSubmitting ? ui('Submitting...') : ui('Submit review')}
+									{reviewSubmitting ? ui('mypage.submitting') : ui('service.submitReview')}
 								</Button>
 							</Box>
 						)}

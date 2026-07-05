@@ -18,24 +18,24 @@ const HeroSection = () => {
 			<div className="container home-hero__inner">
 				<div className="home-hero__left">
 					<h1 className="home-hero__title">
-						{ui('Your Journey to a')}<br />
-						<span className="hero-highlight">{ui('New World')}</span>
-						<br />{ui('Starts Here')}
+						{ui('home.yourJourneyToA')}<br />
+						<span className="hero-highlight">{ui('home.newWorld')}</span>
+						<br />{ui('home.startsHere')}
 					</h1>
 
 					<p className="home-hero__subtitle">
-						{ui('Connect with 500+ trusted immigration and travel agencies. Start your journey to study, work, or explore the world today.')}
+						{ui('home.connectWith500TrustedImmigration')}
 					</p>
 
 					<div className="home-hero__actions">
 						<Link href="/agency">
 							<button className="hero-btn hero-btn--primary">
-								{ui('Explore Agencies')} <ArrowForwardIcon />
+								{ui('home.exploreAgencies')} <ArrowForwardIcon />
 							</button>
 						</Link>
 						<Link href="/service">
 							<button className="hero-btn hero-btn--outline">
-								{ui('Browse Services')}
+								{ui('home.browseServices')}
 							</button>
 						</Link>
 					</div>
@@ -49,7 +49,7 @@ const HeroSection = () => {
 					<span />
 					<span />
 				</div>
-				<span className="scroll-label">{ui('Scroll')}</span>
+				<span className="scroll-label">{ui('agency.scroll')}</span>
 			</div>
 		</section>
 	);

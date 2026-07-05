@@ -51,11 +51,11 @@ const FeaturedAgencies = () => {
 			<div className="container">
 				<div className="home-featured-agencies__header">
 					<div className="header-left">
-						<h2>{ui('Top Rated Agencies')}</h2>
-						<p>{ui('Verified and trusted partners for your migration journey')}</p>
+						<h2>{ui('home.topRatedAgencies')}</h2>
+						<p>{ui('home.verifiedAndTrustedPartnersFor')}</p>
 					</div>
 					<Link href="/agency" className="view-all-link">
-						{ui('View All')} <ArrowForwardIcon />
+						{ui('home.viewAll')} <ArrowForwardIcon />
 					</Link>
 				</div>
 
@@ -91,17 +91,17 @@ const FeaturedAgencies = () => {
 										{agency.verificationStatus === 'VERIFIED' && (
 											<div className="verified-badge">
 												<VerifiedIcon style={{ fontSize: 13, marginRight: 3 }} />
-												{ui('Verified')}
+												{ui('admin.verified')}
 											</div>
 										)}
 									</div>
 									<div className="card-body">
 										<div className="agency-title-row">
 											<h3>{tr(agency.name)}</h3>
-											<span>{agency.totalServices} {ui('services')}</span>
+											<span>{agency.totalServices} {ui('admin.services')}</span>
 										</div>
 										<p className="agency-description">
-											{tr(agency.description) || ui('Trusted migration and travel agency.')}
+											{tr(agency.description) || ui('home.trustedMigrationAndTravelAgency')}
 										</p>
 										{agency.operatingCountries?.length > 0 && (
 											<div className="country-row">
@@ -115,7 +115,7 @@ const FeaturedAgencies = () => {
 										</div>
 										<div className="card-actions">
 											<button className="profile-button" style={{ marginLeft: 'auto', background: 'none', border: '1px solid #1649ff', color: '#1649ff', borderRadius: 8, padding: '5px 14px', fontSize: 13, fontWeight: 800, cursor: 'pointer' }}>
-												{ui('View Profile')}
+												{ui('map.viewProfile')}
 											</button>
 										</div>
 									</div>

@@ -71,50 +71,50 @@ const AdminSupport: NextPage = () => {
 
 	const handleStatus = async (ticketId: string, nextStatus: string) => {
 		await updateStatus({ variables: { input: { ticketId, status: nextStatus } } });
-		await sweetMixinSuccessAlert(ui('Support ticket updated'));
+		await sweetMixinSuccessAlert(ui('admin.supportTicketUpdated'));
 		setSelected(null);
 		refetch();
 	};
 
 	return (
 		<div>
-			<div className="page-title">{ui('Support Messages')}</div>
+			<div className="page-title">{ui('admin.supportMessages')}</div>
 
 			<Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap', alignItems: 'center' }}>
 				<TextField
 					size="small"
-					placeholder={ui('Search name, email, message')}
+					placeholder={ui('admin.searchNameEmailMessage')}
 					value={text}
 					onChange={(e) => setText(e.target.value)}
 					sx={{ minWidth: 280 }}
 					InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon fontSize="small" /></InputAdornment> }}
 				/>
 				<Select size="small" value={status} onChange={(e) => setStatus(e.target.value)} displayEmpty sx={{ minWidth: 155 }}>
-					<MenuItem value="">{ui('All statuses')}</MenuItem>
-					<MenuItem value="OPEN">{ui('Open')}</MenuItem>
-					<MenuItem value="IN_PROGRESS">{ui('In progress')}</MenuItem>
-					<MenuItem value="RESOLVED">{ui('Resolved')}</MenuItem>
+					<MenuItem value="">{ui('admin.allStatuses')}</MenuItem>
+					<MenuItem value="OPEN">{ui('admin.open')}</MenuItem>
+					<MenuItem value="IN_PROGRESS">{ui('admin.inProgress')}</MenuItem>
+					<MenuItem value="RESOLVED">{ui('admin.resolved')}</MenuItem>
 				</Select>
-				<Box sx={{ ml: 'auto', color: '#888', fontSize: 13 }}>{ui('Total')}: <b>{total}</b></Box>
+				<Box sx={{ ml: 'auto', color: '#888', fontSize: 13 }}>{ui('admin.total')}: <b>{total}</b></Box>
 			</Box>
 
 			<TableContainer component={Paper} sx={{ borderRadius: 2, mb: 3 }}>
 				<Table>
 					<TableHead>
 						<TableRow sx={{ bgcolor: '#f5f7fa' }}>
-							<TableCell><b>{ui('Name')}</b></TableCell>
-							<TableCell><b>{ui('Email')}</b></TableCell>
-							<TableCell><b>{ui('Role')}</b></TableCell>
-							<TableCell><b>{ui('Message')}</b></TableCell>
-							<TableCell><b>{ui('Status')}</b></TableCell>
-							<TableCell><b>{ui('Created')}</b></TableCell>
-							<TableCell><b>{ui('Actions')}</b></TableCell>
+							<TableCell><b>{ui('admin.name')}</b></TableCell>
+							<TableCell><b>{ui('help.email')}</b></TableCell>
+							<TableCell><b>{ui('admin.role')}</b></TableCell>
+							<TableCell><b>{ui('help.message')}</b></TableCell>
+							<TableCell><b>{ui('mypage.status')}</b></TableCell>
+							<TableCell><b>{ui('admin.created')}</b></TableCell>
+							<TableCell><b>{ui('admin.actions')}</b></TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
 						{tickets.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={7} sx={{ textAlign: 'center', py: 5, color: '#aaa' }}>{ui('No support messages found')}</TableCell>
+								<TableCell colSpan={7} sx={{ textAlign: 'center', py: 5, color: '#aaa' }}>{ui('admin.noSupportMessagesFound')}</TableCell>
 							</TableRow>
 						) : tickets.map((ticket) => (
 							<TableRow key={ticket._id} hover>
@@ -129,7 +129,7 @@ const AdminSupport: NextPage = () => {
 								</TableCell>
 								<TableCell sx={{ fontSize: 12, color: '#888' }}>{new Date(ticket.createdAt).toLocaleDateString()}</TableCell>
 								<TableCell>
-									<Button size="small" variant="outlined" onClick={() => setSelected(ticket)}>{ui('Open')}</Button>
+									<Button size="small" variant="outlined" onClick={() => setSelected(ticket)}>{ui('admin.open')}</Button>
 								</TableCell>
 							</TableRow>
 						))}
@@ -147,11 +147,11 @@ const AdminSupport: NextPage = () => {
 						<DialogTitle sx={{ fontWeight: 800 }}>{selected.name}</DialogTitle>
 						<DialogContent>
 							<Box sx={{ display: 'grid', gap: 1.2, mb: 2 }}>
-								<Typography fontSize={13}><b>{ui('Email')}:</b> {selected.email}</Typography>
-								{selected.phoneNumber && <Typography fontSize={13}><b>{ui('Phone')}:</b> {selected.phoneNumber}</Typography>}
-								<Typography fontSize={13}><b>{ui('Role')}:</b> {ui(selected.role || 'GUEST')}</Typography>
-								<Typography fontSize={13}><b>{ui('Status')}:</b> {ui(selected.status)}</Typography>
-								<Typography fontSize={13}><b>{ui('Created')}:</b> {new Date(selected.createdAt).toLocaleString()}</Typography>
+								<Typography fontSize={13}><b>{ui('help.email')}:</b> {selected.email}</Typography>
+								{selected.phoneNumber && <Typography fontSize={13}><b>{ui('help.phone')}:</b> {selected.phoneNumber}</Typography>}
+								<Typography fontSize={13}><b>{ui('admin.role')}:</b> {ui(selected.role || 'GUEST')}</Typography>
+								<Typography fontSize={13}><b>{ui('mypage.status')}:</b> {ui(selected.status)}</Typography>
+								<Typography fontSize={13}><b>{ui('admin.created')}:</b> {new Date(selected.createdAt).toLocaleString()}</Typography>
 							</Box>
 							<Box sx={{ p: 2, bgcolor: '#f7f9fc', borderRadius: 2, whiteSpace: 'pre-wrap', fontSize: 14 }}>
 								{selected.message}
@@ -159,12 +159,12 @@ const AdminSupport: NextPage = () => {
 						</DialogContent>
 						<DialogActions sx={{ px: 3, pb: 2, gap: 1, flexWrap: 'wrap' }}>
 							<Button size="small" variant="outlined" color="warning" onClick={() => handleStatus(selected._id, 'IN_PROGRESS')}>
-								{ui('In progress')}
+								{ui('admin.inProgress')}
 							</Button>
 							<Button size="small" variant="contained" color="success" onClick={() => handleStatus(selected._id, 'RESOLVED')}>
-								{ui('Resolve')}
+								{ui('admin.resolve')}
 							</Button>
-							<Button onClick={() => setSelected(null)}>{ui('Close')}</Button>
+							<Button onClick={() => setSelected(null)}>{ui('admin.close')}</Button>
 						</DialogActions>
 					</>
 				)}

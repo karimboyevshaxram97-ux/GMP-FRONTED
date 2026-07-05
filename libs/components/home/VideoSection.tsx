@@ -97,9 +97,9 @@ const VideoSection = () => {
 			<div className="container">
 				{/* Header */}
 				<div className={`hm-header${visible ? ' visible' : ''}`}>
-					<span className="section-tag">{ui('How It Works')}</span>
-					<h2>{ui('Your journey to global opportunities')}</h2>
-					<p>{ui('From first search to final destination — GMP guides you every step of the way.')}</p>
+					<span className="section-tag">{ui('home.howItWorks')}</span>
+					<h2>{ui('home.yourJourneyToGlobalOpportunities')}</h2>
+					<p>{ui('home.fromFirstSearchToFinal')}</p>
 				</div>
 
 				{/* Main 2-col layout */}
@@ -140,8 +140,8 @@ const VideoSection = () => {
 								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
 									<circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
 								</svg>
-								<span>{ui('Search services by country or type...')}</span>
-								<div className="mock-search-btn">{ui('Search')}</div>
+								<span>{ui('home.searchServicesByCountryOr')}</span>
+								<div className="mock-search-btn">{ui('agency.search')}</div>
 							</div>
 
 							{/* Cards grid */}
@@ -168,11 +168,11 @@ const VideoSection = () => {
 							{/* Floating stats badges */}
 							<div className="floating-badge badge-tl">
 								<span className="fb-num">200+</span>
-								<span className="fb-label">{ui('Services')}</span>
+								<span className="fb-label">{ui('agency.services')}</span>
 							</div>
 							<div className="floating-badge badge-br">
 								<span className="fb-num">98%</span>
-								<span className="fb-label">{ui('Success rate')}</span>
+								<span className="fb-label">{ui('home.successRate')}</span>
 							</div>
 						</div>
 					</div>
@@ -182,25 +182,25 @@ const VideoSection = () => {
 				<div className={`hm-stats-strip${visible ? ' visible' : ''}`}>
 					<div className="hm-stat">
 						<span className="hm-stat-num">10,000+</span>
-						<span className="hm-stat-label">{ui('Clients served')}</span>
+						<span className="hm-stat-label">{ui('home.clientsServed')}</span>
 					</div>
 					<div className="hm-stat-sep" />
 					<div className="hm-stat">
 						<span className="hm-stat-num">50+</span>
-						<span className="hm-stat-label">{ui('Verified agencies')}</span>
+						<span className="hm-stat-label">{ui('home.verifiedAgencies')}</span>
 					</div>
 					<div className="hm-stat-sep" />
 					<div className="hm-stat">
 						<span className="hm-stat-num">30+</span>
-						<span className="hm-stat-label">{ui('Destination countries')}</span>
+						<span className="hm-stat-label">{ui('home.destinationCountries')}</span>
 					</div>
 					<div className="hm-stat-sep" />
 					<div className="hm-stat">
 						<span className="hm-stat-num">4.9★</span>
-						<span className="hm-stat-label">{ui('Average rating')}</span>
+						<span className="hm-stat-label">{ui('agency.averageRating')}</span>
 					</div>
 					<div className="hm-cta-btn">
-						<Link href="/service">{ui('Explore all services')} →</Link>
+						<Link href="/service">{ui('home.exploreAllServices')} →</Link>
 					</div>
 				</div>
 			</div>

@@ -60,7 +60,7 @@ const AdminDashboard: NextPage = () => {
 					{total.toLocaleString()}
 				</text>
 				<text x={cx} y={cy + 13} textAnchor="middle" fontSize="11" fill="#94a3b8" fontFamily="inherit">
-					{ui('Total Records')}
+					{ui('admin.totalRecords')}
 				</text>
 			</g>
 		);
@@ -68,7 +68,7 @@ const AdminDashboard: NextPage = () => {
 
 	return (
 		<div>
-			<div className="page-title">{ui('Dashboard')}</div>
+			<div className="page-title">{ui('admin.dashboard')}</div>
 
 			{/* Stat cards */}
 			<Grid container spacing={2} sx={{ mb: 4 }}>
@@ -95,7 +95,7 @@ const AdminDashboard: NextPage = () => {
 				{/* Left — Bar chart */}
 				<Grid item xs={12} md={7}>
 					<Box className="admin-chart-card">
-						<div className="chart-title">{ui('Platform Statistics')}</div>
+						<div className="chart-title">{ui('admin.platformStatistics')}</div>
 						<ResponsiveContainer width="100%" height={290}>
 							<BarChart data={cards} margin={{ top: 10, right: 30, left: -16, bottom: 0 }} barCategoryGap="30%">
 								<defs>
@@ -138,7 +138,7 @@ const AdminDashboard: NextPage = () => {
 				{/* Right — Donut */}
 				<Grid item xs={12} md={5}>
 					<Box className="admin-chart-card" sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-						<div className="chart-title">{ui('Distribution')}</div>
+						<div className="chart-title">{ui('admin.distribution')}</div>
 						<ResponsiveContainer width="100%" height={220}>
 							<PieChart>
 								<defs>

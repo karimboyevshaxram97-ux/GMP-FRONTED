@@ -67,7 +67,7 @@ const AiSearchAssistant = () => {
 				type="button"
 				className="ai-assist-btn"
 				onClick={() => setOpen(true)}
-				title={ui('Ask AI')}
+				title={ui('ai.askAi')}
 			>
 				<AutoAwesomeIcon />
 				<span>AI</span>
@@ -78,16 +78,16 @@ const AiSearchAssistant = () => {
 					<div className="ai-assist-modal" onClick={(e) => e.stopPropagation()}>
 						<div className="ai-assist-header">
 							<span>
-								<AutoAwesomeIcon /> {ui('AI Assistant')}
+								<AutoAwesomeIcon /> {ui('ai.aIAssistant')}
 							</span>
-							<button type="button" className="ai-assist-close" onClick={() => setOpen(false)} aria-label={ui('Close')}>
+							<button type="button" className="ai-assist-close" onClick={() => setOpen(false)} aria-label={ui('admin.close')}>
 								<CloseIcon />
 							</button>
 						</div>
 
 						<div className="ai-assist-body" ref={bodyRef}>
 							{messages.length === 0 && (
-								<p className="ai-assist-empty">{ui('Hi! Ask me anything about studying, working, or traveling abroad.')}</p>
+								<p className="ai-assist-empty">{ui('ai.hiAskMeAnythingAbout')}</p>
 							)}
 
 							{messages.map((msg, idx) => (
@@ -96,14 +96,14 @@ const AiSearchAssistant = () => {
 								</div>
 							))}
 
-							{loading && <div className="ai-msg-bot ai-msg-loading">{ui('Thinking...')}</div>}
-							{error && <div className="ai-assist-error">{ui('Something went wrong. Please try again.')}</div>}
+							{loading && <div className="ai-msg-bot ai-msg-loading">{ui('ai.thinking')}</div>}
+							{error && <div className="ai-assist-error">{ui('ai.somethingWentWrongPleaseTry')}</div>}
 						</div>
 
 						<div className="ai-assist-footer">
 							<input
 								type="text"
-								placeholder={ui('Ask about visas, agencies, or services...')}
+								placeholder={ui('ai.askAboutVisasAgenciesOr')}
 								value={input}
 								onChange={(e) => setInput(e.target.value)}
 								onKeyDown={handleKeyDown}

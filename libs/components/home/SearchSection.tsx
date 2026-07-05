@@ -29,7 +29,7 @@ const SearchSection = () => {
 					<div className="home-search__input-wrap">
 						<SearchIcon />
 						<input
-							placeholder={ui('Search services, agencies...')}
+							placeholder={ui('home.searchServicesAgencies')}
 							value={keyword}
 							onChange={(e) => setKeyword(e.target.value)}
 							onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
@@ -40,31 +40,31 @@ const SearchSection = () => {
 					<div className="home-search__select">
 						<CategoryOutlinedIcon />
 						<select value={type} onChange={(e) => setType(e.target.value)}>
-							<option value="">{ui('All Services')}</option>
-							<option value="STUDY_ABROAD">{ui('Study Abroad')}</option>
-							<option value="WORK_ABROAD">{ui('Work Abroad')}</option>
-							<option value="TRAVEL">{ui('Travel')}</option>
-							<option value="VISA_SERVICES">{ui('Visa Services')}</option>
+							<option value="">{ui('footer.allServices')}</option>
+							<option value="STUDY_ABROAD">{ui('mypage.studyAbroad')}</option>
+							<option value="WORK_ABROAD">{ui('mypage.workAbroad')}</option>
+							<option value="TRAVEL">{ui('mypage.travel')}</option>
+							<option value="VISA_SERVICES">{ui('mypage.visaServices')}</option>
 						</select>
 					</div>
 
 					<div className="home-search__select">
 						<PublicOutlinedIcon />
 						<select value={country} onChange={(e) => setCountry(e.target.value)}>
-							<option value="">{ui('All Countries')}</option>
-							<option value="United States">{ui('United States')}</option>
-							<option value="United Kingdom">{ui('United Kingdom')}</option>
-							<option value="Germany">{ui('Germany')}</option>
-							<option value="Canada">{ui('Canada')}</option>
-							<option value="Australia">{ui('Australia')}</option>
-							<option value="South Korea">{ui('South Korea')}</option>
-							<option value="Japan">{ui('Japan')}</option>
-							<option value="UAE">{ui('UAE')}</option>
+							<option value="">{ui('home.allCountries')}</option>
+							<option value="United States">{ui('home.unitedStates')}</option>
+							<option value="United Kingdom">{ui('home.unitedKingdom')}</option>
+							<option value="Germany">{ui('home.germany')}</option>
+							<option value="Canada">{ui('home.canada')}</option>
+							<option value="Australia">{ui('home.australia')}</option>
+							<option value="South Korea">{ui('home.southKorea')}</option>
+							<option value="Japan">{ui('home.japan')}</option>
+							<option value="UAE">{ui('enum.UAE')}</option>
 						</select>
 					</div>
 
 					<button className="home-search__btn" onClick={handleSearch}>
-						<SearchIcon /> {ui('Search')}
+						<SearchIcon /> {ui('agency.search')}
 					</button>
 				</div>
 			</div>

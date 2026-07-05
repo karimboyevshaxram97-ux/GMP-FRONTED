@@ -59,15 +59,15 @@ const AdminServices: NextPage = () => {
 	const pageCount = Math.max(1, Math.ceil(total / LIMIT));
 
 	const handleDelete = async (id: string, name: string) => {
-		const ok = await sweetConfirmAlert(`${ui('Permanently delete')} "${name}"? ${ui('This cannot be undone.')}`);
+		const ok = await sweetConfirmAlert(`${ui('admin.permanentlyDelete')} "${name}"? ${ui('admin.thisCannotBeUndone')}`);
 		if (!ok) return;
 		try {
 			await deleteService({ variables: { id } });
-			await sweetMixinSuccessAlert(ui('Service deleted'));
+			await sweetMixinSuccessAlert(ui('mypage.serviceDeleted'));
 			setDetailService(null);
 			refetch();
 		} catch (err: any) {
-			await sweetMixinErrorAlert(err?.message || ui('Failed to delete service'));
+			await sweetMixinErrorAlert(err?.message || ui('mypage.failedToDeleteService'));
 		}
 	};
 
@@ -82,64 +82,64 @@ const AdminServices: NextPage = () => {
 					},
 				},
 			});
-			await sweetMixinSuccessAlert(ui('Service status updated'));
+			await sweetMixinSuccessAlert(ui('admin.serviceStatusUpdated'));
 			setDetailService(null);
 			refetch();
 		} catch (err: any) {
-			await sweetMixinErrorAlert(err?.message || ui('Failed to update'));
+			await sweetMixinErrorAlert(err?.message || ui('admin.failedToUpdate'));
 		}
 	};
 
 	return (
 		<div>
-			<div className="page-title">{ui('Services Management')}</div>
+			<div className="page-title">{ui('admin.servicesManagement')}</div>
 
 			<Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap', alignItems: 'center' }}>
 				<TextField
 					size="small"
-					placeholder={ui('Search by service name')}
+					placeholder={ui('admin.searchByServiceName')}
 					value={text}
 					onChange={(e) => setText(e.target.value)}
 					sx={{ minWidth: 240 }}
 					InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon fontSize="small" /></InputAdornment> }}
 				/>
 				<Select size="small" value={serviceType} onChange={(e) => setServiceType(e.target.value)} displayEmpty sx={{ minWidth: 160 }}>
-					<MenuItem value="">{ui('All types')}</MenuItem>
-					<MenuItem value="VISA_SERVICES">{ui('Visa Services')}</MenuItem>
-					<MenuItem value="STUDY_ABROAD">{ui('Study Abroad')}</MenuItem>
-					<MenuItem value="WORK_ABROAD">{ui('Work Abroad')}</MenuItem>
-					<MenuItem value="TRAVEL">{ui('Travel')}</MenuItem>
+					<MenuItem value="">{ui('admin.allTypes')}</MenuItem>
+					<MenuItem value="VISA_SERVICES">{ui('mypage.visaServices')}</MenuItem>
+					<MenuItem value="STUDY_ABROAD">{ui('mypage.studyAbroad')}</MenuItem>
+					<MenuItem value="WORK_ABROAD">{ui('mypage.workAbroad')}</MenuItem>
+					<MenuItem value="TRAVEL">{ui('mypage.travel')}</MenuItem>
 				</Select>
 				<Select size="small" value={status} onChange={(e) => setStatus(e.target.value)} displayEmpty sx={{ minWidth: 130 }}>
-					<MenuItem value="">{ui('All statuses')}</MenuItem>
-					<MenuItem value="ACTIVE">{ui('Active')}</MenuItem>
-					<MenuItem value="DRAFT">{ui('Draft')}</MenuItem>
-					<MenuItem value="ARCHIVED">{ui('Archived')}</MenuItem>
-					<MenuItem value="SUSPENDED">{ui('Suspended')}</MenuItem>
+					<MenuItem value="">{ui('admin.allStatuses')}</MenuItem>
+					<MenuItem value="ACTIVE">{ui('admin.active')}</MenuItem>
+					<MenuItem value="DRAFT">{ui('admin.draft')}</MenuItem>
+					<MenuItem value="ARCHIVED">{ui('admin.archived')}</MenuItem>
+					<MenuItem value="SUSPENDED">{ui('admin.suspended')}</MenuItem>
 				</Select>
-				<Box sx={{ ml: 'auto', color: '#888', fontSize: 13 }}>{ui('Total')}: <b>{total}</b></Box>
+				<Box sx={{ ml: 'auto', color: '#888', fontSize: 13 }}>{ui('admin.total')}: <b>{total}</b></Box>
 			</Box>
 
 			<TableContainer component={Paper} sx={{ borderRadius: 2, mb: 3 }}>
 				<Table>
 					<TableHead>
 						<TableRow sx={{ bgcolor: '#f5f7fa' }}>
-							<TableCell><b>{ui('Service')}</b></TableCell>
-							<TableCell><b>{ui('Type')}</b></TableCell>
-							<TableCell><b>{ui('Destination')}</b></TableCell>
-							<TableCell><b>{ui('Price')}</b></TableCell>
-							<TableCell><b>{ui('Rating')}</b></TableCell>
-							<TableCell><b>{ui('Applications')}</b></TableCell>
-							<TableCell><b>{ui('Status')}</b></TableCell>
-							<TableCell><b>{ui('Visibility')}</b></TableCell>
-							<TableCell><b>{ui('Created')}</b></TableCell>
-							<TableCell><b>{ui('Actions')}</b></TableCell>
+							<TableCell><b>{ui('mypage.service')}</b></TableCell>
+							<TableCell><b>{ui('admin.type')}</b></TableCell>
+							<TableCell><b>{ui('service.destination')}</b></TableCell>
+							<TableCell><b>{ui('service.price')}</b></TableCell>
+							<TableCell><b>{ui('mypage.rating')}</b></TableCell>
+							<TableCell><b>{ui('mypage.applications')}</b></TableCell>
+							<TableCell><b>{ui('mypage.status')}</b></TableCell>
+							<TableCell><b>{ui('admin.visibility')}</b></TableCell>
+							<TableCell><b>{ui('admin.created')}</b></TableCell>
+							<TableCell><b>{ui('admin.actions')}</b></TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
 						{services.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={10} sx={{ textAlign: 'center', py: 5, color: '#aaa' }}>{ui('No services found')}</TableCell>
+								<TableCell colSpan={10} sx={{ textAlign: 'center', py: 5, color: '#aaa' }}>{ui('service.noServicesFound')}</TableCell>
 							</TableRow>
 						) : services.map((svc: any) => (
 							<TableRow key={svc._id} hover>
@@ -179,9 +179,9 @@ const AdminServices: NextPage = () => {
 								<TableCell>
 									<Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
 										{svc.status !== 'ARCHIVED' && (
-											<Button size="small" variant="outlined" color="warning" onClick={() => handleSetStatus(svc._id, 'ARCHIVED')}>{ui('Archive')}</Button>
+											<Button size="small" variant="outlined" color="warning" onClick={() => handleSetStatus(svc._id, 'ARCHIVED')}>{ui('admin.archive')}</Button>
 										)}
-										<Button size="small" variant="outlined" color="error" onClick={() => handleDelete(svc._id, tr(svc.name))}>{ui('Delete')}</Button>
+										<Button size="small" variant="outlined" color="error" onClick={() => handleDelete(svc._id, tr(svc.name))}>{ui('admin.delete')}</Button>
 									</Box>
 								</TableCell>
 							</TableRow>
@@ -202,23 +202,23 @@ const AdminServices: NextPage = () => {
 						<DialogContent>
 							<Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, mb: 2 }}>
 								<Box>
-									<Typography variant="caption" color="text.secondary">{ui('Type')}</Typography>
+									<Typography variant="caption" color="text.secondary">{ui('admin.type')}</Typography>
 									<Typography variant="body2">{ui(detailService.serviceType) || detailService.serviceType?.replace('_', ' ')}</Typography>
 								</Box>
 								<Box>
-									<Typography variant="caption" color="text.secondary">{ui('Destination')}</Typography>
+									<Typography variant="caption" color="text.secondary">{ui('service.destination')}</Typography>
 									<Typography variant="body2">{detailService.destinationCountry}</Typography>
 								</Box>
 								<Box>
-									<Typography variant="caption" color="text.secondary">{ui('Price')}</Typography>
-									<Typography variant="body2">{detailService.price != null ? `$${detailService.price}` : ui('Free')}</Typography>
+									<Typography variant="caption" color="text.secondary">{ui('service.price')}</Typography>
+									<Typography variant="body2">{detailService.price != null ? `$${detailService.price}` : ui('admin.free')}</Typography>
 								</Box>
 								<Box>
-									<Typography variant="caption" color="text.secondary">{ui('Status')}</Typography>
+									<Typography variant="caption" color="text.secondary">{ui('mypage.status')}</Typography>
 									<Box><Chip label={ui(detailService.status)} size="small" color={statusColor[detailService.status] ?? 'default'} /></Box>
 								</Box>
 								<Box>
-									<Typography variant="caption" color="text.secondary">{ui('Visibility')}</Typography>
+									<Typography variant="caption" color="text.secondary">{ui('admin.visibility')}</Typography>
 									<Box>
 										<Chip
 											label={ui(detailService.visibility)}
@@ -229,19 +229,19 @@ const AdminServices: NextPage = () => {
 									</Box>
 								</Box>
 								<Box>
-									<Typography variant="caption" color="text.secondary">{ui('Views')}</Typography>
+									<Typography variant="caption" color="text.secondary">{ui('agency.views')}</Typography>
 									<Typography variant="body2">{detailService.viewCount ?? 0}</Typography>
 								</Box>
 								<Box>
-									<Typography variant="caption" color="text.secondary">{ui('Likes')}</Typography>
+									<Typography variant="caption" color="text.secondary">{ui('agency.likes')}</Typography>
 									<Typography variant="body2">{detailService.likeCount ?? 0}</Typography>
 								</Box>
 								<Box>
-									<Typography variant="caption" color="text.secondary">{ui('Applications')}</Typography>
+									<Typography variant="caption" color="text.secondary">{ui('mypage.applications')}</Typography>
 									<Typography variant="body2">{detailService.currentApplicationCount ?? 0}</Typography>
 								</Box>
 								<Box>
-									<Typography variant="caption" color="text.secondary">{ui('Rating')}</Typography>
+									<Typography variant="caption" color="text.secondary">{ui('mypage.rating')}</Typography>
 									<Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
 										<Rating value={detailService.averageRating ?? 0} precision={0.1} readOnly size="small" />
 										<Typography variant="body2">({detailService.totalReviews ?? 0})</Typography>
@@ -249,15 +249,15 @@ const AdminServices: NextPage = () => {
 								</Box>
 							</Box>
 							<Divider sx={{ mb: 2 }} />
-							<Typography variant="caption" color="text.secondary">{ui('Service ID')}</Typography>
+							<Typography variant="caption" color="text.secondary">{ui('admin.serviceId')}</Typography>
 							<Typography variant="body2" sx={{ fontFamily: 'monospace', fontSize: 12 }}>{detailService._id}</Typography>
 						</DialogContent>
 						<DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
 							{detailService.status !== 'ARCHIVED' && (
-								<Button color="warning" variant="outlined" size="small" onClick={() => handleSetStatus(detailService._id, 'ARCHIVED')}>{ui('Archive')}</Button>
+								<Button color="warning" variant="outlined" size="small" onClick={() => handleSetStatus(detailService._id, 'ARCHIVED')}>{ui('admin.archive')}</Button>
 							)}
-							<Button color="error" variant="outlined" size="small" onClick={() => handleDelete(detailService._id, tr(detailService.name))}>{ui('Delete')}</Button>
-							<Button onClick={() => setDetailService(null)}>{ui('Close')}</Button>
+							<Button color="error" variant="outlined" size="small" onClick={() => handleDelete(detailService._id, tr(detailService.name))}>{ui('admin.delete')}</Button>
+							<Button onClick={() => setDetailService(null)}>{ui('admin.close')}</Button>
 						</DialogActions>
 					</>
 				)}

@@ -50,9 +50,9 @@ const ServiceTypesSection = () => {
 
 			<div className="container">
 				<div className="home-service-types__header">
-					<span className="section-tag">{ui('What We Offer')}</span>
-					<h2>{ui('Explore Our Services')}</h2>
-					<p>{ui('Everything you need to make your international journey smooth and successful.')}</p>
+					<span className="section-tag">{ui('home.whatWeOffer')}</span>
+					<h2>{ui('home.exploreOurServices')}</h2>
+					<p>{ui('home.everythingYouNeedToMake')}</p>
 				</div>
 
 				<div className="home-service-types__grid">
@@ -65,7 +65,7 @@ const ServiceTypesSection = () => {
 								<h3>{ui(s.title)}</h3>
 								<p>{ui(s.desc)}</p>
 								<div className="stype-card__link">
-									{ui('Explore')} <ArrowForwardIcon />
+									{ui('home.explore')} <ArrowForwardIcon />
 								</div>
 							</div>
 						</Link>

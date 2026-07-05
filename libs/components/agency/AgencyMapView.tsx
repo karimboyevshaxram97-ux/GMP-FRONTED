@@ -144,8 +144,8 @@ const AgencyMapView: React.FC = () => {
 						<div class="iw-name">${name}</div>
 					</div>
 					${addressLine ? `<div class="iw-address">${addressLine}</div>` : ''}
-					${(agency.averageRating ?? 0) > 0 ? `<div class="iw-rating">★ ${(agency.averageRating ?? 0).toFixed(1)} <span>(${agency.totalReviews ?? 0} ${ui('reviews')})</span></div>` : ''}
-					<a href="/agency/${agency._id}" class="iw-btn" style="display:block;width:100%;padding:7px 0;background:#0d9488;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;text-align:center;text-decoration:none;">${ui('View Profile')} →</a>
+					${(agency.averageRating ?? 0) > 0 ? `<div class="iw-rating">★ ${(agency.averageRating ?? 0).toFixed(1)} <span>(${agency.totalReviews ?? 0} ${ui('agency.reviews2')})</span></div>` : ''}
+					<a href="/agency/${agency._id}" class="iw-btn" style="display:block;width:100%;padding:7px 0;background:#0d9488;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;text-align:center;text-decoration:none;">${ui('map.viewProfile')} →</a>
 				</div>
 			`;
 
@@ -227,13 +227,13 @@ const AgencyMapView: React.FC = () => {
 							<div className="card-rating">
 								<StarIcon />
 								{(agency.averageRating ?? 0).toFixed(1)}
-								<span className="card-services"> · {agency.totalServices ?? 0} {ui('services')}</span>
+								<span className="card-services"> · {agency.totalServices ?? 0} {ui('admin.services')}</span>
 							</div>
 						)}
 						{agency.verificationStatus === 'VERIFIED' && (
 							<div className="card-verified">
 								<VerifiedIcon />
-								{ui('Verified')}
+								{ui('admin.verified')}
 							</div>
 						)}
 					</div>
@@ -250,28 +250,28 @@ const AgencyMapView: React.FC = () => {
 					<SearchIcon />
 					<input
 						type="text"
-						placeholder={ui('Search agencies, cities...')}
+						placeholder={ui('map.searchAgenciesCities')}
 						value={searchText}
 						onChange={(e) => setSearchText(e.target.value)}
 					/>
 				</div>
 				<select className="filter-select" value={countryFilter} onChange={(e) => setCountryFilter(e.target.value)}>
-					<option value="">{ui('All countries')}</option>
+					<option value="">{ui('map.allCountries')}</option>
 					{countries.map((c) => <option key={c} value={c}>{c}</option>)}
 				</select>
 				<input
 					className="filter-select"
 					type="text"
-					placeholder={ui('City...')}
+					placeholder={ui('map.city')}
 					value={cityFilter}
 					onChange={(e) => setCityFilter(e.target.value)}
 					style={{ minWidth: 100 }}
 				/>
 				{(searchText || countryFilter || cityFilter) && (
-					<button className="filter-reset" onClick={handleReset}>{ui('Clear')}</button>
+					<button className="filter-reset" onClick={handleReset}>{ui('admin.clear')}</button>
 				)}
 				<div className="filter-count">
-					<span>{agencies.length}</span> {agencies.length === 1 ? ui('agency') : ui('agencies')} {ui('on map')}
+					<span>{agencies.length}</span> {agencies.length === 1 ? ui('map.agency') : ui('map.agencies')} {ui('map.onMap')}
 				</div>
 			</div>
 
@@ -296,8 +296,8 @@ const AgencyMapView: React.FC = () => {
 					{!loading && agencies.length === 0 && (
 						<div className="sidebar-empty">
 							<LocationOnIcon />
-							<strong>{ui('No agencies found')}</strong>
-							<span>{ui('Add latitude and longitude to agency profiles to show them on the map.')}</span>
+							<strong>{ui('agency.noAgenciesFound')}</strong>
+							<span>{ui('map.addLatitudeAndLongitudeTo')}</span>
 						</div>
 					)}
 					{agencies.map(renderCard)}

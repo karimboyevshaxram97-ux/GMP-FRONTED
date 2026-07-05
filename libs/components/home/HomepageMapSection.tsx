@@ -25,7 +25,7 @@ const HomepageMapSection: React.FC = () => {
 	const router = useRouter();
 	const tr = useLang();
 	const ui = useUiLang();
-	const viewProfileLabel = ui('View Profile');
+	const viewProfileLabel = ui('map.viewProfile');
 
 	const mapContainerRef = useRef<HTMLDivElement>(null);
 	const mapInstanceRef = useRef<any>(null);
@@ -140,10 +140,10 @@ const HomepageMapSection: React.FC = () => {
 					<div className="home-map-header__left">
 						<span className="home-map-eyebrow">
 							<LocationOnIcon style={{ fontSize: 13 }} />
-							{ui('Agency locations worldwide')}
+							{ui('map.agencyLocationsWorldwide')}
 						</span>
-						<h2>{ui('Find agencies')} <span>{ui('near you')}</span></h2>
-						<p>{ui('Browse our global network of verified migration agencies on the interactive map.')}</p>
+						<h2>{ui('map.findAgencies')} <span>{ui('map.nearYou')}</span></h2>
+						<p>{ui('map.browseOurGlobalNetworkOf')}</p>
 					</div>
 
 					{/* Stats */}
@@ -151,19 +151,19 @@ const HomepageMapSection: React.FC = () => {
 						<div className="home-map-stat">
 							<ApartmentIcon />
 							<strong>{loading ? '—' : `${agencies.length}+`}</strong>
-							<span>{ui('Agencies')}</span>
+							<span>{ui('agency.agencies')}</span>
 						</div>
 						<div className="home-map-stat-div" />
 						<div className="home-map-stat">
 							<PublicIcon />
 							<strong>{loading ? '—' : `${uniqueCountries}+`}</strong>
-							<span>{ui('Countries')}</span>
+							<span>{ui('mypage.countries')}</span>
 						</div>
 						<div className="home-map-stat-div" />
 						<div className="home-map-stat">
 							<LocationCityIcon />
 							<strong>{loading ? '—' : `${uniqueCities}+`}</strong>
-							<span>{ui('Cities')}</span>
+							<span>{ui('map.cities')}</span>
 						</div>
 					</div>
 				</div>
@@ -235,12 +235,12 @@ const HomepageMapSection: React.FC = () => {
 													</span>
 												)}
 												{agency.totalServices ? (
-													<span className="hmc-services">{agency.totalServices} {ui('services')}</span>
+													<span className="hmc-services">{agency.totalServices} {ui('admin.services')}</span>
 												) : null}
 												{agency.verificationStatus === 'VERIFIED' && (
 													<span className="hmc-verified">
 														<VerifiedIcon style={{ fontSize: 13 }} />
-														{ui('Verified')}
+														{ui('admin.verified')}
 													</span>
 												)}
 											</div>
@@ -274,7 +274,7 @@ const HomepageMapSection: React.FC = () => {
 
 						{/* View all */}
 						<button className="home-map-viewall" onClick={() => router.push('/agency/map')}>
-							{ui('Explore full map')}
+							{ui('map.exploreFullMap')}
 							<ArrowForwardIcon style={{ fontSize: 17 }} />
 						</button>
 					</div>
@@ -284,13 +284,13 @@ const HomepageMapSection: React.FC = () => {
 						{loading && (
 							<div className="home-map-loading">
 								<span className="hml-pulse" />
-								<span>{ui('Loading map...')}</span>
+								<span>{ui('map.loadingMap')}</span>
 							</div>
 						)}
 						<div ref={mapContainerRef} style={{ width: '100%', height: '100%' }} />
 						<div className="home-map-overlay-cta" onClick={() => router.push('/agency/map')}>
 							<LocationOnIcon />
-							<span>{ui('Open interactive map')}</span>
+							<span>{ui('map.openInteractiveMap')}</span>
 							<ArrowForwardIcon style={{ fontSize: 15 }} />
 						</div>
 					</div>

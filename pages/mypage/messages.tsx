@@ -62,7 +62,7 @@ function ConversationRow({
 		skip: !conversation.agency,
 	});
 	const agency = data?.getAgency;
-	const name = agency ? tr(agency.name) : ui('Agency');
+	const name = agency ? tr(agency.name) : ui('auth.agency');
 	const logo = agency?.logo ? `${REACT_APP_API_URL}/uploads/${agency.logo}` : null;
 
 	return (
@@ -86,7 +86,7 @@ function ConversationRow({
 				</Box>
 				<Box className="msg-conv-bottom">
 					<span className="msg-conv-preview">
-						{conversation.lastMessage || ui('No messages yet')}
+						{conversation.lastMessage || ui('mypage.noMessagesYet')}
 					</span>
 					{conversation.unreadCount > 0 && (
 						<Badge badgeContent={conversation.unreadCount} color="primary" className="msg-unread-badge" />
@@ -144,7 +144,7 @@ const MessagesPage: NextPage = () => {
 		variables: { id: activeConv?.agency },
 		skip: !activeConv?.agency,
 	});
-	const activeAgencyName = activeAgencyData?.getAgency ? tr(activeAgencyData.getAgency.name) : ui('Agency');
+	const activeAgencyName = activeAgencyData?.getAgency ? tr(activeAgencyData.getAgency.name) : ui('auth.agency');
 
 	const filtered = conversations.filter((c) => {
 		if (!search.trim()) return true;
@@ -208,7 +208,7 @@ const MessagesPage: NextPage = () => {
 
 	const handleBlock = async () => {
 		if (!activeConv) return;
-		const ok = await sweetConfirmAlert(ui("Block this conversation? You won't receive new messages."));
+		const ok = await sweetConfirmAlert(ui('mypage.blockThisConversationYouWont'));
 		if (!ok) return;
 		await blockConversation({ variables: { conversationId: activeConv._id } });
 		setActiveConv(null);
@@ -225,7 +225,7 @@ const MessagesPage: NextPage = () => {
 					<Box className="msg-sidebar-header">
 						<Box className="msg-sidebar-title">
 							<ChatBubbleOutlineIcon />
-							<span>{ui('Messages')}</span>
+							<span>{ui('mypage.messages')}</span>
 							{totalUnread > 0 && (
 								<Chip label={totalUnread} color="primary" size="small" className="msg-total-badge" />
 							)}
@@ -234,7 +234,7 @@ const MessagesPage: NextPage = () => {
 							<SearchIcon className="msg-search-icon" fontSize="small" />
 							<input
 								className="msg-search-input"
-								placeholder={ui('Search conversations...')}
+								placeholder={ui('mypage.searchConversations')}
 								value={search}
 								onChange={(e) => setSearch(e.target.value)}
 							/>
@@ -245,18 +245,18 @@ const MessagesPage: NextPage = () => {
 						{filtered.length === 0 ? (
 							<Box className="msg-empty-sidebar">
 								<ChatBubbleOutlineIcon sx={{ fontSize: 40, color: '#c8d3f5' }} />
-								<p>{search ? ui('No results found') : ui('No conversations yet')}</p>
+								<p>{search ? ui('No results found') : ui('mypage.noConversationsYet')}</p>
 								{!search && user?.role === UserRole.AGENCY_ADMIN && (
-									<span>{ui('When users message your agency, conversations will appear here. Make sure your agency profile is set up and verified.')}</span>
+									<span>{ui('mypage.whenUsersMessageYourAgency')}</span>
 								)}
 								{!search && user?.role !== UserRole.AGENCY_ADMIN && (
 									<>
-										<span>{ui('Browse agencies and click Send message on their profile to start a conversation.')}</span>
+										<span>{ui('mypage.browseAgenciesAndClickSend')}</span>
 										<button
 											className="msg-start-btn"
 											onClick={() => router.push('/agency')}
 										>
-											{ui('Browse agencies')}
+											{ui('mypage.browseAgencies')}
 										</button>
 									</>
 								)}
@@ -279,8 +279,8 @@ const MessagesPage: NextPage = () => {
 					{!activeConv ? (
 						<Box className="msg-empty-main">
 							<ChatBubbleOutlineIcon sx={{ fontSize: 64, color: '#c8d3f5' }} />
-							<h3>{ui('Select a conversation')}</h3>
-							<p>{ui('Choose a conversation from the left to start messaging')}</p>
+							<h3>{ui('mypage.selectAConversation')}</h3>
+							<p>{ui('mypage.chooseAConversationFromThe')}</p>
 						</Box>
 					) : (
 						<>
@@ -296,7 +296,7 @@ const MessagesPage: NextPage = () => {
 								<ConvHeaderInfo conversation={activeConv} />
 								<Box className="msg-header-actions">
 									{activeConv.status !== 'BLOCKED' && (
-										<Tooltip title={ui('Block conversation')}>
+										<Tooltip title={ui('mypage.blockConversation')}>
 											<IconButton size="small" onClick={handleBlock} sx={{ color: '#94a3b8' }}>
 												<BlockIcon fontSize="small" />
 											</IconButton>
@@ -321,9 +321,9 @@ const MessagesPage: NextPage = () => {
 										const isMine = msg.sender === user?._id;
 										const isEditing = editingId === msg._id;
 										const senderLabel = isMine
-											? ui('You')
+											? ui('mypage.you')
 											: user?.role === UserRole.AGENCY_ADMIN
-												? ui('User')
+												? ui('auth.user')
 												: activeAgencyName;
 
 										return (
@@ -362,14 +362,14 @@ const MessagesPage: NextPage = () => {
 																	})}
 																</time>
 																{msg.isEdited && (
-																	<span className="msg-edited">{ui('edited')}</span>
+																	<span className="msg-edited">{ui('mypage.edited')}</span>
 																)}
 															</Box>
 														</>
 													)}
 
 													{isMine && !isEditing && (
-														<Tooltip title={ui('Edit message')}>
+														<Tooltip title={ui('mypage.editMessage')}>
 															<IconButton
 																size="small"
 																className="msg-edit-btn"
@@ -391,7 +391,7 @@ const MessagesPage: NextPage = () => {
 							{activeConv.status === 'BLOCKED' ? (
 								<Box className="msg-blocked-banner">
 									<BlockIcon fontSize="small" />
-									<span>{ui('This conversation is blocked')}</span>
+									<span>{ui('mypage.thisConversationIsBlocked')}</span>
 								</Box>
 							) : (
 								<Box component="form" className="msg-chat-input" onSubmit={handleSend}>
@@ -401,7 +401,7 @@ const MessagesPage: NextPage = () => {
 										size="small"
 										multiline
 										maxRows={4}
-										placeholder={ui('Type a message... (Enter to send, Shift+Enter for new line)')}
+										placeholder={ui('mypage.typeAMessageEnterTo')}
 										value={messageText}
 										onChange={(e) => setMessageText(e.target.value)}
 										onKeyDown={(e) => {
@@ -443,7 +443,7 @@ function ConvHeaderInfo({ conversation }: { conversation: any }) {
 		skip: !conversation.agency,
 	});
 	const agency = data?.getAgency;
-	const name = agency ? tr(agency.name) : ui('Conversation');
+	const name = agency ? tr(agency.name) : ui('mypage.conversation');
 	const logo = agency?.logo ? `${REACT_APP_API_URL}/uploads/${agency.logo}` : null;
 
 	return (

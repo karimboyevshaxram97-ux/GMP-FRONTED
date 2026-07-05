@@ -40,7 +40,7 @@ const AgencyCard = ({ agency, onClick, onLike }: Props) => {
 					alt={tr(agency.name)}
 				/>
 				{agency.verificationStatus === AgencyVerificationStatus.VERIFIED && (
-					<Chip className="verified-badge" icon={<VerifiedIcon />} label={ui('Verified')} />
+					<Chip className="verified-badge" icon={<VerifiedIcon />} label={ui('admin.verified')} />
 				)}
 			</Box>
 
@@ -59,17 +59,17 @@ const AgencyCard = ({ agency, onClick, onLike }: Props) => {
 
 				<Box className="rating-row">
 					<Rating value={agency.averageRating || 0} precision={0.1} size="small" readOnly />
-					<span>{agency.totalReviews || 0} {ui('reviews')}</span>
+					<span>{agency.totalReviews || 0} {ui('agency.reviews2')}</span>
 				</Box>
 
 				<Box className="agency-metrics">
 					<span>
 						<WorkOutlineIcon />
-						{agency.totalServices || 0} {ui('services')}
+						{agency.totalServices || 0} {ui('admin.services')}
 					</span>
 					<span>
 						<VisibilityIcon />
-						{agency.viewCount || 0} {ui('views')}
+						{agency.viewCount || 0} {ui('agency.views2')}
 					</span>
 				</Box>
 

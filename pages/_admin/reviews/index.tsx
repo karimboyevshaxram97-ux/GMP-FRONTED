@@ -39,19 +39,19 @@ const AdminReviews: NextPage = () => {
 		try {
 			if (action === 'APPROVE') {
 				await approveReview({ variables: { reviewId: review._id } });
-				await sweetMixinSuccessAlert(ui('Review approved'));
+				await sweetMixinSuccessAlert(ui('admin.reviewApproved'));
 			}
 			if (action === 'REJECT') {
 				await rejectReview({ variables: { reviewId: review._id, reason: actionReason || undefined } });
-				await sweetMixinSuccessAlert(ui('Review rejected'));
+				await sweetMixinSuccessAlert(ui('admin.reviewRejected'));
 			}
 			if (action === 'HIDE') {
 				await hideReview({ variables: { reviewId: review._id, reason: actionReason || undefined } });
-				await sweetMixinSuccessAlert(ui('Review hidden'));
+				await sweetMixinSuccessAlert(ui('admin.reviewHidden'));
 			}
 			await refetch();
 		} catch (err: any) {
-			await sweetMixinErrorAlert(toFriendlyError(err, ui('Failed to update review')));
+			await sweetMixinErrorAlert(toFriendlyError(err, ui('admin.failedToUpdateReview')));
 		} finally {
 			setBusyId('');
 		}
@@ -77,11 +77,11 @@ const AdminReviews: NextPage = () => {
 
 	return (
 		<div>
-			<div className="page-title">{ui('Reviews Moderation')}</div>
+			<div className="page-title">{ui('admin.reviewsModeration')}</div>
 
 			<Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2, mb: 2, alignItems: 'center' }}>
 				<FormControl size="small" sx={{ minWidth: 180 }}>
-					<InputLabel>{ui('Status')}</InputLabel>
+					<InputLabel>{ui('mypage.status')}</InputLabel>
 					<Select
 						label="Status"
 						value={status}
@@ -89,13 +89,13 @@ const AdminReviews: NextPage = () => {
 					>
 						{statusOptions.map((option) => (
 							<MenuItem key={option || 'ALL'} value={option}>
-								{option ? ui(option) : ui('All reviews')}
+								{option ? ui(option) : ui('admin.allReviews')}
 							</MenuItem>
 						))}
 					</Select>
 				</FormControl>
 				<Button variant="outlined" onClick={() => refetch()} disabled={loading}>
-					{ui('Refresh')}
+					{ui('admin.refresh')}
 				</Button>
 			</Box>
 
@@ -103,23 +103,23 @@ const AdminReviews: NextPage = () => {
 				<Table size="small">
 					<TableHead>
 						<TableRow sx={{ bgcolor: '#f5f7fa' }}>
-							<TableCell><b>{ui('Rating')}</b></TableCell>
-							<TableCell><b>{ui('Comment')}</b></TableCell>
-							<TableCell><b>{ui('Agency')}</b></TableCell>
-							<TableCell><b>{ui('Service')}</b></TableCell>
-							<TableCell><b>{ui('Status')}</b></TableCell>
-							<TableCell><b>{ui('Date')}</b></TableCell>
-							<TableCell align="right"><b>{ui('Actions')}</b></TableCell>
+							<TableCell><b>{ui('mypage.rating')}</b></TableCell>
+							<TableCell><b>{ui('admin.comment')}</b></TableCell>
+							<TableCell><b>{ui('auth.agency')}</b></TableCell>
+							<TableCell><b>{ui('mypage.service')}</b></TableCell>
+							<TableCell><b>{ui('mypage.status')}</b></TableCell>
+							<TableCell><b>{ui('admin.date')}</b></TableCell>
+							<TableCell align="right"><b>{ui('admin.actions')}</b></TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
 						{loading ? (
 							<TableRow>
-								<TableCell colSpan={7} sx={{ textAlign: 'center', py: 4, color: '#aaa' }}>{ui('Loading reviews...')}</TableCell>
+								<TableCell colSpan={7} sx={{ textAlign: 'center', py: 4, color: '#aaa' }}>{ui('admin.loadingReviews')}</TableCell>
 							</TableRow>
 						) : reviews.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={7} sx={{ textAlign: 'center', py: 4, color: '#aaa' }}>{ui('No reviews found.')}</TableCell>
+								<TableCell colSpan={7} sx={{ textAlign: 'center', py: 4, color: '#aaa' }}>{ui('admin.noReviewsFound')}</TableCell>
 							</TableRow>
 						) : reviews.map((review: any) => {
 							const reviewStatus = review.status || 'PENDING';
@@ -131,7 +131,7 @@ const AdminReviews: NextPage = () => {
 										<Rating value={review.rating} readOnly size="small" />
 									</TableCell>
 									<TableCell sx={{ fontSize: 13, maxWidth: 320 }}>
-										{review.comment || <span style={{ color: '#aaa' }}>{ui('No comment')}</span>}
+										{review.comment || <span style={{ color: '#aaa' }}>{ui('admin.noComment')}</span>}
 									</TableCell>
 									<TableCell sx={{ fontSize: 12 }}>{review.agency || '-'}</TableCell>
 									<TableCell sx={{ fontSize: 12 }}>{review.service || '-'}</TableCell>
@@ -153,7 +153,7 @@ const AdminReviews: NextPage = () => {
 												disabled={isBusy || reviewStatus === 'APPROVED'}
 												onClick={() => runAction('APPROVE', review)}
 											>
-												{ui('Approve')}
+												{ui('mypage.approve')}
 											</Button>
 											<Button
 												size="small"
@@ -162,7 +162,7 @@ const AdminReviews: NextPage = () => {
 												disabled={isBusy || reviewStatus === 'REJECTED'}
 												onClick={() => openReasonDialog('REJECT', review)}
 											>
-												{ui('Reject')}
+												{ui('mypage.reject')}
 											</Button>
 											<Button
 												size="small"
@@ -171,7 +171,7 @@ const AdminReviews: NextPage = () => {
 												disabled={isBusy || reviewStatus === 'HIDDEN'}
 												onClick={() => openReasonDialog('HIDE', review)}
 											>
-												{ui('Hide')}
+												{ui('admin.hide')}
 											</Button>
 										</Box>
 									</TableCell>
@@ -183,23 +183,23 @@ const AdminReviews: NextPage = () => {
 			</TableContainer>
 
 			<Dialog open={!!reasonAction} onClose={closeReasonDialog} fullWidth maxWidth="sm">
-				<DialogTitle>{reasonAction === 'REJECT' ? ui('Reject review') : ui('Hide review')}</DialogTitle>
+				<DialogTitle>{reasonAction === 'REJECT' ? ui('admin.rejectReview') : ui('admin.hideReview')}</DialogTitle>
 				<DialogContent>
 					<TextField
 						autoFocus
 						fullWidth
 						multiline
 						minRows={3}
-						label={ui('Reason')}
+						label={ui('admin.reason')}
 						value={reason}
 						onChange={(e) => setReason(e.target.value)}
 						sx={{ mt: 1 }}
 					/>
 				</DialogContent>
 				<DialogActions>
-					<Button onClick={closeReasonDialog}>{ui('Cancel')}</Button>
+					<Button onClick={closeReasonDialog}>{ui('agency.cancel')}</Button>
 					<Button variant="contained" onClick={submitReasonAction} disabled={!!busyId}>
-						{ui('Submit')}
+						{ui('admin.submit')}
 					</Button>
 				</DialogActions>
 			</Dialog>
