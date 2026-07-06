@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Menu, MenuItem } from '@mui/material';
-import LanguageIcon from '@mui/icons-material/Language';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CheckIcon from '@mui/icons-material/Check';
 import { Lang } from '../../enums/lang.enum';
 import { normalizeLang, setLang } from '../../utils/lang';
+import FlagIcon from './FlagIcon';
 
 const LANGS: ReadonlyArray<{ code: Lang; native: string }> = [
 	{ code: Lang.KO, native: '한국어' },
@@ -40,7 +40,7 @@ const LanguageSwitcher = () => {
 				aria-expanded={Boolean(anchor)}
 				aria-label="Change language"
 			>
-				<LanguageIcon className="lang-switcher__globe" />
+				<FlagIcon lang={active.code} size={20} className="lang-switcher__flag" />
 				<span className="lang-switcher__label">{active.native}</span>
 				<KeyboardArrowDownIcon className="lang-switcher__arrow" />
 			</button>
@@ -60,12 +60,13 @@ const LanguageSwitcher = () => {
 							fontSize: 14,
 							fontWeight: lang.code === current ? 700 : 500,
 							display: 'flex',
-							justifyContent: 'space-between',
-							gap: 2,
+							alignItems: 'center',
+							gap: 1.25,
 							py: 1.1,
 						}}
 					>
-						<span>{lang.native}</span>
+						<FlagIcon lang={lang.code} size={22} />
+						<span style={{ flex: 1 }}>{lang.native}</span>
 						{lang.code === current && <CheckIcon sx={{ fontSize: 16, color: '#1649ff' }} />}
 					</MenuItem>
 				))}

@@ -23,6 +23,7 @@ import { Lang } from '../../enums/lang.enum';
 import { normalizeLang, setLang, toBackendLang } from '../../utils/lang';
 import { useUiLang } from '../../utils/translations';
 import { sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../sweetAlert';
+import FlagIcon from '../common/FlagIcon';
 
 const NAV_SECTIONS = [
 	{
@@ -171,10 +172,18 @@ const withLayoutAdmin = (Component: any) => {
 								onChange={(e) => handleLanguageChange(e.target.value as Lang)}
 								sx={{ bgcolor: 'rgba(255,255,255,0.08)', color: '#fff', '.MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.18)' }, '.MuiSvgIcon-root': { color: '#fff' } }}
 							>
-								<MenuItem value={Lang.UZ}>🇺🇿 &nbsp;UZ — O'zbek</MenuItem>
-								<MenuItem value={Lang.RU}>🇷🇺 &nbsp;RU — Русский</MenuItem>
-								<MenuItem value={Lang.EN}>🇬🇧 &nbsp;EN — English</MenuItem>
-								<MenuItem value={Lang.KO}>🇰🇷 &nbsp;KO — 한국어</MenuItem>
+								<MenuItem value={Lang.UZ} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+									<FlagIcon lang={Lang.UZ} size={20} /> UZ — O'zbek
+								</MenuItem>
+								<MenuItem value={Lang.RU} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+									<FlagIcon lang={Lang.RU} size={20} /> RU — Русский
+								</MenuItem>
+								<MenuItem value={Lang.EN} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+									<FlagIcon lang={Lang.EN} size={20} /> EN — English
+								</MenuItem>
+								<MenuItem value={Lang.KO} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+									<FlagIcon lang={Lang.KO} size={20} /> KO — 한국어
+								</MenuItem>
 							</Select>
 						</Box>
 
