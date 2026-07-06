@@ -182,32 +182,6 @@
 	flex-shrink: 0;
 }
 
-.jl-stats {
-	display: flex;
-	gap: 28px;
-	padding-top: 28px;
-	border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.jl-stat {
-	strong {
-		display: block;
-		font-size: 20px;
-		font-weight: 900;
-		color: #ffffff;
-		letter-spacing: -0.5px;
-		line-height: 1;
-		margin-bottom: 4px;
-	}
-
-	span {
-		font-size: 10px;
-		color: rgba(255, 255, 255, 0.28);
-		text-transform: uppercase;
-		letter-spacing: 1.5px;
-	}
-}
-
 // ── Right content ─────────────────────────────────────────────────────────────
 
 .jr-inner {
@@ -525,8 +499,7 @@
 		width: 100%;
 		padding: 36px 28px;
 
-		.jl-features,
-		.jl-stats {
+		.jl-features {
 			display: none;
 		}
 

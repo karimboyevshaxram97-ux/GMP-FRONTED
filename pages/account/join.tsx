@@ -29,12 +29,6 @@ const FEATURES = [
 	'auth.agencyLoginHint',
 ];
 
-const STATS = [
-	{ num: '200+', label: 'Services' },
-	{ num: '50+', label: 'Agencies' },
-	{ num: '10k+', label: 'Users' },
-];
-
 const Join: NextPage = () => {
 	const ui = useUiLang();
 	const router = useRouter();
@@ -190,14 +184,6 @@ const Join: NextPage = () => {
 							))}
 						</ul>
 
-						<div className="jl-stats">
-							{STATS.map((s, i) => (
-								<div className="jl-stat" key={i}>
-									<strong>{s.num}</strong>
-									<span>{ui(s.label)}</span>
-								</div>
-							))}
-						</div>
 					</div>
 				</div>
 
