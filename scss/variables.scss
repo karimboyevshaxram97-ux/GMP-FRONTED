@@ -57,3 +57,84 @@ $navbar-bg-scroll: rgba(24, 26, 32, 0.62);
 
 // Accent (NESTAR-inspired)
 $accent-orange: #f17742;
+
+// ── Glassmorphism buttons ────────────────────────────────────
+// Site-wide button language. Use one of these mixins on every button:
+//   glass-button       — translucent "glass" on dark/photo backgrounds
+//   glass-button-dark  — same idea for light backgrounds (dark tint)
+//   accent-button      — filled gradient CTA (send, join, primary actions)
+// Pass $radius to match the shape (default 10px; 24px+ for pills, 50% for round).
+$glass-bg: rgba(255, 255, 255, 0.08);
+$glass-bg-hover: rgba(255, 255, 255, 0.15);
+$glass-bg-active: rgba(255, 255, 255, 0.2);
+$glass-border: rgba(255, 255, 255, 0.15);
+$accent-gradient: linear-gradient(135deg, #4e7fff 0%, #7b5bff 100%);
+
+@mixin button-states {
+	transition: all 0.2s ease;
+	cursor: pointer;
+
+	&:active:not(:disabled) {
+		transform: scale(0.98);
+	}
+
+	&:focus-visible {
+		outline: 2px solid rgba(123, 145, 255, 0.85);
+		outline-offset: 2px;
+	}
+
+	&:disabled {
+		opacity: 0.4;
+		cursor: not-allowed;
+	}
+}
+
+@mixin glass-button($radius: 10px) {
+	@include button-states;
+	background: $glass-bg;
+	border: 1px solid $glass-border;
+	border-radius: $radius;
+	color: #fff;
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+
+	&:hover:not(:disabled) {
+		background: $glass-bg-hover;
+		border-color: rgba(255, 255, 255, 0.28);
+	}
+
+	&:active:not(:disabled) {
+		background: $glass-bg-active;
+	}
+}
+
+@mixin glass-button-dark($radius: 10px) {
+	@include button-states;
+	background: rgba(10, 36, 114, 0.06);
+	border: 1px solid rgba(10, 36, 114, 0.18);
+	border-radius: $radius;
+	color: $primary-dark;
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+
+	&:hover:not(:disabled) {
+		background: rgba(10, 36, 114, 0.12);
+		border-color: rgba(10, 36, 114, 0.3);
+	}
+
+	&:active:not(:disabled) {
+		background: rgba(10, 36, 114, 0.16);
+	}
+}
+
+@mixin accent-button($radius: 10px) {
+	@include button-states;
+	background: $accent-gradient;
+	border: none;
+	border-radius: $radius;
+	color: #fff;
+
+	&:hover:not(:disabled) {
+		filter: brightness(1.08);
+	}
+}

@@ -235,6 +235,7 @@ $chat-h: calc(100vh - 80px - #{$header-h} - #{$input-h});
 		}
 
 		.msg-start-btn {
+			@include button-states;
 			margin-top: 6px;
 			background: $primary;
 			color: #fff;
@@ -243,10 +244,8 @@ $chat-h: calc(100vh - 80px - #{$header-h} - #{$input-h});
 			padding: 10px 20px;
 			font-size: 13px;
 			font-weight: 700;
-			cursor: pointer;
-			transition: background 0.2s;
 
-			&:hover { background: darken(#1649ff, 8%); }
+			&:hover:not(:disabled) { background: darken(#1649ff, 8%); }
 		}
 	}
 

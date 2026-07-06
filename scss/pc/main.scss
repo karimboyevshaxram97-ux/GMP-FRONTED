@@ -119,33 +119,20 @@
 
 		/* Login / Register button (guest state) */
 		.join-box {
+			@include glass-button(8px);
 			display: flex;
 			align-items: center;
 			gap: 8px;
-			color: #0a2472;
 			font-size: 13px;
 			font-weight: 700;
-			cursor: pointer;
 			padding: 0 20px;
 			height: 38px;
 			justify-content: center;
-			background: #ffffff;
-			border-radius: 8px;
-			border: none;
-			box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
-			transition: all 0.22s ease;
 			white-space: nowrap;
 			letter-spacing: 0.2px;
 
-			&:hover {
-				background: #f0f4ff;
-				box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-				transform: translateY(-1px);
-			}
-
 			svg {
 				font-size: 18px;
-				color: #1649ff;
 			}
 		}
 
@@ -155,28 +142,33 @@
 			gap: 16px;
 
 			.login-user {
-				cursor: pointer;
+				@include glass-button(50%);
+				width: 38px;
+				height: 38px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				overflow: hidden;
 
 				img {
-					width: 38px;
-					height: 38px;
+					width: 30px;
+					height: 30px;
 					border-radius: 50%;
 					object-fit: cover;
-					border: 2px solid rgba(255, 255, 255, 0.6);
 				}
 			}
 
 			.notification-icon {
-				color: rgba(255, 255, 255, 0.8);
+				@include glass-button(50%);
+				color: rgba(255, 255, 255, 0.85);
 				padding: 6px;
 
 				svg {
 					font-size: 22px;
 				}
 
-				&:hover {
+				&:hover:not(:disabled) {
 					color: #ffffff;
-					background: rgba(255, 255, 255, 0.1);
 				}
 
 				.MuiBadge-badge {
@@ -386,23 +378,20 @@
 			gap: 10px;
 
 			.social-btn {
+				@include glass-button(10px);
 				width: 40px;
 				height: 40px;
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				border-radius: 10px;
-				background: rgba(255, 255, 255, 0.06);
-				border: 1px solid rgba(255, 255, 255, 0.09);
 				color: rgba(255, 255, 255, 0.55);
-				transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
 
 				svg {
 					width: 16px;
 					height: 16px;
 				}
 
-				&:hover {
+				&:hover:not(:disabled) {
 					background: rgba(99, 102, 241, 0.28);
 					border-color: rgba(99, 102, 241, 0.5);
 					color: #ffffff;
@@ -528,15 +517,14 @@
 			}
 
 			button {
+				@include button-states;
 				padding: 10px 14px;
 				background: linear-gradient(135deg, #6366f1, #8b5cf6);
 				border: none;
-				cursor: pointer;
 				color: #fff;
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				transition: opacity 0.25s ease;
 				flex-shrink: 0;
 
 				svg {
@@ -544,8 +532,8 @@
 					height: 15px;
 				}
 
-				&:hover {
-					opacity: 0.82;
+				&:hover:not(:disabled) {
+					filter: brightness(1.1);
 				}
 			}
 		}
