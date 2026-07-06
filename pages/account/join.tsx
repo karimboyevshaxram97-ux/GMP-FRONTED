@@ -11,7 +11,15 @@ import { logIn, signUp, getJwtToken, updateUserInfo } from '../../libs/auth';
 import { UserRole } from '../../libs/enums/user.enum';
 import ParticleCanvas from '../../libs/components/common/ParticleCanvas';
 import FormBgAnimation from '../../libs/components/common/FormBgAnimation';
+import SocialLoginButtons from '../../libs/components/common/SocialLoginButtons';
 import { useUiLang } from '../../libs/utils/translations';
+
+// Error codes /auth/callback forwards via ?socialError= → translation keys
+const SOCIAL_ERROR_KEYS: Record<string, string> = {
+	email_conflict: 'auth.emailUsedOtherProvider',
+	not_configured: 'auth.providerNotConfigured',
+	social_failed: 'auth.socialLoginFailed',
+};
 
 const FEATURES = [
 	'Verified & trusted migration agencies',
@@ -82,6 +90,15 @@ const Join: NextPage = () => {
 	useEffect(() => {
 		if (isAdminMode) setTab('login');
 	}, [isAdminMode]);
+
+	// Social login failures land back here as /account/join?socialError=<code>
+	useEffect(() => {
+		const socialError = router.query.socialError;
+		if (typeof socialError !== 'string' || !socialError) return;
+		setTab('login');
+		setError(ui(SOCIAL_ERROR_KEYS[socialError] ?? SOCIAL_ERROR_KEYS.social_failed));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [router.query.socialError]);
 
 	const switchTab = (value: 'login' | 'register') => {
 		setTab(value);
@@ -230,6 +247,7 @@ const Join: NextPage = () => {
 								<button type="submit" className="jr-btn" disabled={loading}>
 									{loading ? ui('auth.signingIn') : ui('auth.signIn')}
 								</button>
+								{!isAdminMode && <SocialLoginButtons />}
 								<p className="jr-switch">
 									{ui('auth.noAccount')}{' '}
 									<button type="button" onClick={() => switchTab('register')}>{ui('auth.createOne')}</button>
