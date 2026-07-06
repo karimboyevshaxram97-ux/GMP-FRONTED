@@ -27,6 +27,7 @@ import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { applicationStatusColors, REACT_APP_API_URL } from '../../libs/config';
 import { sweetMixinSuccessAlert, sweetMixinErrorAlert, sweetConfirmAlert } from '../../libs/sweetAlert';
 import { useLang } from '../../libs/utils/lang';
+import { avatarSrc } from '../../libs/utils/avatar';
 import { UserRole } from '../../libs/enums/user.enum';
 import { ServiceType } from '../../libs/enums/service.enum';
 import { toFriendlyError } from '../../libs/utils/errors';
@@ -604,10 +605,7 @@ const MyPage: NextPage = () => {
 				<Stack className="container">
 					<Box className="mypage-hero-grid">
 						<Box className="profile-summary">
-							<img
-								src={user?.avatar ? `${REACT_APP_API_URL}/uploads/${user.avatar}` : '/img/profile/defaultUser.svg'}
-								alt="avatar"
-							/>
+							<img src={avatarSrc(user?.avatar)} alt="avatar" />
 							<Box>
 								<span>{ui('mypage.myAccount')}</span>
 								<h1>{user?.firstName || ui('auth.user')} {user?.lastName || ''}</h1>
@@ -669,7 +667,7 @@ const MyPage: NextPage = () => {
 										onClick={() => !avatarUploading && avatarInputRef.current?.click()}
 									>
 										<img
-											src={user?.avatar ? `${REACT_APP_API_URL}/uploads/${user.avatar}` : '/img/profile/defaultUser.svg'}
+											src={avatarSrc(user?.avatar)}
 											alt="avatar"
 										/>
 										<Box className="avatar-overlay">

@@ -13,8 +13,8 @@ import { BAN_USER, UNBAN_USER } from '../../../apollo/admin/mutation';
 import withLayoutAdmin from '../../../libs/components/layout/LayoutAdmin';
 import { sweetConfirmAlert, sweetMixinSuccessAlert } from '../../../libs/sweetAlert';
 import { useDebounce } from '../../../libs/hooks/useDebounce';
-import { REACT_APP_API_URL } from '../../../libs/config';
 import { useUiLang } from '../../../libs/utils/translations';
+import { avatarSrc } from '../../../libs/utils/avatar';
 
 const PAGE_SIZE = 10;
 
@@ -207,7 +207,7 @@ const AdminUsers: NextPage = () => {
 						<DialogContent>
 							<Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
 								<Avatar
-									src={detailUser.avatar ? `${REACT_APP_API_URL}/uploads/${detailUser.avatar}` : undefined}
+									src={detailUser.avatar ? avatarSrc(detailUser.avatar) : undefined}
 									sx={{ width: 64, height: 64, fontSize: 26, bgcolor: '#1649ff' }}
 								>
 									{!detailUser.avatar && detailUser.firstName?.[0]}

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useReactiveVar } from '@apollo/client';
 import { socketVar, userVar } from '../../apollo/store';
-import { REACT_APP_API_URL } from '../config';
+import { avatarSrc } from '../utils/avatar';
 import { sweetErrorAlert } from '../sweetAlert';
 import { useUiLang } from '../utils/translations';
 
@@ -81,7 +81,7 @@ const Chat = () => {
 
 	const getAvatar = (authUser: MessagePayload['authUser']) => {
 		if (!authUser?.avatar) return '';
-		return `${REACT_APP_API_URL}/uploads/${authUser.avatar}`;
+		return avatarSrc(authUser.avatar);
 	};
 
 	const getInitials = (authUser: MessagePayload['authUser']) => {

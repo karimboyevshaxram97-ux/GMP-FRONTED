@@ -10,7 +10,7 @@ import { Logout } from '@mui/icons-material';
 import { useReactiveVar, useQuery, useMutation } from '@apollo/client';
 import { userVar } from '../../apollo/store';
 import { getJwtToken, logOut, updateUserInfo } from '../auth';
-import { REACT_APP_API_URL } from '../config';
+import { avatarSrc } from '../utils/avatar';
 import useDeviceDetect from '../hooks/useDeviceDetect';
 import { GET_MY_NOTIFICATIONS, GET_UNREAD_NOTIFICATION_COUNT } from '../../apollo/user/query';
 import { MARK_ALL_NOTIFICATIONS_AS_READ } from '../../apollo/user/mutation';
@@ -248,10 +248,7 @@ const Top = () => {
 
 							{/* Avatar */}
 							<div className={'login-user'} onClick={(e: any) => setLogoutAnchor(e.currentTarget)}>
-								<img
-									src={user?.avatar ? `${REACT_APP_API_URL}/uploads/${user.avatar}` : '/img/profile/defaultUser.svg'}
-									alt="avatar"
-								/>
+								<img src={avatarSrc(user?.avatar)} alt="avatar" />
 							</div>
 							<Menu
 								anchorEl={logoutAnchor}
