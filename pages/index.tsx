@@ -4,7 +4,6 @@ import withLayoutMain from '../libs/components/layout/LayoutHome';
 import HeroSection from '../libs/components/home/HeroSection';
 import SearchSection from '../libs/components/home/SearchSection';
 import ServiceTypesSection from '../libs/components/home/ServiceTypesSection';
-import StatsSection from '../libs/components/home/StatsSection';
 import HowItWorks from '../libs/components/home/HowItWorks';
 import FeaturedAgencies from '../libs/components/home/FeaturedAgencies';
 import FeaturedServices from '../libs/components/home/FeaturedServices';
@@ -24,7 +23,6 @@ const Homepage = () => (
 		<HeroSection />
 		<SearchSection />
 		<ServiceTypesSection />
-		<StatsSection />
 		<HowItWorks />
 		<FeaturedAgencies />
 		<FeaturedServices />
