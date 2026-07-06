@@ -21,11 +21,12 @@ const SOCIAL_ERROR_KEYS: Record<string, string> = {
 	social_failed: 'auth.socialLoginFailed',
 };
 
+// How sign-in works for each account type (shown in the left panel)
 const FEATURES = [
-	'Verified & trusted migration agencies',
-	'Services across 30+ countries worldwide',
-	'Secure documents & application tracking',
-	'Study, work, travel and visa services',
+	'auth.socialQuickStart',
+	'auth.socialPersonalOnly',
+	'auth.agencyRegisterHint',
+	'auth.agencyLoginHint',
 ];
 
 const STATS = [
