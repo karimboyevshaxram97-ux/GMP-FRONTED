@@ -10,10 +10,10 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
-		"@anthropic-ai/sdk": "^0.110.0",
 		"@apollo/client": "^3.5.10",
 		"@emotion/react": "^11.8.1",
 		"@emotion/styled": "^11.8.1",
+		"@google/genai": "^2.10.0",
 		"@mui/icons-material": "^5.4.2",
 		"@mui/lab": "^5.0.0-alpha.85",
 		"@mui/material": "^5.10.1",

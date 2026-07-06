@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import Anthropic from '@anthropic-ai/sdk';
+import { GoogleGenAI } from '@google/genai';
 
-const MODEL = 'claude-opus-4-8';
+const MODEL = 'gemini-2.5-flash';
 const MAX_MESSAGES = 20;
 const MAX_MESSAGE_LENGTH = 2000;
 
@@ -14,15 +14,15 @@ Help users:
 
 Always reply in the same language the user writes in (Uzbek, Russian, English, or Korean). Keep answers short and practical — a few sentences, not an essay. If the user's question has nothing to do with migration, travel, study, work abroad, or GMP itself, politely say that's outside what you can help with here.`;
 
-let client: Anthropic | null = null;
+let client: GoogleGenAI | null = null;
 
-function getClient(): Anthropic {
+function getClient(): GoogleGenAI {
 	if (!client) {
-		const apiKey = process.env.ANTHROPIC_API_KEY;
+		const apiKey = process.env.GEMINI_API_KEY;
 		if (!apiKey) {
-			throw new Error('ANTHROPIC_API_KEY is not configured');
+			throw new Error('GEMINI_API_KEY is not configured');
 		}
-		client = new Anthropic({ apiKey });
+		client = new GoogleGenAI({ apiKey });
 	}
 	return client;
 }
@@ -59,24 +59,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	try {
-		const anthropic = getClient();
-		const response = await anthropic.messages.create({
+		const ai = getClient();
+		const response = await ai.models.generateContent({
 			model: MODEL,
-			max_tokens: 1024,
-			system: SYSTEM_PROMPT,
-			thinking: { type: 'adaptive' },
-			output_config: { effort: 'low' },
-			messages: sanitized,
+			contents: sanitized.map((m) => ({
+				role: m.role === 'assistant' ? 'model' : 'user',
+				parts: [{ text: m.content }],
+			})),
+			config: {
+				systemInstruction: SYSTEM_PROMPT,
+				maxOutputTokens: 1024,
+				// Disable thinking so short answers come back fast and cheap.
+				thinkingConfig: { thinkingBudget: 0 },
+			},
 		});
 
-		if (response.stop_reason === 'refusal') {
+		if (response.promptFeedback?.blockReason) {
 			return res.status(200).json({ reply: null, refused: true });
 		}
 
-		const textBlock = response.content.find((block) => block.type === 'text');
-		const reply = textBlock && textBlock.type === 'text' ? textBlock.text : '';
-
-		return res.status(200).json({ reply });
+		return res.status(200).json({ reply: response.text ?? '' });
 	} catch (err) {
 		console.error('AI chat error:', err);
 		return res.status(500).json({ error: 'AI assistant is temporarily unavailable.' });
