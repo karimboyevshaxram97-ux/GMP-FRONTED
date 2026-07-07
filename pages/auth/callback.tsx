@@ -46,7 +46,7 @@ const AuthCallback: NextPage = () => {
 			updateUserInfo(accessToken);
 
 			const currentUser = userVar();
-			if (currentUser.role === UserRole.SUPER_ADMIN) router.replace('/_admin');
+			if (currentUser.role === UserRole.SUPER_ADMIN) router.replace('/admin');
 			else if (currentUser.role === UserRole.AGENCY_ADMIN) router.replace('/mypage?tab=agency');
 			else router.replace('/');
 			return;

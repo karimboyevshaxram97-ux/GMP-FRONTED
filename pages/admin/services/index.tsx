@@ -178,6 +178,9 @@ const AdminServices: NextPage = () => {
 								</TableCell>
 								<TableCell>
 									<Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+										{svc.status !== 'ACTIVE' && (
+											<Button size="small" variant="outlined" color="success" onClick={() => handleSetStatus(svc._id, 'ACTIVE')}>{ui('admin.activate')}</Button>
+										)}
 										{svc.status !== 'ARCHIVED' && (
 											<Button size="small" variant="outlined" color="warning" onClick={() => handleSetStatus(svc._id, 'ARCHIVED')}>{ui('admin.archive')}</Button>
 										)}
@@ -253,6 +256,9 @@ const AdminServices: NextPage = () => {
 							<Typography variant="body2" sx={{ fontFamily: 'monospace', fontSize: 12 }}>{detailService._id}</Typography>
 						</DialogContent>
 						<DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
+							{detailService.status !== 'ACTIVE' && (
+								<Button color="success" variant="outlined" size="small" onClick={() => handleSetStatus(detailService._id, 'ACTIVE')}>{ui('admin.activate')}</Button>
+							)}
 							{detailService.status !== 'ARCHIVED' && (
 								<Button color="warning" variant="outlined" size="small" onClick={() => handleSetStatus(detailService._id, 'ARCHIVED')}>{ui('admin.archive')}</Button>
 							)}

@@ -29,23 +29,23 @@ const NAV_SECTIONS = [
 	{
 		label: 'Overview',
 		items: [
-			{ icon: <DashboardIcon />, label: 'Dashboard', href: '/_admin' },
+			{ icon: <DashboardIcon />, label: 'Dashboard', href: '/admin' },
 		],
 	},
 	{
 		label: 'Management',
 		items: [
-			{ icon: <PeopleIcon />,                  label: 'Users',     href: '/_admin/users' },
-			{ icon: <BusinessIcon />,                label: 'Agencies',  href: '/_admin/agencies', badge: true },
-			{ icon: <MiscellaneousServicesIcon />,   label: 'Services',  href: '/_admin/services' },
-			{ icon: <RateReviewIcon />,              label: 'Reviews',   href: '/_admin/reviews' },
-			{ icon: <ContactSupportIcon />,          label: 'Support',   href: '/_admin/support' },
+			{ icon: <PeopleIcon />,                  label: 'Users',     href: '/admin/users' },
+			{ icon: <BusinessIcon />,                label: 'Agencies',  href: '/admin/agencies', badge: true },
+			{ icon: <MiscellaneousServicesIcon />,   label: 'Services',  href: '/admin/services' },
+			{ icon: <RateReviewIcon />,              label: 'Reviews',   href: '/admin/reviews' },
+			{ icon: <ContactSupportIcon />,          label: 'Support',   href: '/admin/support' },
 		],
 	},
 	{
 		label: 'System',
 		items: [
-			{ icon: <HistoryIcon />, label: 'Audit Log', href: '/_admin/audit-log' },
+			{ icon: <HistoryIcon />, label: 'Audit Log', href: '/admin/audit-log' },
 		],
 	},
 ];

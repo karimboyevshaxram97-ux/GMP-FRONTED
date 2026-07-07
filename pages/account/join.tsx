@@ -42,7 +42,7 @@ const Join: NextPage = () => {
 		if (jwt) updateUserInfo(jwt);
 		const currentUser = userVar();
 		if (currentUser?._id) {
-			if (currentUser.role === UserRole.SUPER_ADMIN) router.replace('/_admin');
+			if (currentUser.role === UserRole.SUPER_ADMIN) router.replace('/admin');
 			else if (currentUser.role === UserRole.AGENCY_ADMIN) router.replace('/mypage?tab=agency');
 			else router.replace('/');
 		}
@@ -107,7 +107,7 @@ const Join: NextPage = () => {
 		try {
 			await logIn(loginPhone, loginPassword);
 			const currentUser = userVar();
-			if (currentUser.role === UserRole.SUPER_ADMIN) router.push('/_admin');
+			if (currentUser.role === UserRole.SUPER_ADMIN) router.push('/admin');
 			else if (currentUser.role === UserRole.AGENCY_ADMIN) router.push('/mypage?tab=agency');
 			else router.push('/');
 		} catch (err: any) {

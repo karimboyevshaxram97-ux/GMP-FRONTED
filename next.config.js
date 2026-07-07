@@ -11,12 +11,6 @@ const nextConfig = {
 		REACT_APP_API_WS: process.env.REACT_APP_API_WS,
 		REACT_APP_CHAT_WS: process.env.REACT_APP_CHAT_WS,
 	},
-	webpack: (config, { isServer }) => {
-		if (isServer) {
-			config.output.chunkFilename = 'chunks/[name].js';
-		}
-		return config;
-	},
 };
 
 module.exports = nextConfig;
