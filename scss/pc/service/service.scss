@@ -5,31 +5,6 @@
 	min-height: 100vh;
 	padding-bottom: 64px;
 
-	/* ── Hero search bar (white card over Ken Burns dark overlay) ── */
-	.service-hero-search {
-		animation: fadeInUp 0.8s ease 0.7s both;
-		background: rgba(255, 255, 255, 0.97);
-		border-radius: 14px;
-		box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28);
-		display: flex;
-		gap: 12px;
-		margin: 0 auto;
-		max-width: 600px;
-		padding: 10px;
-
-		.MuiOutlinedInput-notchedOutline {
-			border: none;
-		}
-
-		.MuiButton-root {
-			border-radius: 10px;
-			box-shadow: none;
-			flex-shrink: 0;
-			padding-left: 28px;
-			padding-right: 28px;
-		}
-	}
-
 	.service-type-strip {
 		display: flex;
 		gap: 14px;
@@ -39,6 +14,7 @@
 		&::-webkit-scrollbar { height: 0; }
 
 		.type-tab {
+			@include button-states;
 			display: flex;
 			align-items: center;
 			gap: 12px;
@@ -46,7 +22,6 @@
 			border-radius: 16px;
 			border: 1.5px solid #e4eaf6;
 			background: #ffffff;
-			cursor: pointer;
 			white-space: nowrap;
 			transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease, background 0.22s ease;
 			font-family: $font-family;
@@ -280,11 +255,6 @@
 
 @media (max-width: 768px) {
 	.services-page {
-		.service-hero-search {
-			flex-direction: column;
-			padding: 12px;
-		}
-
 		.service-results-head {
 			align-items: flex-start;
 			flex-direction: column;
@@ -401,7 +371,6 @@
 		}
 
 		.MuiButton-root {
-			border-radius: 8px;
 			font-weight: 800;
 			margin-top: 10px;
 			padding: 11px 16px;

@@ -59,6 +59,7 @@
 		}
 
 		.like-btn {
+			@include button-states;
 			align-items: center;
 			background: rgba(255, 255, 255, 0.94);
 			border: 1px solid rgba(10, 36, 114, 0.08);
@@ -178,17 +179,16 @@
 		padding-top: 14px;
 
 		.action-btn {
+			@include button-states;
 			align-items: center;
 			border: 1px solid #e8edf7;
-			border-radius: 20px;
+			border-radius: 999px;
 			color: $text-secondary;
-			cursor: pointer;
 			display: flex;
 			font-size: 13px;
 			font-weight: 600;
 			gap: 5px;
 			padding: 5px 12px;
-			transition: all 0.2s;
 			user-select: none;
 
 			svg { font-size: 16px; flex-shrink: 0; }
@@ -203,15 +203,13 @@
 		}
 
 		.profile-button {
-			border-radius: 8px;
-			color: $primary;
+			@include glass-button-dark(999px);
 			font-size: 13px;
 			font-weight: 800;
 			margin-left: auto;
 			min-width: 0;
 			padding: 5px 14px;
 			text-transform: none;
-			transition: background 0.25s, color 0.25s;
 		}
 	}
 }
@@ -312,17 +310,16 @@
 	}
 
 	.service-action-btn {
+		@include button-states;
 		align-items: center;
 		border: 1px solid #e8edf7;
-		border-radius: 20px;
+		border-radius: 999px;
 		color: $text-secondary;
-		cursor: pointer;
 		display: flex;
 		font-size: 13px;
 		font-weight: 600;
 		gap: 4px;
 		padding: 4px 10px;
-		transition: all 0.2s;
 		user-select: none;
 
 		svg { font-size: 15px; flex-shrink: 0; }
@@ -403,6 +400,57 @@
 	@include glass-button-dark;
 }
 
+// ── Unified MUI buttons: one pill shape + states site-wide ──
+// Doubled class beats MUI's runtime (emotion) specificity. Only the
+// primary color gets the accent/glass treatment; error/success/etc.
+// keep their semantic colors but share the same shape and behavior.
+.MuiButton-root.MuiButton-root {
+	@include button-states;
+	border-radius: 999px;
+	text-transform: none;
+	font-weight: 700;
+
+	&.MuiButton-containedPrimary {
+		@include accent-button(999px);
+		box-shadow: none;
+
+		&:hover:not(:disabled) {
+			box-shadow: 0 8px 20px rgba(78, 127, 255, 0.35);
+		}
+	}
+
+	&.MuiButton-outlinedPrimary {
+		@include glass-button-dark(999px);
+	}
+}
+
+.MuiPaginationItem-root.MuiPaginationItem-root {
+	border-radius: 999px;
+	font-weight: 700;
+}
+
+// ── Theme toggle (site header) ──────────────────────────────
+.theme-toggle {
+	@include glass-button(50%);
+	width: 38px;
+	height: 38px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: rgba(255, 255, 255, 0.85);
+	flex-shrink: 0;
+
+	svg { font-size: 20px; }
+
+	&:hover:not(:disabled) { color: #ffffff; }
+}
+
+// Mobile top bar (light background) needs dark variant
+.top > .theme-toggle {
+	@include glass-button-dark(50%);
+	margin: 8px 0;
+}
+
 // ── Language Switcher (site header) ─────────────────────────
 .lang-switcher {
 	@include glass-button(8px);
@@ -433,4 +481,3 @@
 	width: fit-content;
 	margin: 8px 0;
 }
-

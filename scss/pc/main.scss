@@ -517,11 +517,8 @@
 			}
 
 			button {
-				@include button-states;
+				@include accent-button(0);
 				padding: 10px 14px;
-				background: linear-gradient(135deg, #6366f1, #8b5cf6);
-				border: none;
-				color: #fff;
 				display: flex;
 				align-items: center;
 				justify-content: center;
@@ -530,10 +527,6 @@
 				svg {
 					width: 15px;
 					height: 15px;
-				}
-
-				&:hover:not(:disabled) {
-					filter: brightness(1.1);
 				}
 			}
 		}
@@ -555,47 +548,6 @@
 				&:nth-child(2) { animation-delay: 1s; }
 				&:nth-child(3) { animation-delay: 2s; }
 			}
-		}
-	}
-
-	// Stats strip
-	.footer-stats {
-		display: flex;
-		align-items: center;
-		padding: 28px 0;
-		border-top: 1px solid rgba(255, 255, 255, 0.06);
-		border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-		margin-bottom: 28px;
-
-		.fstat {
-			flex: 1;
-			text-align: center;
-
-			.fstat-num {
-				display: block;
-				font-size: 26px;
-				font-weight: 800;
-				line-height: 1;
-				margin-bottom: 4px;
-				background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 100%);
-				-webkit-background-clip: text;
-				-webkit-text-fill-color: transparent;
-				background-clip: text;
-			}
-
-			.fstat-label {
-				font-size: 11px;
-				text-transform: uppercase;
-				letter-spacing: 1.2px;
-				color: rgba(255, 255, 255, 0.35);
-			}
-		}
-
-		.fstat-sep {
-			width: 1px;
-			height: 36px;
-			background: rgba(255, 255, 255, 0.09);
-			flex-shrink: 0;
 		}
 	}
 

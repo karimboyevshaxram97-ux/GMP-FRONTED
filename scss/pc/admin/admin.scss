@@ -628,7 +628,6 @@
 
 		// ── MUI overrides ────────────────────────────────────────────
 		.MuiButton-root.MuiButton-root {
-			border-radius: 8px;
 			font-weight: 700;
 			text-transform: none;
 			font-size: 13px;
@@ -658,7 +657,7 @@
 
 		.MuiPagination-root {
 			.MuiPaginationItem-root {
-				border-radius: 8px;
+				border-radius: 999px;
 				font-weight: 700;
 			}
 		}

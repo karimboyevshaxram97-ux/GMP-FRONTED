@@ -235,17 +235,11 @@ $chat-h: calc(100vh - 80px - #{$header-h} - #{$input-h});
 		}
 
 		.msg-start-btn {
-			@include button-states;
+			@include accent-button(999px);
 			margin-top: 6px;
-			background: $primary;
-			color: #fff;
-			border: none;
-			border-radius: 8px;
 			padding: 10px 20px;
 			font-size: 13px;
 			font-weight: 700;
-
-			&:hover:not(:disabled) { background: darken(#1649ff, 8%); }
 		}
 	}
 
@@ -527,21 +521,18 @@ $chat-h: calc(100vh - 80px - #{$header-h} - #{$input-h});
 	}
 
 	.msg-send-btn.msg-send-btn {
-		background: $primary;
-		color: #ffffff;
+		@include accent-button(12px);
 		width: 44px;
 		height: 44px;
-		border-radius: 12px;
 		flex-shrink: 0;
-		transition: opacity 0.2s, transform 0.15s;
 
 		&:hover:not(:disabled) {
-			opacity: 0.88;
 			transform: scale(1.05);
 		}
 
 		&:disabled {
 			background: #c8d3f5;
+			color: #ffffff;
 		}
 	}
 

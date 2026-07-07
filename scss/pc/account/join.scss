@@ -237,20 +237,19 @@
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	background: #f1f4fb;
-	border-radius: 10px;
+	border-radius: 999px;
 	padding: 4px;
 	margin-bottom: 20px;
 
 	button {
+		@include button-states;
 		background: transparent;
 		border: none;
-		border-radius: 7px;
+		border-radius: 999px;
 		color: #7c8db0;
-		cursor: pointer;
 		font-size: 13px;
 		font-weight: 700;
 		padding: 9px;
-		transition: all 0.2s;
 
 		&.active {
 			background: #ffffff;
@@ -367,30 +366,20 @@
 }
 
 .jr-btn {
-	@include button-states;
+	@include accent-button(999px);
 	width: 100%;
 	padding: 12px;
-	border: none;
-	border-radius: 9px;
 	font-size: 14px;
 	font-weight: 800;
-	color: #ffffff;
-	background: linear-gradient(135deg, #1649ff 0%, #5b21b6 100%);
 	box-shadow: 0 4px 14px rgba(22, 73, 255, 0.32);
 	font-family: inherit;
 
 	&:hover:not(:disabled) {
-		background: linear-gradient(135deg, #0f38e0 0%, #4c1d95 100%);
 		box-shadow: 0 6px 20px rgba(22, 73, 255, 0.42);
 		transform: translateY(-1px);
 	}
 
 	&:active:not(:disabled) { transform: translateY(0); }
-
-	&:disabled {
-		opacity: 0.6;
-		cursor: not-allowed;
-	}
 }
 
 // ── Social login (Kakao / Naver / Google) ────────────────────────────────────
@@ -430,7 +419,7 @@
 		width: 100%;
 		padding: 12px;
 		border: none;
-		border-radius: 9px;
+		border-radius: 999px;
 		font-size: 13.5px;
 		font-weight: 700;
 		font-family: inherit;

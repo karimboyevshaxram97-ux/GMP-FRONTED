@@ -65,9 +65,9 @@ $accent-orange: #f17742;
 //   accent-button      — filled gradient CTA (send, join, primary actions)
 // Pass $radius to match the shape (default 10px; 24px+ for pills, 50% for round).
 $glass-bg: rgba(255, 255, 255, 0.08);
-$glass-bg-hover: rgba(255, 255, 255, 0.15);
+$glass-bg-hover: rgba(255, 255, 255, 0.16);
 $glass-bg-active: rgba(255, 255, 255, 0.2);
-$glass-border: rgba(255, 255, 255, 0.15);
+$glass-border: rgba(255, 255, 255, 0.18);
 $accent-gradient: linear-gradient(135deg, #4e7fff 0%, #7b5bff 100%);
 
 @mixin button-states {

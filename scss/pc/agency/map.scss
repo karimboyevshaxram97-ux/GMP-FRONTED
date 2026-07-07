@@ -91,19 +91,12 @@ $panel-height: calc(100vh - #{$map-navbar} - #{$filter-height});
   }
 
   .filter-reset {
+    @include glass-button-dark(10px);
     height: 38px;
     padding: 0 16px;
-    border: 1.5px solid #e0e4ef;
-    border-radius: 10px;
-    background: transparent;
     font-size: 13px;
-    color: #6b7280;
-    cursor: pointer;
     font-weight: 600;
-    transition: all 0.2s;
     white-space: nowrap;
-
-    &:hover { border-color: #0d9488; color: #0d9488; background: #f0fdfa; }
   }
 
   .filter-count {
@@ -461,20 +454,14 @@ $panel-height: calc(100vh - #{$map-navbar} - #{$filter-height});
   }
 
   .iw-btn {
-    @include button-states;
+    @include accent-button(999px);
     display: block;
     width: 100%;
     padding: 7px 0;
-    background: #0d9488;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
     font-size: 13px;
     font-weight: 700;
     text-align: center;
     text-decoration: none;
-
-    &:hover:not(:disabled) { background: #0f766e; }
   }
 }
 
