@@ -25,6 +25,7 @@ import TuneIcon from '@mui/icons-material/Tune';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import withLayoutMain from '../../libs/components/layout/LayoutHome';
 import ServiceCard from '../../libs/components/common/ServiceCard';
+import PhotoBoard from '../../libs/components/service/PhotoBoard';
 import AgencyCard from '../../libs/components/common/AgencyCard';
 import { GET_AGENCIES, GET_SERVICES } from '../../apollo/user/query';
 import { TOGGLE_LIKE } from '../../apollo/user/mutation';
@@ -193,6 +194,8 @@ const ServiceList: NextPage = () => {
 						</button>
 					))}
 				</Box>
+
+				<PhotoBoard serviceType={serviceType} />
 
 				<Box className="services-layout">
 					<Box className="service-filter-panel">

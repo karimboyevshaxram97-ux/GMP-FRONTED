@@ -277,3 +277,31 @@ export const CREATE_SUPPORT_TICKET = gql`
 		}
 	}
 `;
+
+export const CREATE_PHOTO = gql`
+	mutation CreatePhoto($input: CreatePhotoInput!) {
+		createPhoto(input: $input) {
+			_id
+			image
+			serviceType
+		}
+	}
+`;
+
+export const DELETE_PHOTO = gql`
+	mutation DeletePhoto($photoId: String!) {
+		deletePhoto(photoId: $photoId)
+	}
+`;
+
+export const CREATE_PHOTO_COMMENT = gql`
+	mutation CreatePhotoComment($input: CreatePhotoCommentInput!) {
+		createPhotoComment(input: $input) {
+			_id
+			text
+			userName
+			userAvatar
+			createdAt
+		}
+	}
+`;

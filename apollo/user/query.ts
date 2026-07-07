@@ -383,3 +383,40 @@ export const GET_AGENCIES_FOR_MAP = gql`
 		}
 	}
 `;
+
+export const GET_PHOTOS = gql`
+	query GetPhotos($input: PhotosInquiryInput!) {
+		getPhotos(input: $input) {
+			list {
+				_id
+				agency
+				image
+				serviceType
+				likeCount
+				viewCount
+				commentCount
+				meLiked {
+					myFavorite
+				}
+				agencyName { uz ru en ko }
+				agencyLogo
+				createdAt
+			}
+			metaCounter {
+				total
+			}
+		}
+	}
+`;
+
+export const GET_PHOTO_COMMENTS = gql`
+	query GetPhotoComments($photoId: String!) {
+		getPhotoComments(photoId: $photoId) {
+			_id
+			text
+			userName
+			userAvatar
+			createdAt
+		}
+	}
+`;
