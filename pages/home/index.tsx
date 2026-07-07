@@ -1,4 +1,5 @@
 import React from 'react';
+import dynamic from 'next/dynamic';
 import withLayoutMain from '../../libs/components/layout/LayoutHome';
 import HeroSection from '../../libs/components/home/HeroSection';
 import SearchSection from '../../libs/components/home/SearchSection';
@@ -10,6 +11,11 @@ import Brands from '../../libs/components/home/Brands';
 import VideoSection from '../../libs/components/home/VideoSection';
 import TopAgenciesSection from '../../libs/components/home/TopAgenciesSection';
 import CtaBanner from '../../libs/components/home/CtaBanner';
+
+const HomepageMapSection = dynamic(
+	() => import('../../libs/components/home/HomepageMapSection'),
+	{ ssr: false },
+);
 
 const Homepage = () => (
 	<div className="homepage">
@@ -23,6 +29,7 @@ const Homepage = () => (
 		<VideoSection />
 		<TopAgenciesSection />
 		<CtaBanner />
+		<HomepageMapSection />
 	</div>
 );
 

@@ -25,7 +25,7 @@ const AgencyCard = ({ agency, onClick, onLike }: Props) => {
 	const tr = useLang();
 	const ui = useUiLang();
 	const countries = agency.operatingCountries ?? [];
-	const description = tr(agency.description) || ui('Verified migration agency ready to support your application journey.');
+	const description = tr(agency.description) || ui('agency.defaultCardDescription');
 	const liked = isLiked(agency.meLiked);
 
 	return (

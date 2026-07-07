@@ -18,6 +18,15 @@ const hasValidCoords = (a: Agency): boolean =>
 	Math.abs(a.latitude) <= 90 &&
 	Math.abs(a.longitude) <= 180;
 
+const escapeHtml = (value: unknown): string =>
+	String(value ?? '').replace(/[&<>"']/g, (char) => ({
+		'&': '&amp;',
+		'<': '&lt;',
+		'>': '&gt;',
+		'"': '&quot;',
+		"'": '&#39;',
+	}[char] ?? char));
+
 function uniqueCountries(agencies: Agency[]): string[] {
 	const set = new Set<string>();
 	agencies.forEach((a) => { if (a.country) set.add(a.country); });
@@ -133,19 +142,25 @@ const AgencyMapView: React.FC = () => {
 
 			const name = tr(agency.name);
 			const addressLine = [agency.address, agency.city, agency.country].filter(Boolean).join(', ');
+			const safeName = escapeHtml(name);
+			const safeInitial = escapeHtml(name.charAt(0).toUpperCase());
+			const safeAddress = escapeHtml(addressLine);
+			const safeReviewsLabel = escapeHtml(ui('agency.reviews2'));
+			const safeProfileLabel = escapeHtml(ui('map.viewProfile'));
+			const safeProfileHref = `/agency/${encodeURIComponent(agency._id)}`;
 			const logoHtml = agency.logo
-				? `<img src="${REACT_APP_API_URL}/uploads/${agency.logo}" style="width:44px;height:44px;border-radius:8px;object-fit:cover;border:1px solid #e8eaf0;" />`
-				: `<div style="width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,#0d9488,#1649ff);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;flex-shrink:0;">${name.charAt(0).toUpperCase()}</div>`;
+				? `<img src="${escapeHtml(`${REACT_APP_API_URL}/uploads/${agency.logo}`)}" style="width:44px;height:44px;border-radius:8px;object-fit:cover;border:1px solid #e8eaf0;" />`
+				: `<div style="width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,#0d9488,#1649ff);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;flex-shrink:0;">${safeInitial}</div>`;
 
 			const popupHtml = `
 				<div class="map-info-window" style="min-width:210px;">
 					<div class="iw-header">
 						${logoHtml}
-						<div class="iw-name">${name}</div>
+						<div class="iw-name">${safeName}</div>
 					</div>
-					${addressLine ? `<div class="iw-address">${addressLine}</div>` : ''}
-					${(agency.averageRating ?? 0) > 0 ? `<div class="iw-rating">★ ${(agency.averageRating ?? 0).toFixed(1)} <span>(${agency.totalReviews ?? 0} ${ui('agency.reviews2')})</span></div>` : ''}
-					<a href="/agency/${agency._id}" class="iw-btn" style="display:block;width:100%;padding:7px 0;background:#0d9488;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;text-align:center;text-decoration:none;">${ui('map.viewProfile')} →</a>
+					${addressLine ? `<div class="iw-address">${safeAddress}</div>` : ''}
+					${(agency.averageRating ?? 0) > 0 ? `<div class="iw-rating">★ ${(agency.averageRating ?? 0).toFixed(1)} <span>(${agency.totalReviews ?? 0} ${safeReviewsLabel})</span></div>` : ''}
+					<a href="${safeProfileHref}" class="iw-btn" style="display:block;width:100%;padding:7px 0;background:#0d9488;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;text-align:center;text-decoration:none;">${safeProfileLabel} →</a>
 				</div>
 			`;
 

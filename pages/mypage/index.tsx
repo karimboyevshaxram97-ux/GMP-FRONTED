@@ -32,6 +32,7 @@ import { UserRole } from '../../libs/enums/user.enum';
 import { ServiceType } from '../../libs/enums/service.enum';
 import { toFriendlyError } from '../../libs/utils/errors';
 import { useUiLang } from '../../libs/utils/translations';
+import AgencyPhotos from '../../libs/components/mypage/AgencyPhotos';
 
 // ── Helper components ────────────────────────────────────────────────────────
 
@@ -341,7 +342,7 @@ const MyPage: NextPage = () => {
 		event.preventDefault();
 		setAgencyError('');
 		const countries = agencyCountries.split(',').map((c) => c.trim()).filter(Boolean);
-		if (!countries.length) { setAgencyError(ui('At least one operating country is required.')); return; }
+		if (!countries.length) { setAgencyError(ui('errors.atLeastOneOperatingCountry')); return; }
 		setAgencyCreating(true);
 		try {
 			await createAgency({
@@ -369,7 +370,7 @@ const MyPage: NextPage = () => {
 			await refreshAuthTokens();
 			await sweetMixinSuccessAlert(ui('mypage.agencyCreatedPendingAdminApproval'));
 		} catch (err: any) {
-			setAgencyError(toFriendlyError(err, ui('Failed to create agency. Please try again.')));
+			setAgencyError(toFriendlyError(err, ui('errors.failedToCreateAgency')));
 		} finally {
 			setAgencyCreating(false);
 		}
@@ -403,7 +404,7 @@ const MyPage: NextPage = () => {
 			setEditingLocation(false);
 			await sweetMixinSuccessAlert(ui('mypage.locationUpdated'));
 		} catch (err: any) {
-			await sweetMixinErrorAlert(err?.message || ui('Failed to update location.'));
+			await sweetMixinErrorAlert(err?.message || ui('errors.failedToUpdateLocation'));
 		} finally {
 			setLocationSaving(false);
 		}
@@ -746,7 +747,7 @@ const MyPage: NextPage = () => {
 											{msgLoading ? (
 												<Box className="chat-loading"><CircularProgress size={28} /></Box>
 											) : messages.length === 0 ? (
-												<Box className="empty-state">{ui('No messages yet. Say hello!')}</Box>
+												<Box className="empty-state">{ui('chat.noMessagesYetSayHi')}</Box>
 											) : (
 												messages.map((msg: any) => {
 													const isMine = msg.sender === user?._id;
@@ -996,6 +997,8 @@ const MyPage: NextPage = () => {
 										<Button type="submit" variant="contained" disabled={agencyCreating}>{agencyCreating ? ui('mypage.submitting') : ui('mypage.registerAgency')}</Button>
 									</Box>
 								)}
+
+								{myAgency && <AgencyPhotos agencyId={myAgency._id} />}
 							</Box>
 						)}
 					{/* Tab 5: Agency Services Management */}

@@ -43,7 +43,7 @@ const Brands = () => {
 					{/* Uzluksiz aylanish uchun ro'yxat ikki marta chiziladi */}
 					{[...BRANDS, ...BRANDS].map((brand, i) => (
 						<div className="brand-item" key={i} aria-hidden={i >= BRANDS.length}>
-							<img src={`https://cdn.simpleicons.org/${brand.slug}/ffffff`} alt={brand.name} loading="lazy" />
+							<img src={`https://cdn.simpleicons.org/${brand.slug}`} alt={brand.name} loading="lazy" />
 							<span>{brand.name}</span>
 						</div>
 					))}

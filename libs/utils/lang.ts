@@ -1,4 +1,5 @@
 import Router from 'next/router';
+import { useCallback } from 'react';
 import { useTranslation } from 'next-i18next';
 import { Lang } from '../enums/lang.enum';
 import { LocalizedString } from '../types/localized-string';
@@ -19,7 +20,7 @@ export function t(str: LocalizedString | string | undefined | null, lang?: Lang 
 export function useLang() {
 	const { i18n } = useTranslation();
 	const lang = normalizeLang(i18n.language) ?? Lang.KO;
-	return (str: LocalizedString | string | undefined | null) => t(str, lang);
+	return useCallback((str: LocalizedString | string | undefined | null) => t(str, lang), [lang]);
 }
 
 /**

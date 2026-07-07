@@ -5,12 +5,39 @@
 	min-height: 100vh;
 	padding-bottom: 64px;
 
+	// ── Profil banneri: to'q gradient + yorug'lik dog'lari ──
 	.mypage-hero-clean {
-		background:
-			radial-gradient(circle at top left, rgba(22, 73, 255, 0.12), transparent 32%),
-			linear-gradient(135deg, #ffffff 0%, #eef3ff 100%);
-		border-bottom: 1px solid rgba(10, 36, 114, 0.08);
-		padding: 120px 0 42px;
+		position: relative;
+		background: linear-gradient(150deg, #0a1332 0%, #0e2261 55%, #101a3e 100%);
+		padding: 120px 0 46px;
+		overflow: hidden;
+
+		&::before,
+		&::after {
+			content: '';
+			position: absolute;
+			border-radius: 50%;
+			filter: blur(90px);
+			pointer-events: none;
+		}
+
+		&::before {
+			width: 440px;
+			height: 440px;
+			background: rgba(78, 127, 255, 0.22);
+			top: -170px;
+			left: -70px;
+		}
+
+		&::after {
+			width: 380px;
+			height: 380px;
+			background: rgba(123, 91, 255, 0.18);
+			bottom: -200px;
+			right: -60px;
+		}
+
+		.container { position: relative; z-index: 1; }
 	}
 
 	.mypage-hero-grid {
@@ -26,41 +53,47 @@
 		gap: 22px;
 
 		img {
-			background: #ffffff;
-			border: 1px solid rgba(10, 36, 114, 0.1);
-			border-radius: 8px;
+			background: rgba(255, 255, 255, 0.1);
+			border: 3px solid rgba(255, 255, 255, 0.35);
+			border-radius: 50%;
+			box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
 			height: 104px;
 			object-fit: cover;
 			width: 104px;
 		}
 
 		span {
-			color: $primary;
+			color: #9db4ff;
 			display: block;
 			font-size: 12px;
 			font-weight: 800;
+			letter-spacing: 1.5px;
 			text-transform: uppercase;
 			margin-bottom: 6px;
 		}
 
 		h1 {
-			color: $text-primary;
+			color: #ffffff;
 			font-size: 38px;
 			font-weight: 800;
 			line-height: 1.1;
 			margin-bottom: 8px;
+			text-shadow: 0 2px 20px rgba(0, 0, 0, 0.25);
 		}
 
 		p {
-			color: $text-secondary;
+			color: rgba(255, 255, 255, 0.7);
 			font-size: 15px;
 		}
 
 		.account-role-badge {
 			align-items: center;
-			border: 1px solid #dbe5ff;
+			border: 1px solid rgba(255, 255, 255, 0.28);
 			border-radius: 999px;
-			color: #1649ff;
+			background: rgba(255, 255, 255, 0.1);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+			color: #cdd9ff;
 			display: inline-flex;
 			font-size: 12px;
 			font-weight: 800;
@@ -70,40 +103,47 @@
 			text-transform: uppercase;
 
 			&.agency {
-				background: #eaf7f2;
-				border-color: #bfe8d8;
-				color: #087f5b;
-			}
-
-			&.user {
-				background: #edf2ff;
+				background: rgba(45, 212, 191, 0.14);
+				border-color: rgba(45, 212, 191, 0.4);
+				color: #5eead4;
 			}
 		}
 	}
 
+	// Statistika — banner ustidagi glass kartalar
 	.account-stats {
 		display: grid;
 		gap: 12px;
 		grid-template-columns: repeat(3, 1fr);
 
 		div {
-			background: #ffffff;
-			border: 1px solid rgba(10, 36, 114, 0.08);
-			border-radius: 8px;
-			box-shadow: 0 12px 32px rgba(10, 36, 114, 0.08);
+			background: rgba(255, 255, 255, 0.08);
+			border: 1px solid rgba(255, 255, 255, 0.16);
+			border-radius: 16px;
+			backdrop-filter: blur(14px);
+			-webkit-backdrop-filter: blur(14px);
 			padding: 20px;
+			transition: transform 0.25s ease, background 0.25s ease;
+
+			&:hover {
+				transform: translateY(-3px);
+				background: rgba(255, 255, 255, 0.13);
+			}
 		}
 
 		strong {
-			color: $text-primary;
 			display: block;
-			font-size: 28px;
+			font-size: 30px;
 			line-height: 1;
 			margin-bottom: 8px;
+			background: linear-gradient(90deg, #ffffff 0%, #9db4ff 100%);
+			-webkit-background-clip: text;
+			background-clip: text;
+			-webkit-text-fill-color: transparent;
 		}
 
 		span {
-			color: $text-secondary;
+			color: rgba(255, 255, 255, 0.65);
 			font-size: 13px;
 		}
 	}
@@ -125,38 +165,56 @@
 	.mypage-content-card {
 		background: #ffffff;
 		border: 1px solid rgba(10, 36, 114, 0.08);
-		border-radius: 8px;
+		border-radius: 18px;
 		box-shadow: 0 10px 30px rgba(10, 36, 114, 0.06);
 	}
 
 	.menu-list {
 		overflow: hidden;
+		padding: 10px;
 
 		.menu-item {
 			align-items: center;
-			border-bottom: 1px solid #edf1f7;
+			border-radius: 12px;
 			color: $text-secondary;
 			cursor: pointer;
 			display: flex;
 			font-size: 14px;
-			font-weight: 800;
+			font-weight: 700;
 			gap: 12px;
-			padding: 16px 18px;
-			transition: background 0.2s, color 0.2s;
+			margin-bottom: 2px;
+			padding: 13px 14px;
+			transition: background 0.2s, color 0.2s, transform 0.2s;
 
-			&:last-child {
-				border-bottom: none;
-			}
+			&:last-child { margin-bottom: 0; }
 
-			&:hover,
-			&.active {
+			&:hover {
 				background: #f1f5ff;
 				color: $primary;
+				transform: translateX(3px);
+			}
+
+			// Faol bo'lim — accent gradient
+			&.active {
+				background: $accent-gradient;
+				color: #ffffff;
+				box-shadow: 0 8px 22px rgba(78, 127, 255, 0.35);
+
+				svg { color: #ffffff; }
+
+				b {
+					background: rgba(255, 255, 255, 0.22);
+					color: #ffffff;
+				}
 			}
 
 			svg {
 				font-size: 20px;
+				color: #94a3b8;
+				transition: color 0.2s;
 			}
+
+			&:hover svg { color: $primary; }
 
 			span {
 				flex: 1;
@@ -174,7 +232,7 @@
 
 	.mypage-content-card {
 		min-height: 420px;
-		padding: 28px;
+		padding: 30px;
 	}
 
 	.content-head {
@@ -640,6 +698,132 @@
 		.list-row {
 			align-items: flex-start;
 			flex-direction: column;
+		}
+	}
+}
+
+// ── My Agency: foto galereya boshqaruvi ──────────────────────
+.agency-photos {
+	margin-top: 36px;
+	padding-top: 28px;
+	border-top: 1px solid #edf1f7;
+
+	&__head {
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: 16px;
+		flex-wrap: wrap;
+	}
+
+	&__actions {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+
+		.MuiSelect-select { min-width: 130px; }
+	}
+
+	&__hint {
+		font-size: 12.5px;
+		color: $text-muted;
+		margin: 10px 0 18px;
+	}
+
+	&__empty {
+		font-size: 13.5px;
+		color: $text-muted;
+		padding: 26px 0;
+		text-align: center;
+		border: 1.5px dashed #dbe3f2;
+		border-radius: 12px;
+	}
+
+	&__grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 14px;
+
+		@media (max-width: 900px) { grid-template-columns: repeat(2, 1fr); }
+	}
+}
+
+.agency-photo {
+	position: relative;
+	aspect-ratio: 16 / 10;
+	border-radius: 12px;
+	overflow: hidden;
+	background: #eef3ff;
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	&::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, transparent 50%);
+		pointer-events: none;
+	}
+
+	&__type {
+		position: absolute;
+		top: 10px;
+		left: 10px;
+		z-index: 1;
+		font-size: 10.5px;
+		font-weight: 700;
+		color: #fff;
+		background: rgba(10, 14, 30, 0.55);
+		backdrop-filter: blur(8px);
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		padding: 3px 10px;
+		border-radius: 999px;
+	}
+
+	&__delete {
+		@include button-states;
+		position: absolute;
+		top: 8px;
+		right: 8px;
+		z-index: 2;
+		width: 30px;
+		height: 30px;
+		border-radius: 50%;
+		border: none;
+		background: rgba(10, 14, 30, 0.55);
+		backdrop-filter: blur(8px);
+		color: #fff;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		svg { font-size: 16px; }
+
+		&:hover:not(:disabled) { background: #ef4444; }
+	}
+
+	&__stats {
+		position: absolute;
+		left: 12px;
+		right: 12px;
+		bottom: 10px;
+		z-index: 1;
+		display: flex;
+		gap: 14px;
+
+		span {
+			display: inline-flex;
+			align-items: center;
+			gap: 4px;
+			color: rgba(255, 255, 255, 0.92);
+			font-size: 12px;
+			font-weight: 700;
+
+			svg { font-size: 14px; }
 		}
 	}
 }

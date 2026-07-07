@@ -21,6 +21,15 @@ const hasValidCoords = (a: Agency): boolean =>
 	Math.abs(a.latitude) <= 90 &&
 	Math.abs(a.longitude) <= 180;
 
+const escapeHtml = (value: unknown): string =>
+	String(value ?? '').replace(/[&<>"']/g, (char) => ({
+		'&': '&amp;',
+		'<': '&lt;',
+		'>': '&gt;',
+		'"': '&quot;',
+		"'": '&#39;',
+	}[char] ?? char));
+
 const HomepageMapSection: React.FC = () => {
 	const router = useRouter();
 	const tr = useLang();
@@ -101,17 +110,21 @@ const HomepageMapSection: React.FC = () => {
 		agencies.forEach((agency) => {
 			if (!hasValidCoords(agency)) return;
 			const name = tr(agency.name);
+			const safeName = escapeHtml(name);
+			const safeInitial = escapeHtml(name.charAt(0).toUpperCase());
+			const safeLocation = escapeHtml([agency.city, agency.country].filter(Boolean).join(', '));
+			const safeProfileHref = `/agency/${encodeURIComponent(agency._id)}`;
 			const popupHtml = `
 				<div class="map-info-window" style="min-width:200px;">
 					<div class="iw-header">
 						${agency.logo
-					? `<img src="${REACT_APP_API_URL}/uploads/${agency.logo}" style="width:44px;height:44px;border-radius:8px;object-fit:cover;" />`
-					: `<div style="width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,#0d9488,#1649ff);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;">${name.charAt(0).toUpperCase()}</div>`
+					? `<img src="${escapeHtml(`${REACT_APP_API_URL}/uploads/${agency.logo}`)}" style="width:44px;height:44px;border-radius:8px;object-fit:cover;" />`
+					: `<div style="width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,#0d9488,#1649ff);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;">${safeInitial}</div>`
 				}
-						<div class="iw-name">${name}</div>
+						<div class="iw-name">${safeName}</div>
 					</div>
-					${agency.city ? `<div class="iw-address">${[agency.city, agency.country].filter(Boolean).join(', ')}</div>` : ''}
-					<a href="/agency/${agency._id}" class="iw-btn" style="display:block;width:100%;padding:7px 0;background:#0d9488;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;text-align:center;text-decoration:none;">${viewProfileLabel} →</a>
+					${agency.city ? `<div class="iw-address">${safeLocation}</div>` : ''}
+					<a href="${safeProfileHref}" class="iw-btn" style="display:block;width:100%;padding:7px 0;background:#0d9488;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;text-align:center;text-decoration:none;">${escapeHtml(viewProfileLabel)} →</a>
 				</div>`;
 			const marker = L.marker([agency.latitude, agency.longitude], { icon: redIcon })
 				.bindPopup(popupHtml, { minWidth: 210 })
@@ -126,7 +139,7 @@ const HomepageMapSection: React.FC = () => {
 		}
 
 		return () => { markersAdded.forEach((m) => m.remove()); };
-	}, [agencies, viewProfileLabel]);
+	}, [agencies, tr, viewProfileLabel]);
 
 	return (
 		<section className="home-map-section">

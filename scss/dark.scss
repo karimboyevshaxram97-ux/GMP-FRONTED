@@ -147,9 +147,11 @@ html.dark {
 	.home-search { background: var(--dk-bg); }
 
 	.home-search__card {
-		background: var(--dk-surface);
-		border-color: var(--dk-border);
-		box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+		background: rgba(20, 27, 48, 0.88);
+		border-color: rgba(255, 255, 255, 0.12);
+		box-shadow:
+			0 24px 64px rgba(0, 0, 0, 0.5),
+			inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
 		input, select { color: var(--dk-text); background: transparent; }
 		input::placeholder { color: var(--dk-muted); }
@@ -160,7 +162,10 @@ html.dark {
 		background: var(--dk-surface-2);
 		border-color: transparent;
 
+		&:hover { border-color: rgba(157, 180, 255, 0.3); }
 		&:focus-within { background: var(--dk-surface); }
+
+		svg { color: #9db4ff; }
 
 		select option { background: var(--dk-surface); color: var(--dk-text); }
 	}
@@ -228,6 +233,33 @@ html.dark {
 		color: #9db4ff;
 	}
 
+	// Brendlar lentasi (yorug' dizayn → qora yuzalar)
+	.home-brands {
+		background: var(--dk-bg-2);
+
+		&__header h2 { color: var(--dk-text); }
+
+		&__marquee::before { background: linear-gradient(to right, var(--dk-bg-2), transparent); }
+		&__marquee::after  { background: linear-gradient(to left, var(--dk-bg-2), transparent); }
+
+		.brand-item {
+			background: var(--dk-surface);
+			border-color: var(--dk-border);
+			box-shadow: none;
+
+			img { filter: grayscale(1) invert(1) opacity(0.7); }
+			span { color: var(--dk-text-2); }
+
+			&:hover {
+				border-color: rgba(157, 180, 255, 0.4);
+				box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+
+				img { filter: grayscale(1) invert(1) opacity(1); }
+				span { color: var(--dk-text); }
+			}
+		}
+	}
+
 	// AI yordamchi modali
 	.ai-assist-modal { background: var(--dk-surface); }
 	.ai-assist-body { background: var(--dk-bg); }
@@ -261,13 +293,64 @@ html.dark {
 		.price-label { color: var(--dk-text); }
 	}
 
-	.service-detail-hero {
-		background:
-			radial-gradient(circle at top right, rgba(78, 127, 255, 0.14), transparent 32%),
-			linear-gradient(135deg, var(--dk-bg-2) 0%, var(--dk-surface) 100%);
+	.photo-board__head {
+		h2 { color: var(--dk-text); }
+		p { color: var(--dk-text-2); }
+	}
+
+	.photo-modal {
+		background: var(--dk-surface);
+
+		&__agency, &__stats, &__input { border-color: var(--dk-border); }
+		&__agency strong { color: var(--dk-text); }
+
+		.photo-comment {
+			strong { color: var(--dk-text); }
+			p { color: var(--dk-text-2); }
+		}
+
+		&__input input {
+			background: var(--dk-surface-2);
+			border-color: var(--dk-border-strong);
+			color: var(--dk-text);
+
+			&::placeholder { color: var(--dk-muted); }
+			&:focus { background: var(--dk-surface); }
+		}
+	}
+
+	.agency-photos {
 		border-color: var(--dk-border);
 
-		h1 { color: var(--dk-text); }
+		&__empty { border-color: var(--dk-border-strong); }
+	}
+
+	// service-detail-hero endi o'zi qora gradient — dark rejimda faqat
+	// pastdagi oq kartalarni qoraytiramiz
+	.service-detail-page {
+		background: var(--dk-bg);
+
+		.service-main-card,
+		.service-detail-loading,
+		.service-detail-empty {
+			background: var(--dk-surface);
+			border-color: var(--dk-border);
+
+			h1, h2, h3, strong { color: var(--dk-text); }
+			p { color: var(--dk-text-2); }
+		}
+
+		.service-facts > div {
+			background: var(--dk-surface-2);
+			border-color: var(--dk-border);
+
+			span { color: var(--dk-text-2); }
+			strong { color: var(--dk-text); }
+			svg { background: rgba(78, 127, 255, 0.16); color: #9db4ff; }
+		}
+
+		.service-review { border-color: var(--dk-border); }
+		.review-form { border-color: var(--dk-border); }
 	}
 
 	// ── Agency sahifasi ───────────────────────────────────────
@@ -323,13 +406,23 @@ html.dark {
 		h2, strong, label { color: var(--dk-text); }
 	}
 
+	.menu-list {
+		background: var(--dk-surface);
+		border-color: var(--dk-border);
+	}
+
 	.menu-list .menu-item {
 		color: var(--dk-text-2);
-		border-color: var(--dk-border);
 
-		&:hover, &.active {
+		&:hover {
 			background: rgba(78, 127, 255, 0.12);
 			color: #9db4ff;
+		}
+
+		// Faol bo'lim dark rejimda ham accent gradientda qoladi
+		&.active {
+			color: #ffffff;
+			b { background: rgba(255, 255, 255, 0.22); color: #ffffff; }
 		}
 
 		b { background: rgba(78, 127, 255, 0.16); color: #9db4ff; }

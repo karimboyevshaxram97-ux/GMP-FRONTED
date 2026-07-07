@@ -186,7 +186,7 @@ const AgencyDetail: NextPage = () => {
 									<Chip label={agency.status} className="status-chip" />
 								</Box>
 								<h1>{tr(agency.name) || ui('auth.agency')}</h1>
-								<p>{tr(agency.description) || ui('A verified agency profile for migration, travel, study, and work services.')}</p>
+								<p>{tr(agency.description) || ui('agency.defaultProfileDescription')}</p>
 								<Box className="rating-summary">
 									<Rating value={agency.averageRating || 0} precision={0.1} readOnly />
 									<strong>{(agency.averageRating || 0).toFixed(1)}</strong>

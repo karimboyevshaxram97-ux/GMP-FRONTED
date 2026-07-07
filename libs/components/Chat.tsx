@@ -38,7 +38,7 @@ const Chat = () => {
 	useEffect(() => {
 		if (!socket) return;
 
-		socket.onmessage = (event: MessageEvent) => {
+		const handleMessage = (event: MessageEvent) => {
 			try {
 				const data = JSON.parse(event.data);
 				switch (data.event) {
@@ -57,8 +57,10 @@ const Chat = () => {
 			} catch {}
 		};
 
+		socket.addEventListener('message', handleMessage);
+
 		return () => {
-			socket.onmessage = null;
+			socket.removeEventListener('message', handleMessage);
 		};
 	}, [socket]);
 

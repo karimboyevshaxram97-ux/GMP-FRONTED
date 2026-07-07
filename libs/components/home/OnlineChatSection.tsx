@@ -37,7 +37,7 @@ const OnlineChatSection = () => {
 		const onOpen = () => setConnected(true);
 		const onClose = () => setConnected(false);
 
-		socket.onmessage = (e: MessageEvent) => {
+		const onMessage = (e: MessageEvent) => {
 			try {
 				const data = JSON.parse(e.data);
 				if (data.event === 'info') setOnlineUsers(data.totalClients ?? 0);
@@ -46,12 +46,13 @@ const OnlineChatSection = () => {
 			} catch {}
 		};
 
+		socket.addEventListener('message', onMessage);
 		socket.addEventListener('open', onOpen);
 		socket.addEventListener('close', onClose);
 		return () => {
+			socket.removeEventListener('message', onMessage);
 			socket.removeEventListener('open', onOpen);
 			socket.removeEventListener('close', onClose);
-			socket.onmessage = null;
 		};
 	}, [socket]);
 

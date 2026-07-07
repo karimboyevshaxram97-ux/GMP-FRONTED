@@ -314,7 +314,7 @@ const MessagesPage: NextPage = () => {
 								) : messages.length === 0 ? (
 									<Box className="msg-chat-empty">
 										<ChatBubbleOutlineIcon sx={{ fontSize: 48, color: '#c8d3f5' }} />
-										<p>{ui('No messages yet. Say hello!')}</p>
+										<p>{ui('chat.noMessagesYetSayHi')}</p>
 									</Box>
 								) : (
 									messages.map((msg: any) => {
