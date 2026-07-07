@@ -7,7 +7,7 @@ import ServiceTypesSection from '../libs/components/home/ServiceTypesSection';
 import HowItWorks from '../libs/components/home/HowItWorks';
 import FeaturedAgencies from '../libs/components/home/FeaturedAgencies';
 import FeaturedServices from '../libs/components/home/FeaturedServices';
-import Destinations from '../libs/components/home/Destinations';
+import Brands from '../libs/components/home/Brands';
 import VideoSection from '../libs/components/home/VideoSection';
 import TopAgenciesSection from '../libs/components/home/TopAgenciesSection';
 import CtaBanner from '../libs/components/home/CtaBanner';
@@ -22,11 +22,11 @@ const Homepage = () => (
 	<div className="homepage">
 		<HeroSection />
 		<SearchSection />
+		<Brands />
 		<ServiceTypesSection />
 		<HowItWorks />
 		<FeaturedAgencies />
 		<FeaturedServices />
-		<Destinations />
 		<VideoSection />
 		<TopAgenciesSection />
 		<CtaBanner />

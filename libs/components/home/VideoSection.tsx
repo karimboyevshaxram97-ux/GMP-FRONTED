@@ -53,18 +53,16 @@ const STEPS = [
 	},
 ];
 
-const MOCK_CARDS = [
-	{ type: 'Study Abroad', country: 'United Kingdom', price: '$2,400', badge: 'Popular', color: '#6366f1' },
-	{ type: 'Work Permit', country: 'Germany', price: '$1,200', badge: 'Verified', color: '#0ea5e9' },
-	{ type: 'Travel Package', country: 'Japan', price: '$890', badge: 'New', color: '#10b981' },
-	{ type: 'Visa Service', country: 'Canada', price: '$350', badge: 'Fast', color: '#f59e0b' },
-];
+// O'z reklama videongizni qo'yish uchun shu ID ni almashtiring
+// (https://youtu.be/XXXXXXXXXXX dagi XXXXXXXXXXX qismi)
+const YOUTUBE_VIDEO_ID = 'V72pPDz43KI'; // touropia — "50 Most Beautiful Cities in the World" 4K
 
 const VideoSection = () => {
 	const ui = useUiLang();
 	const sectionRef = useRef<HTMLElement>(null);
 	const [activeStep, setActiveStep] = useState(0);
 	const [visible, setVisible] = useState(false);
+	const [playing, setPlaying] = useState(false);
 
 	useEffect(() => {
 		const observer = new IntersectionObserver(
@@ -124,56 +122,38 @@ const VideoSection = () => {
 						))}
 					</div>
 
-					{/* Mock platform preview */}
+					{/* Video showcase (lite YouTube embed — iframe loads only on click) */}
 					<div className="hm-preview">
-						<div className="preview-window">
-							{/* Browser bar */}
-							<div className="browser-bar">
-								<div className="browser-dots">
-									<span /><span /><span />
-								</div>
-								<div className="browser-url">gmp.uz/service</div>
-							</div>
-
-							{/* Search bar mock */}
-							<div className="mock-search">
-								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-									<circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
-								</svg>
-								<span>{ui('home.searchServicesByCountryOr')}</span>
-								<div className="mock-search-btn">{ui('agency.search')}</div>
-							</div>
-
-							{/* Cards grid */}
-							<div className="mock-cards">
-								{MOCK_CARDS.map((card, i) => (
-									<div
-										key={i}
-										className={`mock-card${visible ? ' in' : ''}`}
-										style={{ transitionDelay: `${0.3 + i * 0.1}s` }}
-									>
-										<div className="card-type-dot" style={{ background: card.color }} />
-										<div className="card-info">
-											<span className="card-type">{ui(card.type)}</span>
-											<span className="card-country">{ui(card.country)}</span>
-										</div>
-										<div className="card-right">
-											<span className="card-badge">{ui(card.badge)}</span>
-											<span className="card-price">{card.price}</span>
-										</div>
-									</div>
-								))}
-							</div>
-
-							{/* Floating stats badges */}
-							<div className="floating-badge badge-tl">
-								<span className="fb-num">200+</span>
-								<span className="fb-label">{ui('agency.services')}</span>
-							</div>
-							<div className="floating-badge badge-br">
-								<span className="fb-num">98%</span>
-								<span className="fb-label">{ui('home.successRate')}</span>
-							</div>
+						<div className="hm-video">
+							{playing ? (
+								<iframe
+									src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_VIDEO_ID}?autoplay=1&rel=0&modestbranding=1`}
+									title={ui('home.watchVideo')}
+									allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+									allowFullScreen
+								/>
+							) : (
+								<button
+									type="button"
+									className="hm-video__facade"
+									onClick={() => setPlaying(true)}
+									aria-label={ui('home.watchVideo')}
+								>
+									<img
+									src={`https://i.ytimg.com/vi/${YOUTUBE_VIDEO_ID}/maxresdefault.jpg`}
+									onError={(e) => { e.currentTarget.src = '/img/travel-bg.jpg'; }}
+									alt=""
+									aria-hidden="true"
+								/>
+									<span className="hm-video__scrim" />
+									<span className="hm-video__play">
+										<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+											<path d="M8 5v14l11-7z" />
+										</svg>
+									</span>
+									<span className="hm-video__label">{ui('home.watchVideo')}</span>
+								</button>
+							)}
 						</div>
 					</div>
 				</div>
