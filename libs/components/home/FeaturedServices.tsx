@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@apollo/client';
-import { Rating } from '@mui/material';
+import { Box, Pagination, Rating } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
@@ -10,22 +10,28 @@ import { serviceTypeLabels } from '../../config';
 import { useLang } from '../../utils/lang';
 import { useUiLang } from '../../utils/translations';
 
+const PAGE_LIMIT = 4;
+
 const FeaturedServices = () => {
 	const tr = useLang();
 	const ui = useUiLang();
-	const { data, loading } = useQuery(GET_SERVICES, {
+	const [page, setPage] = useState(1);
+	const { data, previousData, loading } = useQuery(GET_SERVICES, {
 		variables: {
 			input: {
 				sort: 'AVERAGE_RATING',
 				direction: 'DESC',
-				page: 1,
-				limit: 4,
+				page,
+				limit: PAGE_LIMIT,
 				status: 'ACTIVE',
 			},
 		},
 	});
 
-	const services: any[] = data?.getServices?.list ?? [];
+	const view = data ?? previousData;
+	const services: any[] = view?.getServices?.list ?? [];
+	const total: number = view?.getServices?.metaCounter?.[0]?.total ?? 0;
+	const showSkeletons = loading && services.length === 0;
 
 	return (
 		<section className="home-featured-services">
@@ -41,8 +47,8 @@ const FeaturedServices = () => {
 				</div>
 
 				<div className="home-featured-services__grid">
-					{loading
-						? Array(4).fill(0).map((_, i) => (
+					{showSkeletons
+						? Array(PAGE_LIMIT).fill(0).map((_, i) => (
 							<div key={i} className="service-card">
 								<div className="service-card-body" style={{ gap: 12 }}>
 									<div style={{ height: 28, background: '#f0f4ff', borderRadius: 100, width: 110 }} />
@@ -88,6 +94,17 @@ const FeaturedServices = () => {
 							</Link>
 						))}
 				</div>
+
+				{total > PAGE_LIMIT && (
+					<Box className="home-featured-services__pagination">
+						<Pagination
+							count={Math.ceil(total / PAGE_LIMIT)}
+							page={page}
+							onChange={(_, value) => setPage(value)}
+							color="primary"
+						/>
+					</Box>
+				)}
 			</div>
 		</section>
 	);

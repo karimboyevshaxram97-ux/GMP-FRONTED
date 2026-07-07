@@ -1,7 +1,7 @@
-﻿import React from 'react';
+﻿import React, { useState } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@apollo/client';
-import { Rating } from '@mui/material';
+import { Box, Pagination, Rating } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import VerifiedIcon from '@mui/icons-material/Verified';
@@ -10,25 +10,31 @@ import { REACT_APP_API_URL } from '../../config';
 import { useLang } from '../../utils/lang';
 import { useUiLang } from '../../utils/translations';
 
+const PAGE_LIMIT = 4;
+
 const FeaturedAgencies = () => {
 	const tr = useLang();
 	const ui = useUiLang();
-	const { data, loading } = useQuery(GET_AGENCIES, {
+	const [page, setPage] = useState(1);
+	const { data, previousData, loading } = useQuery(GET_AGENCIES, {
 		fetchPolicy: 'cache-and-network',
 		nextFetchPolicy: 'cache-first',
 		variables: {
 			input: {
 				sort: 'AVERAGE_RATING',
 				direction: 'DESC',
-				page: 1,
-				limit: 4,
+				page,
+				limit: PAGE_LIMIT,
 				status: 'ACTIVE',
 				verificationStatus: 'VERIFIED',
 			},
 		},
 	});
 
-	const agencies: any[] = data?.getAgencies?.list ?? [];
+	const view = data ?? previousData;
+	const agencies: any[] = view?.getAgencies?.list ?? [];
+	const total: number = view?.getAgencies?.metaCounter?.[0]?.total ?? 0;
+	const showSkeletons = loading && agencies.length === 0;
 
 	// Deterministic gradient palette so each agency without an image looks distinct
 	const PLACEHOLDER_GRADIENTS = [
@@ -60,8 +66,8 @@ const FeaturedAgencies = () => {
 				</div>
 
 				<div className="home-featured-agencies__grid">
-					{loading
-						? Array(4).fill(0).map((_, i) => (
+					{showSkeletons
+						? Array(PAGE_LIMIT).fill(0).map((_, i) => (
 							<div key={i} className="agency-skeleton">
 								<div className="sk-img" />
 								<div className="sk-body">
@@ -114,7 +120,7 @@ const FeaturedAgencies = () => {
 											<span>{(agency.averageRating ?? 0).toFixed(1)} ({agency.totalReviews})</span>
 										</div>
 										<div className="card-actions">
-											<button className="profile-button" style={{ marginLeft: 'auto', background: 'none', border: '1px solid #1649ff', color: '#1649ff', borderRadius: 8, padding: '5px 14px', fontSize: 13, fontWeight: 800, cursor: 'pointer' }}>
+											<button className="profile-button">
 												{ui('map.viewProfile')}
 											</button>
 										</div>
@@ -123,6 +129,17 @@ const FeaturedAgencies = () => {
 							</Link>
 						))}
 				</div>
+
+				{total > PAGE_LIMIT && (
+					<Box className="home-featured-agencies__pagination">
+						<Pagination
+							count={Math.ceil(total / PAGE_LIMIT)}
+							page={page}
+							onChange={(_, value) => setPage(value)}
+							color="primary"
+						/>
+					</Box>
+				)}
 			</div>
 		</section>
 	);
