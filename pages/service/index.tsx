@@ -11,13 +11,11 @@ import {
 	Box,
 	Grid,
 	Pagination,
-	TextField,
 	Select,
 	MenuItem,
 	FormControl,
 	Button,
 	Chip,
-	InputAdornment,
 	Slider,
 	Skeleton,
 } from '@mui/material';
@@ -67,7 +65,6 @@ const ServiceList: NextPage = () => {
 	const router = useRouter();
 	const user = useReactiveVar(userVar);
 	const [search, setSearch] = useState('');
-	const [inputValue, setInputValue] = useState('');
 	const [serviceType, setServiceType] = useState('');
 	const [country, setCountry] = useState('');
 	const [sort, setSort] = useState(ServiceSortField.SERVICE_RANK);
@@ -88,7 +85,6 @@ const ServiceList: NextPage = () => {
 		const queryCountry = typeof router.query.country === 'string' ? router.query.country : '';
 		setServiceType(type);
 		setSearch(text);
-		setInputValue(text);
 		setCountry(queryCountry);
 		setPage(1);
 	}, [router.query.type, router.query.text, router.query.country]);
@@ -140,11 +136,6 @@ const ServiceList: NextPage = () => {
 		refetchAgencies();
 	};
 
-	const handleSearch = (event: React.FormEvent) => {
-		event.preventDefault();
-		pushServiceFilters({ type: serviceType, text: inputValue.trim(), country });
-	};
-
 	const resetFilters = () => {
 		setSort(ServiceSortField.SERVICE_RANK);
 		setPriceRange([0, 5000]);
@@ -175,40 +166,6 @@ const ServiceList: NextPage = () => {
 						{serviceType === ServiceType.VISA_SERVICES && ui('service.professionalVisaAssistanceForEvery')}
 						{!serviceType && ui('service.searchVisaStudyWorkAnd')}
 					</p>
-					<Box component="form" className="service-hero-search" onSubmit={handleSearch}>
-						<TextField
-							fullWidth
-							placeholder={ui('service.searchByServiceNameOr')}
-							value={inputValue}
-							onChange={(event) => setInputValue(event.target.value)}
-							InputProps={{
-								startAdornment: (
-									<InputAdornment position="start">
-										<SearchIcon />
-									</InputAdornment>
-								),
-							}}
-						/>
-						<Button type="submit" variant="contained" size="large">
-							{ui('agency.search')}
-						</Button>
-					</Box>
-					<Box className="hero-stats">
-						<div className="stat-item">
-							<div className="number">{total || '200'}+</div>
-							<div className="label">{ui('service.servicesAvailable')}</div>
-						</div>
-						<div className="stat-divider" />
-						<div className="stat-item">
-							<div className="number">4</div>
-							<div className="label">{ui('service.serviceCategories')}</div>
-						</div>
-						<div className="stat-divider" />
-						<div className="stat-item">
-							<div className="number">$0–$5k</div>
-							<div className="label">{ui('service.priceRange')}</div>
-						</div>
-					</Box>
 				</Box>
 				<div className="scroll-indicator">
 					<div className="scroll-dot" />

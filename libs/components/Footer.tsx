@@ -184,29 +184,6 @@ const Footer = () => {
 					</div>
 				</div>
 
-				{/* Stats strip */}
-				<div className="footer-stats animate-in">
-					<div className="fstat">
-						<span className="fstat-num">200+</span>
-						<span className="fstat-label">{ui('agency.services')}</span>
-					</div>
-					<div className="fstat-sep" />
-					<div className="fstat">
-						<span className="fstat-num">50+</span>
-						<span className="fstat-label">{ui('agency.agencies')}</span>
-					</div>
-					<div className="fstat-sep" />
-					<div className="fstat">
-						<span className="fstat-num">30+</span>
-						<span className="fstat-label">{ui('mypage.countries')}</span>
-					</div>
-					<div className="fstat-sep" />
-					<div className="fstat">
-						<span className="fstat-num">10k+</span>
-						<span className="fstat-label">{ui('footer.clientsServed')}</span>
-					</div>
-				</div>
-
 				{/* Bottom bar */}
 				<div className="footer-bottom-bar">
 					<span>© {new Date().getFullYear()} GMP - {ui('footer.globalMigrationPlatformAllRights')}</span>

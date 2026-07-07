@@ -15,15 +15,6 @@ import withLayoutMain from '../../libs/components/layout/LayoutHome';
 import { CREATE_SUPPORT_TICKET } from '../../apollo/user/mutation';
 import { useUiLang } from '../../libs/utils/translations';
 
-const categories = [
-	{ icon: '🎓', label: 'Study Abroad', count: 12 },
-	{ icon: '💼', label: 'Work Permits', count: 8 },
-	{ icon: '✈️', label: 'Travel & Visa', count: 15 },
-	{ icon: '🏢', label: 'Agencies', count: 6 },
-	{ icon: '📋', label: 'Applications', count: 10 },
-	{ icon: '💳', label: 'Payments', count: 5 },
-];
-
 const faqs = [
 	{
 		cat: 'Getting Started',
@@ -368,14 +359,6 @@ const HelpPage: NextPage = () => {
 				delay: stagger(80, { start: 100 }),
 				ease: 'outExpo',
 			});
-			animate('.cat-card', {
-				opacity: [0, 1],
-				translateY: [24, 0],
-				scale: [0.95, 1],
-				duration: 500,
-				delay: stagger(55, { start: 400 }),
-				ease: 'outExpo',
-			});
 			animate('.faq-row', {
 				opacity: [0, 1],
 				translateX: [-20, 0],
@@ -434,21 +417,6 @@ const HelpPage: NextPage = () => {
 							value={search}
 							onChange={(e) => setSearch(e.target.value)}
 						/>
-					</div>
-				</Container>
-			</section>
-
-			{/* ── CATEGORIES ── */}
-			<section className="hp-categories">
-				<Container maxWidth="lg">
-					<div className="cat-grid">
-						{categories.map((cat, i) => (
-							<div key={i} className="cat-card">
-								<div className="cat-emoji">{cat.icon}</div>
-								<div className="cat-label">{ui(cat.label)}</div>
-								<div className="cat-count">{cat.count} {ui('help.articles')}</div>
-							</div>
-						))}
 					</div>
 				</Container>
 			</section>

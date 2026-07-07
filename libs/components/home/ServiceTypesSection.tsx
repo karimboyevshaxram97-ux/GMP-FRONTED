@@ -6,32 +6,24 @@ import { useUiLang } from '../../utils/translations';
 const serviceTypes = [
 	{
 		key: 'study',
-		emoji: '🎓',
-		count: '120+ Programs',
 		title: 'Study Abroad',
 		desc: 'Top universities in Europe, Asia, and America. Scholarships and full support included.',
 		href: '/service?type=STUDY_ABROAD',
 	},
 	{
 		key: 'work',
-		emoji: '💼',
-		count: '200+ Opportunities',
 		title: 'Work Abroad',
 		desc: 'Find your dream job overseas. Work permits, job placement, and relocation assistance.',
 		href: '/service?type=WORK_ABROAD',
 	},
 	{
 		key: 'travel',
-		emoji: '✈️',
-		count: '80+ Packages',
 		title: 'Travel',
 		desc: 'Explore the world with curated travel packages. Hotels, tours, and experiences.',
 		href: '/service?type=TRAVEL',
 	},
 	{
 		key: 'visa',
-		emoji: '🛂',
-		count: '150+ Services',
 		title: 'Visa Services',
 		desc: 'Fast, reliable visa processing. Tourist, student, and work visas worldwide.',
 		href: '/service?type=VISA_SERVICES',
@@ -60,8 +52,6 @@ const ServiceTypesSection = () => {
 						<Link href={s.href} key={s.key} style={{ textDecoration: 'none' }}>
 							<div className={`stype-card stype-card--${s.key}`}>
 								<div className="stype-card__shine" />
-								<div className="stype-card__icon">{s.emoji}</div>
-								<div className="stype-card__count">{ui(s.count)}</div>
 								<h3>{ui(s.title)}</h3>
 								<p>{ui(s.desc)}</p>
 								<div className="stype-card__link">

@@ -6,14 +6,12 @@ import {
 	Box,
 	Grid,
 	Pagination,
-	TextField,
 	Select,
 	MenuItem,
 	InputLabel,
 	FormControl,
 	Button,
 	Chip,
-	InputAdornment,
 	Skeleton,
 } from '@mui/material';
 import { useQuery, useMutation, useReactiveVar } from '@apollo/client';
@@ -43,7 +41,6 @@ const AgencyHome: NextPage = () => {
 	const router = useRouter();
 	const user = useReactiveVar(userVar);
 	const [search, setSearch] = useState('');
-	const [inputValue, setInputValue] = useState('');
 	const [sort, setSort] = useState(AgencySortField.AGENCY_RANK);
 	const [page, setPage] = useState(1);
 
@@ -89,25 +86,6 @@ const AgencyHome: NextPage = () => {
 		refetchFeatured();
 	};
 
-	const visibleCountries = useMemo(() => {
-		const countries = new Set<string>();
-		agencies.forEach((agency) => agency.operatingCountries?.forEach((country) => countries.add(country)));
-		return countries.size;
-	}, [agencies]);
-
-	const averageRating = useMemo(() => {
-		const ratedAgencies = agencies.filter((agency) => agency.averageRating > 0);
-		if (!ratedAgencies.length) return '0.0';
-		const totalRating = ratedAgencies.reduce((sum, agency) => sum + agency.averageRating, 0);
-		return (totalRating / ratedAgencies.length).toFixed(1);
-	}, [agencies]);
-
-	const handleSearch = (event: React.FormEvent) => {
-		event.preventDefault();
-		setSearch(inputValue.trim());
-		setPage(1);
-	};
-
 	const handleSortChange = (value: AgencySortField) => {
 		setSort(value);
 		setPage(1);
@@ -115,7 +93,6 @@ const AgencyHome: NextPage = () => {
 
 	const clearSearch = () => {
 		setSearch('');
-		setInputValue('');
 		setPage(1);
 	};
 
@@ -143,40 +120,6 @@ const AgencyHome: NextPage = () => {
 					<p className="hero-subtitle">
 						{ui('agency.compareTrustedAgenciesByReviews')}
 					</p>
-					<Box component="form" className="agency-hero-search" onSubmit={handleSearch}>
-						<TextField
-							fullWidth
-							placeholder={ui('agency.searchByAgencyNameOr')}
-							value={inputValue}
-							onChange={(event) => setInputValue(event.target.value)}
-							InputProps={{
-								startAdornment: (
-									<InputAdornment position="start">
-										<SearchIcon />
-									</InputAdornment>
-								),
-							}}
-						/>
-						<Button type="submit" variant="contained" size="large">
-							{ui('agency.search')}
-						</Button>
-					</Box>
-					<Box className="hero-stats">
-						<div className="stat-item">
-							<div className="number">{total || '100'}+</div>
-							<div className="label">{ui('agency.agenciesListed')}</div>
-						</div>
-						<div className="stat-divider" />
-						<div className="stat-item">
-							<div className="number">{visibleCountries || '40'}+</div>
-							<div className="label">{ui('agency.countriesCovered')}</div>
-						</div>
-						<div className="stat-divider" />
-						<div className="stat-item">
-							<div className="number">{averageRating}</div>
-							<div className="label">{ui('agency.averageRating')}</div>
-						</div>
-					</Box>
 				</Box>
 				<div className="scroll-indicator">
 					<div className="scroll-dot" />

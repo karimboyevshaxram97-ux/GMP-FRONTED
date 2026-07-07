@@ -1,6 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useUiLang } from '../../utils/translations';
 
 const HeroSection = () => {
@@ -26,19 +24,6 @@ const HeroSection = () => {
 					<p className="home-hero__subtitle">
 						{ui('home.connectWith500TrustedImmigration')}
 					</p>
-
-					<div className="home-hero__actions">
-						<Link href="/agency">
-							<button className="hero-btn hero-btn--primary">
-								{ui('home.exploreAgencies')} <ArrowForwardIcon />
-							</button>
-						</Link>
-						<Link href="/service">
-							<button className="hero-btn hero-btn--outline">
-								{ui('home.browseServices')}
-							</button>
-						</Link>
-					</div>
 				</div>
 			</div>
 
