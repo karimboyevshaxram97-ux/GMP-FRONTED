@@ -30,6 +30,8 @@ import '../scss/pc/service/service.scss';
 import '../scss/pc/help/help.scss';
 import '../scss/pc/chat/chat.scss';
 import 'leaflet/dist/leaflet.css';
+// Tungi rejim: ENG OXIRIDA import qilinadi — dark qoidalari ustun bo'lishi uchun
+import '../scss/dark.scss';
 
 const App = ({ Component, pageProps }: AppProps) => {
 	// @ts-ignore

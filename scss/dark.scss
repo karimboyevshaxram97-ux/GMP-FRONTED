@@ -1,0 +1,535 @@
+// ═════════════════════════════════════════════════════════════
+//  TUNGI REJIM (dark mode)
+//  <html class="dark"> bo'lganda butun sayt qora tusga o'tadi.
+//  Bu fayl _app.tsx da ENG OXIRIDA import qilinadi — teng
+//  spetsifiklikda ham dark qoidalari ustun bo'lishi uchun.
+// ═════════════════════════════════════════════════════════════
+@import './variables';
+
+html.dark {
+	// ── Palitra ──────────────────────────────────────────────
+	--dk-bg: #0b0e1a;          // sahifa foni
+	--dk-bg-2: #0e1424;        // navbatlashgan bo'lim foni
+	--dk-surface: #141b30;     // karta / panel
+	--dk-surface-2: #1b2440;   // ichki / hover yuzalar
+	--dk-border: rgba(255, 255, 255, 0.09);
+	--dk-border-strong: rgba(255, 255, 255, 0.16);
+	--dk-text: #e8edf9;
+	--dk-text-2: #a7b1cc;
+	--dk-muted: #707b9b;
+
+	color-scheme: dark;
+
+	body {
+		background: var(--dk-bg);
+		color: var(--dk-text);
+	}
+
+	// ── Umumiy kartalar (agency/service — general.scss) ──────
+	.agency-card,
+	.service-card {
+		background: var(--dk-surface);
+		border-color: var(--dk-border);
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+
+		h3 { color: var(--dk-text); }
+
+		.card-image { background: var(--dk-surface-2); }
+
+		.agency-title-row span {
+			background: rgba(78, 127, 255, 0.16);
+			color: #9db4ff;
+		}
+
+		.agency-description,
+		.country-row,
+		.rating-row,
+		.agency-metrics span,
+		.service-card-desc,
+		.service-meta-row {
+			color: var(--dk-text-2);
+		}
+
+		.like-btn {
+			background: rgba(20, 27, 48, 0.92);
+			border-color: var(--dk-border);
+			color: var(--dk-text-2);
+
+			&.active { background: #ff4757; color: #fff; }
+		}
+
+		.action-btn,
+		.service-action-btn {
+			border-color: var(--dk-border);
+			color: var(--dk-text-2);
+		}
+
+		.verified-badge { background: var(--dk-surface-2); }
+	}
+
+	.card-footer,
+	.service-card-footer { border-color: var(--dk-border); }
+
+	// glass-button-dark bilan chizilgan tugmalar qora fonda oq glass bo'ladi
+	.profile-button,
+	.btn-glass-dark,
+	.filter-reset {
+		background: $glass-bg;
+		border-color: $glass-border;
+		color: #fff;
+
+		&:hover:not(:disabled) {
+			background: $glass-bg-hover;
+			border-color: rgba(255, 255, 255, 0.28);
+			color: #fff;
+		}
+	}
+
+	.status-chip {
+		&.verified { background: rgba(76, 175, 80, 0.16); color: #7ee08a; }
+		&.pending  { background: rgba(255, 152, 0, 0.16);  color: #ffc069; }
+		&.active   { background: rgba(33, 150, 243, 0.16); color: #7cc3ff; }
+	}
+
+	// ── MUI umumiy (menyular, dialoglar, formalar, jadvallar) ─
+	.MuiPaper-root {
+		background: var(--dk-surface);
+		color: var(--dk-text);
+		border-color: var(--dk-border);
+	}
+
+	.MuiDivider-root { border-color: var(--dk-border); }
+
+	.MuiMenuItem-root {
+		color: var(--dk-text);
+		&:hover { background: var(--dk-surface-2); }
+	}
+
+	.MuiTypography-root { color: inherit; }
+	.MuiTypography-root[class*='colorTextSecondary'] { color: var(--dk-text-2); }
+
+	.MuiOutlinedInput-root {
+		background: var(--dk-surface-2) !important;
+		color: var(--dk-text);
+
+		.MuiOutlinedInput-notchedOutline { border-color: var(--dk-border-strong); }
+		&:hover .MuiOutlinedInput-notchedOutline { border-color: rgba(157, 180, 255, 0.4); }
+		&.Mui-focused { background: var(--dk-surface) !important; }
+	}
+
+	.MuiInputBase-input { color: var(--dk-text); }
+	.MuiInputBase-input::placeholder { color: var(--dk-muted); opacity: 1; }
+	.MuiInputLabel-root { color: var(--dk-text-2); }
+	.MuiInputAdornment-root { color: var(--dk-muted); }
+	.MuiSvgIcon-root.MuiSelect-icon { color: var(--dk-text-2); }
+
+	.MuiTableHead-root .MuiTableRow-root { background: var(--dk-surface-2); }
+	.MuiTableCell-head { color: var(--dk-text-2); border-color: var(--dk-border); }
+	.MuiTableCell-body { color: var(--dk-text); border-color: var(--dk-border); }
+	.MuiTableRow-root:hover .MuiTableCell-body { background: var(--dk-surface-2); }
+
+	.MuiChip-root { background: var(--dk-surface-2); color: var(--dk-text); }
+	.MuiPaginationItem-root { color: var(--dk-text-2); }
+	.MuiSkeleton-root { background: rgba(255, 255, 255, 0.08); }
+
+	.MuiButton-outlinedPrimary.MuiButton-outlinedPrimary {
+		background: $glass-bg;
+		border-color: $glass-border;
+		color: #fff;
+
+		&:hover:not(:disabled) {
+			background: $glass-bg-hover;
+			border-color: rgba(255, 255, 255, 0.28);
+		}
+	}
+
+	// ── Bosh sahifa: yorug' bo'limlar ─────────────────────────
+	.home-search { background: var(--dk-bg); }
+
+	.home-search__card {
+		background: var(--dk-surface);
+		border-color: var(--dk-border);
+		box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+
+		input, select { color: var(--dk-text); background: transparent; }
+		input::placeholder { color: var(--dk-muted); }
+	}
+
+	.home-search__input-wrap,
+	.home-search__select {
+		background: var(--dk-surface-2);
+		border-color: transparent;
+
+		&:focus-within { background: var(--dk-surface); }
+
+		select option { background: var(--dk-surface); color: var(--dk-text); }
+	}
+
+	.home-service-types {
+		background: linear-gradient(145deg, #0d1226 0%, #131a30 45%, #0b1120 100%);
+
+		&__header {
+			h2 { color: var(--dk-text); }
+			p { color: var(--dk-text-2); }
+		}
+	}
+
+	.stype-card {
+		background: rgba(255, 255, 255, 0.05);
+		border-color: rgba(255, 255, 255, 0.12);
+		box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+
+		h3 { color: var(--dk-text); }
+		p { color: var(--dk-text-2); }
+		&__shine { background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent); }
+	}
+
+	.home-how {
+		background: var(--dk-bg-2);
+
+		h2 { color: var(--dk-text); }
+		p { color: var(--dk-text-2); }
+	}
+
+	.home-featured-agencies,
+	.top-agencies {
+		background: var(--dk-bg);
+	}
+
+	.home-featured-services { background: var(--dk-bg-2); }
+
+	.home-featured-agencies,
+	.home-featured-services,
+	.top-agencies,
+	.home-how {
+		.header-left h2, .top-agencies__head h2, h2 { color: var(--dk-text); }
+		.header-left p, .top-agencies__head p, p { color: var(--dk-text-2); }
+	}
+
+	.top-agencies__card {
+		background: var(--dk-surface);
+		border-color: var(--dk-border);
+
+		h3, strong, .top-agencies__name { color: var(--dk-text); }
+	}
+
+	.home-featured-agencies .agency-skeleton,
+	.home-featured-services .service-card {
+		background: var(--dk-surface);
+		border-color: var(--dk-border);
+	}
+
+	.sk-img, .sk-line, .sk-line-sm, .sk-body div {
+		background: rgba(255, 255, 255, 0.08) !important;
+	}
+
+	.section-tag {
+		background: rgba(78, 127, 255, 0.14);
+		color: #9db4ff;
+	}
+
+	// AI yordamchi modali
+	.ai-assist-modal { background: var(--dk-surface); }
+	.ai-assist-body { background: var(--dk-bg); }
+	.ai-msg-bot { background: var(--dk-surface-2); color: var(--dk-text); }
+	.ai-assist-footer { background: var(--dk-surface); border-color: var(--dk-border); }
+
+	// ── Service sahifasi ──────────────────────────────────────
+	.services-page,
+	.service-detail-page {
+		background: var(--dk-bg);
+	}
+
+	.type-tab {
+		background: var(--dk-surface);
+		border-color: var(--dk-border);
+
+		.type-tab-label { color: var(--dk-text); }
+		.type-tab-sub { color: var(--dk-muted); }
+	}
+
+	.service-filter-panel,
+	.service-results-head,
+	.empty-services,
+	.related-agencies-panel {
+		background: var(--dk-surface);
+		border-color: var(--dk-border);
+		box-shadow: none;
+
+		h2, h3, .panel-title, label { color: var(--dk-text); }
+		p, span { color: var(--dk-text-2); }
+		.price-label { color: var(--dk-text); }
+	}
+
+	.service-detail-hero {
+		background:
+			radial-gradient(circle at top right, rgba(78, 127, 255, 0.14), transparent 32%),
+			linear-gradient(135deg, var(--dk-bg-2) 0%, var(--dk-surface) 100%);
+		border-color: var(--dk-border);
+
+		h1 { color: var(--dk-text); }
+	}
+
+	// ── Agency sahifasi ───────────────────────────────────────
+	.agencies-page { background: var(--dk-bg); }
+
+	.agency-toolbar,
+	.empty-agencies {
+		background: var(--dk-surface);
+		border-color: var(--dk-border);
+
+		h2, h3 { color: var(--dk-text); }
+		p { color: var(--dk-text-2); }
+	}
+
+	.section-heading h2 { color: var(--dk-text); }
+
+	// ── Agency detail ─────────────────────────────────────────
+	.agency-detail { background: var(--dk-bg); }
+
+	.agency-detail .agency-identity,
+	.agency-detail .profile-metrics,
+	.profile-section,
+	.contact-card,
+	.review-item,
+	.inline-msg-box,
+	.msg-sent-box {
+		background: var(--dk-surface);
+		border-color: var(--dk-border);
+
+		h1, h2, h3, h4, strong { color: var(--dk-text); }
+		p, span, li { color: var(--dk-text-2); }
+	}
+
+	.profile-tabs {
+		background: var(--dk-surface);
+		border-color: var(--dk-border);
+	}
+
+	.inline-msg-textarea {
+		background: var(--dk-surface-2);
+		border-color: var(--dk-border-strong);
+		color: var(--dk-text);
+		&::placeholder { color: var(--dk-muted); }
+	}
+
+	// ── Mypage ────────────────────────────────────────────────
+	.mypage { background: var(--dk-bg); }
+
+	.mypage-content-card {
+		background: var(--dk-surface);
+		border-color: var(--dk-border);
+
+		h2, strong, label { color: var(--dk-text); }
+	}
+
+	.menu-list .menu-item {
+		color: var(--dk-text-2);
+		border-color: var(--dk-border);
+
+		&:hover, &.active {
+			background: rgba(78, 127, 255, 0.12);
+			color: #9db4ff;
+		}
+
+		b { background: rgba(78, 127, 255, 0.16); color: #9db4ff; }
+	}
+
+	.content-head h2 { color: var(--dk-text); }
+
+	.list-row {
+		border-color: var(--dk-border);
+		strong { color: var(--dk-text); }
+		&.clickable:hover { background: var(--dk-surface-2); }
+	}
+
+	// ── Xabarlar (messages) ───────────────────────────────────
+	.messages-page { background: var(--dk-bg); }
+
+	.msg-layout,
+	.msg-sidebar,
+	.msg-main,
+	.msg-sidebar-header,
+	.msg-chat-header,
+	.msg-chat-input,
+	.msg-chat-empty,
+	.msg-empty-main,
+	.msg-empty-sidebar {
+		background: var(--dk-surface);
+		border-color: var(--dk-border);
+	}
+
+	.msg-sidebar-title, .msg-empty-main h3, .msg-chat-empty h3 { color: var(--dk-text); }
+	.msg-empty-main p, .msg-chat-empty p, .msg-empty-sidebar { color: var(--dk-text-2); }
+
+	.msg-search-wrap {
+		background: var(--dk-surface-2);
+		border-color: var(--dk-border-strong);
+	}
+
+	.msg-search-input {
+		background: transparent;
+		color: var(--dk-text);
+		&::placeholder { color: var(--dk-muted); }
+	}
+
+	.msg-conv-row {
+		border-color: var(--dk-border);
+		&:hover { background: var(--dk-surface-2); }
+		&.active { background: rgba(78, 127, 255, 0.12); }
+	}
+
+	.msg-conv-name, .msg-header-name { color: var(--dk-text); }
+	.msg-conv-preview, .msg-conv-time, .msg-header-sub { color: var(--dk-muted); }
+
+	.msg-chat-messages { background: var(--dk-bg); }
+
+	.msg-bubble.bubble-theirs {
+		background: var(--dk-surface-2);
+		box-shadow: none;
+		.msg-text { color: var(--dk-text); }
+	}
+
+	// ── Help sahifasi ─────────────────────────────────────────
+	.help-page { background: var(--dk-bg); }
+
+	.hp-faq .faq-list {
+		background: var(--dk-surface);
+		border-color: var(--dk-border);
+	}
+
+	.faq-row {
+		border-color: var(--dk-border);
+		&:hover { background: var(--dk-surface-2); }
+		&.open { background: var(--dk-surface-2); }
+
+		.faq-q { color: var(--dk-text); }
+		.faq-body p { color: var(--dk-text-2); }
+		.faq-cat { background: rgba(78, 127, 255, 0.16); }
+	}
+
+	.hp-section-head {
+		h2 { color: var(--dk-text); }
+		p { color: var(--dk-text-2); }
+	}
+
+	.hp-section-tag { background: rgba(78, 127, 255, 0.14); }
+
+	.hp-contact .contact-right {
+		background: var(--dk-surface);
+
+		h3 { color: var(--dk-text); }
+		p, label { color: var(--dk-text-2); }
+
+		input, textarea {
+			background: var(--dk-surface-2);
+			border-color: var(--dk-border-strong);
+			color: var(--dk-text);
+
+			&::placeholder { color: var(--dk-muted); }
+			&:focus { background: var(--dk-surface); }
+		}
+	}
+
+	// ── Join (login/register) ─────────────────────────────────
+	.join-card { background: var(--dk-surface); }
+	.join-right { background: var(--dk-surface); }
+
+	.jr-heading h2, .jr-field label { color: var(--dk-text); }
+
+	.jr-tabs {
+		background: var(--dk-surface-2);
+
+		button { color: var(--dk-muted); }
+		button.active { background: var(--dk-surface); color: #9db4ff; box-shadow: none; }
+	}
+
+	.jr-field input {
+		background: var(--dk-surface-2);
+		border-color: var(--dk-border-strong);
+		color: var(--dk-text);
+
+		&::placeholder { color: var(--dk-muted); }
+		&:focus { background: var(--dk-surface); }
+	}
+
+	.jr-role {
+		background: var(--dk-surface-2);
+		border-color: var(--dk-border-strong);
+
+		strong { color: var(--dk-text); }
+
+		&.active { background: rgba(78, 127, 255, 0.14); }
+	}
+
+	.jr-social-btn--google {
+		background: var(--dk-surface-2);
+		border-color: var(--dk-border-strong);
+		color: var(--dk-text);
+
+		&:hover:not(:disabled) { background: var(--dk-surface); }
+	}
+
+	.join-form-panel { background: rgba(20, 27, 48, 0.97); }
+
+	// ── Xarita sahifasi ───────────────────────────────────────
+	.agency-map-page { background: var(--dk-bg); }
+
+	.agency-map-filters {
+		background: var(--dk-surface);
+		border-color: var(--dk-border);
+		box-shadow: none;
+
+		.filter-search {
+			background: var(--dk-surface-2);
+			border-color: var(--dk-border-strong);
+
+			input { color: var(--dk-text); &::placeholder { color: var(--dk-muted); } }
+		}
+
+		.filter-select {
+			background: var(--dk-surface-2);
+			border-color: var(--dk-border-strong);
+			color: var(--dk-text);
+		}
+
+		.filter-count { color: var(--dk-text-2); }
+	}
+
+	.agency-map-sidebar {
+		background: var(--dk-surface);
+		border-color: var(--dk-border);
+	}
+
+	.agency-map-card {
+		border-color: var(--dk-border);
+		&:hover { background: var(--dk-surface-2); }
+		&.active { background: rgba(13, 148, 136, 0.12); }
+
+		.card-name { color: var(--dk-text); }
+		.card-address, .card-hours { color: var(--dk-text-2); }
+	}
+
+	// ── Admin panel (CSS o'zgaruvchilar orqali) ───────────────
+	.admin-page {
+		--page-bg: #0b0e1a;
+		--card-bg: #141b30;
+		--card-border: rgba(255, 255, 255, 0.09);
+		--heading: #e8edf9;
+
+		.stat-label, .qo-label, .filter-total { color: var(--dk-text-2); }
+		.qo-card { background: var(--dk-surface-2); border-color: var(--dk-border); }
+		.admin-bulk-bar { background: rgba(78, 127, 255, 0.1); border-color: rgba(78, 127, 255, 0.3); }
+		.MuiTableHead-root .MuiTableRow-root { background: var(--dk-surface-2); }
+		.sbi-label { color: var(--dk-text-2); }
+		.sbi-track { background: var(--dk-surface-2); }
+		.dl-item:hover { background: var(--dk-surface-2); }
+		.dl-name { color: var(--dk-text-2); }
+	}
+
+	// ── Pagination (global) ───────────────────────────────────
+	.pagination-box .MuiPaginationItem-root {
+		color: var(--dk-text-2);
+		&.Mui-selected { background: $primary; color: #fff; }
+	}
+}

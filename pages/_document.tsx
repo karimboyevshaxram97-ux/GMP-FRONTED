@@ -16,6 +16,13 @@ export default function Document() {
 				<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 			</Head>
 			<body>
+				{/* Dark rejim tanlovi sahifa chizilishidan OLDIN qo'llanadi (oq "chaqnash" bo'lmasligi uchun) */}
+				<script
+					dangerouslySetInnerHTML={{
+						__html:
+							"(function(){try{if(localStorage.getItem('gmp-theme')==='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();",
+					}}
+				/>
 				<Main />
 				<NextScript />
 			</body>
