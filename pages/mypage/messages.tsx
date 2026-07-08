@@ -152,7 +152,9 @@ const MessagesPage: NextPage = () => {
 	});
 
 	useEffect(() => {
-		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+		// Faqat chat konteynerini pastga tushiramiz — butun sahifani emas
+		const container = messagesEndRef.current?.parentElement;
+		if (container) container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
 	}, [messages]);
 
 	const openConversation = React.useCallback(async (conv: any) => {

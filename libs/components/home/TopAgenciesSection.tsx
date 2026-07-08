@@ -41,7 +41,7 @@ const TopAgenciesSection = () => {
 				</div>
 
 				<div className="top-agencies__grid">
-					{agencies.map((agency, idx) => {
+					{agencies.map((agency) => {
 						const name = tr(agency.name) || ui('auth.agency');
 						const image = agency.coverImage || agency.logo;
 						const rating = agency.averageRating ?? agency.memberData?.memberRank ?? null;
@@ -54,7 +54,6 @@ const TopAgenciesSection = () => {
 								title={name}
 							>
 								<div className="top-agency-card__avatar">
-									<span className="top-agency-card__rank">{idx + 1}</span>
 									<img src={`${REACT_APP_API_URL}/uploads/${image}`} alt={name} />
 								</div>
 								<strong className="top-agency-card__name">{name}</strong>

@@ -696,5 +696,9 @@
 	"mypage.deletePhotoConfirm": "Удалить это фото?",
 	"mypage.photoAdded": "Фото добавлено на доску",
 	"mypage.noPhotosYet": "Пока нет фото. Добавьте первое — оно появится на досках Study/Work/Travel.",
-	"mypage.photoBoardHint": "Фото отображаются на досках Study / Work / Travel. Самые популярные — первыми."
+	"mypage.photoBoardHint": "Фото отображаются на досках Study / Work / Travel. Самые популярные — первыми.",
+	"mypage.finishProfile": "Завершить и посмотреть профиль",
+	"mypage.finishMissing": "Сначала заполните",
+	"mypage.profileCompleted": "Профиль агентства полностью готов!",
+	"mypage.profileCompletedPending": "Все данные заполнены! Профиль станет публичным после подтверждения администратором."
 }

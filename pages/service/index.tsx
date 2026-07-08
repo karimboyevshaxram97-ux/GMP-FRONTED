@@ -61,15 +61,18 @@ const heroTitleMap: Record<string, string> = {
 	[ServiceType.VISA_SERVICES]: 'Visa Services',
 };
 
+const MAX_PRICE = 5000;
+const isServiceType = (value: string): value is ServiceType => Object.values(ServiceType).includes(value as ServiceType);
+
 const ServiceList: NextPage = () => {
 	const ui = useUiLang();
 	const router = useRouter();
 	const user = useReactiveVar(userVar);
 	const [search, setSearch] = useState('');
-	const [serviceType, setServiceType] = useState('');
+	const [serviceType, setServiceType] = useState<ServiceType | ''>('');
 	const [country, setCountry] = useState('');
 	const [sort, setSort] = useState(ServiceSortField.SERVICE_RANK);
-	const [priceRange, setPriceRange] = useState<number[]>([0, 5000]);
+	const [priceRange, setPriceRange] = useState<number[]>([0, MAX_PRICE]);
 	const [page, setPage] = useState(1);
 
 	const pushServiceFilters = (filters: { type?: string; text?: string; country?: string }) => {
@@ -81,7 +84,8 @@ const ServiceList: NextPage = () => {
 	};
 
 	useEffect(() => {
-		const type = typeof router.query.type === 'string' ? router.query.type : '';
+		const rawType = typeof router.query.type === 'string' ? router.query.type : '';
+		const type = isServiceType(rawType) ? rawType : '';
 		const text = typeof router.query.text === 'string' ? router.query.text : '';
 		const queryCountry = typeof router.query.country === 'string' ? router.query.country : '';
 		setServiceType(type);
@@ -97,7 +101,7 @@ const ServiceList: NextPage = () => {
 				serviceType: serviceType || undefined,
 				destinationCountry: country || undefined,
 				minPrice: priceRange[0] > 0 ? priceRange[0] : undefined,
-				maxPrice: priceRange[1],
+				maxPrice: priceRange[1] < MAX_PRICE ? priceRange[1] : undefined,
 				sort,
 				direction: SortDirection.DESC,
 				page,
@@ -139,7 +143,7 @@ const ServiceList: NextPage = () => {
 
 	const resetFilters = () => {
 		setSort(ServiceSortField.SERVICE_RANK);
-		setPriceRange([0, 5000]);
+		setPriceRange([0, MAX_PRICE]);
 		pushServiceFilters({});
 	};
 
@@ -186,7 +190,6 @@ const ServiceList: NextPage = () => {
 							style={{ '--tab-color': option.color, '--tab-bg': option.bg, '--tab-shadow': option.shadow } as React.CSSProperties}
 							onClick={() => pushServiceFilters({ type: option.value, text: search, country })}
 						>
-							<span className="type-tab-icon">{option.icon}</span>
 							<span className="type-tab-body">
 								<span className="type-tab-label">{ui(option.label)}</span>
 								<span className="type-tab-sub">{ui(option.sub)}</span>
@@ -194,8 +197,6 @@ const ServiceList: NextPage = () => {
 						</button>
 					))}
 				</Box>
-
-				<PhotoBoard serviceType={serviceType} />
 
 				<Box className="services-layout">
 					<Box className="service-filter-panel">
@@ -223,7 +224,7 @@ const ServiceList: NextPage = () => {
 								setPage(1);
 							}}
 							min={0}
-							max={5000}
+							max={MAX_PRICE}
 							step={100}
 							valueLabelDisplay="auto"
 						/>
@@ -325,6 +326,9 @@ const ServiceList: NextPage = () => {
 						)}
 					</Box>
 				</Box>
+
+				{/* Foto lavha — agentlik va xizmat kartalaridan pastda, faqat tanlangan boardda */}
+				{serviceType && <PhotoBoard serviceType={serviceType} />}
 			</Stack>
 		</div>
 	);

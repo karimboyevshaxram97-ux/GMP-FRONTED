@@ -696,5 +696,9 @@
 	"mypage.deletePhotoConfirm": "Delete this photo?",
 	"mypage.photoAdded": "Photo added to the board",
 	"mypage.noPhotosYet": "No photos yet. Add your first photo — it will appear on the Study/Work/Travel boards.",
-	"mypage.photoBoardHint": "Photos appear on the Study / Work / Travel boards. The most liked photos are shown first."
+	"mypage.photoBoardHint": "Photos appear on the Study / Work / Travel boards. The most liked photos are shown first.",
+	"mypage.finishProfile": "Finish and view my profile",
+	"mypage.finishMissing": "Please complete these first",
+	"mypage.profileCompleted": "Your agency profile is complete!",
+	"mypage.profileCompletedPending": "All info is complete! Your profile will go public once an admin verifies your agency."
 }

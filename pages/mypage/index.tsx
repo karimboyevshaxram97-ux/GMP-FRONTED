@@ -36,6 +36,12 @@ import AgencyPhotos from '../../libs/components/mypage/AgencyPhotos';
 
 // ── Helper components ────────────────────────────────────────────────────────
 
+const optionalNumber = (value: string): number | undefined => {
+	if (!value.trim()) return undefined;
+	const parsed = Number(value);
+	return Number.isFinite(parsed) ? parsed : undefined;
+};
+
 function FollowingAgencyRow({ follow, onOpen }: { follow: any; onOpen: () => void }) {
 	const tr = useLang();
 	const ui = useUiLang();
@@ -232,9 +238,10 @@ const MyPage: NextPage = () => {
 	const agencyServices: any[] = agencyServicesData?.getServicesByAgency ?? [];
 	const agencyApplications: any[] = agencyAppsData?.applicationsByAgency ?? [];
 
-	// Scroll to bottom when messages change
+	// Scroll to bottom when messages change (faqat chat konteyneri, sahifa emas)
 	useEffect(() => {
-		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+		const container = messagesEndRef.current?.parentElement;
+		if (container) container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
 	}, [messages]);
 
 	const openConversation = async (conversation: any) => {
@@ -295,6 +302,26 @@ const MyPage: NextPage = () => {
 		} finally {
 			setAvatarUploading(false);
 			if (avatarInputRef.current) avatarInputRef.current.value = '';
+		}
+	};
+
+	// Agentlik profilini yakunlash: to'liqlik tekshiruvi, so'ng ommaviy profil
+	const handleFinishProfile = async () => {
+		const missing: string[] = [];
+		if (!myAgency?.logo) missing.push('Logo');
+		if (!myAgency?.coverImage) missing.push('Cover');
+		if (!tr(myAgency?.description)) missing.push(ui('mypage.description'));
+		if (!myAgency?.phoneNumber) missing.push(ui('auth.phoneNumber'));
+		if (missing.length) {
+			await sweetMixinErrorAlert(`${ui('mypage.finishMissing')}: ${missing.join(', ')}`);
+			return;
+		}
+		if (isAgencyVerified) {
+			await sweetMixinSuccessAlert(ui('mypage.profileCompleted'));
+			router.push(`/agency/${myAgency._id}`);
+		} else {
+			// Hali admin tasdiqlamagan — ommaviy sahifa mavjud emas
+			await sweetMixinSuccessAlert(ui('mypage.profileCompletedPending'));
 		}
 	};
 
@@ -359,8 +386,8 @@ const MyPage: NextPage = () => {
 						city: agencyCity || undefined,
 						country: agencyHqCountry || undefined,
 						address: agencyAddress || undefined,
-						latitude: agencyLat ? parseFloat(agencyLat) : undefined,
-						longitude: agencyLng ? parseFloat(agencyLng) : undefined,
+						latitude: optionalNumber(agencyLat),
+						longitude: optionalNumber(agencyLng),
 					},
 				},
 			});
@@ -395,8 +422,8 @@ const MyPage: NextPage = () => {
 						city: editCity || undefined,
 						country: editHqCountry || undefined,
 						address: editAddress || undefined,
-						latitude: editLat ? parseFloat(editLat) : undefined,
-						longitude: editLng ? parseFloat(editLng) : undefined,
+						latitude: optionalNumber(editLat),
+						longitude: optionalNumber(editLng),
 					},
 				},
 			});
@@ -436,6 +463,7 @@ const MyPage: NextPage = () => {
 			const sourceCountries = svcSources.split(',').map((s) => s.trim()).filter(Boolean);
 			const nameObj = { en: svcName, uz: svcName, ru: svcName, ko: svcName };
 			const descObj = svcDesc ? { en: svcDesc, uz: svcDesc, ru: svcDesc, ko: svcDesc } : undefined;
+			const servicePrice = optionalNumber(svcPrice);
 			if (editingService) {
 				await updateService({
 					variables: {
@@ -446,7 +474,7 @@ const MyPage: NextPage = () => {
 							serviceType: svcType,
 							destinationCountry: svcDest,
 							sourceCountries,
-							price: svcPrice ? parseFloat(svcPrice) : undefined,
+							price: servicePrice,
 							processingTime: svcProcessing || undefined,
 						},
 					},
@@ -456,7 +484,7 @@ const MyPage: NextPage = () => {
 				await createService({
 					variables: {
 						agencyId: myAgency._id,
-						input: { name: nameObj, description: descObj, serviceType: svcType, destinationCountry: svcDest, sourceCountries, price: svcPrice ? parseFloat(svcPrice) : undefined, processingTime: svcProcessing || undefined },
+						input: { name: nameObj, description: descObj, serviceType: svcType, destinationCountry: svcDest, sourceCountries, price: servicePrice, processingTime: svcProcessing || undefined },
 					},
 				});
 				await sweetMixinSuccessAlert(ui('mypage.serviceCreated'));
@@ -999,6 +1027,21 @@ const MyPage: NextPage = () => {
 								)}
 
 								{myAgency && <AgencyPhotos agencyId={myAgency._id} />}
+
+								{/* Yakunlovchi tugma: to'liqlikni tekshiradi, ommaviy profilga olib boradi */}
+								{myAgency && (
+									<Box sx={{ mt: 4, pt: 3, borderTop: '1px solid rgba(120,140,180,0.2)' }}>
+										<Button
+											fullWidth
+											variant="contained"
+											size="large"
+											startIcon={<CheckCircleIcon />}
+											onClick={handleFinishProfile}
+										>
+											{ui('mypage.finishProfile')}
+										</Button>
+									</Box>
+								)}
 							</Box>
 						)}
 					{/* Tab 5: Agency Services Management */}

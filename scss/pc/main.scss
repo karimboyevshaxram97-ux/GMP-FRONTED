@@ -125,8 +125,8 @@
 			gap: 8px;
 			font-size: 13px;
 			font-weight: 700;
-			padding: 0 20px;
-			height: 38px;
+			padding: 0 16px;
+			height: 32px;
 			justify-content: center;
 			white-space: nowrap;
 			letter-spacing: 0.2px;
@@ -143,16 +143,16 @@
 
 			.login-user {
 				@include glass-button(50%);
-				width: 38px;
-				height: 38px;
+				width: 32px;
+				height: 32px;
 				display: flex;
 				align-items: center;
 				justify-content: center;
 				overflow: hidden;
 
 				img {
-					width: 30px;
-					height: 30px;
+					width: 25px;
+					height: 25px;
 					border-radius: 50%;
 					object-fit: cover;
 				}
@@ -164,7 +164,7 @@
 				padding: 6px;
 
 				svg {
-					font-size: 22px;
+					font-size: 18px;
 				}
 
 				&:hover:not(:disabled) {

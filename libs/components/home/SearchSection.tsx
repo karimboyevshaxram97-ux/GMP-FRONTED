@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import { MenuItem, Select } from '@mui/material';
+import type { SelectChangeEvent } from '@mui/material/Select';
 import SearchIcon from '@mui/icons-material/Search';
 import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
 import PublicOutlinedIcon from '@mui/icons-material/PublicOutlined';
@@ -12,6 +14,26 @@ const SearchSection = () => {
 	const [keyword, setKeyword] = useState('');
 	const [type, setType] = useState('');
 	const [country, setCountry] = useState('');
+
+	const serviceOptions = [
+		{ value: '', label: ui('footer.allServices') },
+		{ value: 'STUDY_ABROAD', label: ui('mypage.studyAbroad') },
+		{ value: 'WORK_ABROAD', label: ui('mypage.workAbroad') },
+		{ value: 'TRAVEL', label: ui('mypage.travel') },
+		{ value: 'VISA_SERVICES', label: ui('mypage.visaServices') },
+	];
+
+	const countryOptions = [
+		{ value: '', label: ui('home.allCountries') },
+		{ value: 'United States', label: ui('home.unitedStates') },
+		{ value: 'United Kingdom', label: ui('home.unitedKingdom') },
+		{ value: 'Germany', label: ui('home.germany') },
+		{ value: 'Canada', label: ui('home.canada') },
+		{ value: 'Australia', label: ui('home.australia') },
+		{ value: 'South Korea', label: ui('home.southKorea') },
+		{ value: 'Japan', label: ui('home.japan') },
+		{ value: 'UAE', label: ui('enum.UAE') },
+	];
 
 	const handleSearch = () => {
 		const params = new URLSearchParams();
@@ -39,28 +61,40 @@ const SearchSection = () => {
 
 					<div className="home-search__select">
 						<CategoryOutlinedIcon />
-						<select value={type} onChange={(e) => setType(e.target.value)}>
-							<option value="">{ui('footer.allServices')}</option>
-							<option value="STUDY_ABROAD">{ui('mypage.studyAbroad')}</option>
-							<option value="WORK_ABROAD">{ui('mypage.workAbroad')}</option>
-							<option value="TRAVEL">{ui('mypage.travel')}</option>
-							<option value="VISA_SERVICES">{ui('mypage.visaServices')}</option>
-						</select>
+						<Select
+							className="home-search__mui-select"
+							value={type}
+							onChange={(e: SelectChangeEvent) => setType(e.target.value)}
+							displayEmpty
+							variant="standard"
+							disableUnderline
+							MenuProps={{ PaperProps: { className: 'home-search-menu' } }}
+						>
+							{serviceOptions.map((option) => (
+								<MenuItem key={option.value || 'all-services'} value={option.value}>
+									{option.label}
+								</MenuItem>
+							))}
+						</Select>
 					</div>
 
 					<div className="home-search__select">
 						<PublicOutlinedIcon />
-						<select value={country} onChange={(e) => setCountry(e.target.value)}>
-							<option value="">{ui('home.allCountries')}</option>
-							<option value="United States">{ui('home.unitedStates')}</option>
-							<option value="United Kingdom">{ui('home.unitedKingdom')}</option>
-							<option value="Germany">{ui('home.germany')}</option>
-							<option value="Canada">{ui('home.canada')}</option>
-							<option value="Australia">{ui('home.australia')}</option>
-							<option value="South Korea">{ui('home.southKorea')}</option>
-							<option value="Japan">{ui('home.japan')}</option>
-							<option value="UAE">{ui('enum.UAE')}</option>
-						</select>
+						<Select
+							className="home-search__mui-select"
+							value={country}
+							onChange={(e: SelectChangeEvent) => setCountry(e.target.value)}
+							displayEmpty
+							variant="standard"
+							disableUnderline
+							MenuProps={{ PaperProps: { className: 'home-search-menu' } }}
+						>
+							{countryOptions.map((option) => (
+								<MenuItem key={option.value || 'all-countries'} value={option.value}>
+									{option.label}
+								</MenuItem>
+							))}
+						</Select>
 					</div>
 
 					<button className="home-search__btn" onClick={handleSearch}>

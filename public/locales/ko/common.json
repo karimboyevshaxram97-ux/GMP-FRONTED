@@ -696,5 +696,9 @@
 	"mypage.deletePhotoConfirm": "이 사진을 삭제할까요?",
 	"mypage.photoAdded": "사진이 보드에 추가되었습니다",
 	"mypage.noPhotosYet": "아직 사진이 없습니다. 첫 사진을 추가하면 Study/Work/Travel 보드에 표시됩니다.",
-	"mypage.photoBoardHint": "사진은 Study / Work / Travel 보드에 표시됩니다. 좋아요가 많은 사진이 먼저 나옵니다."
+	"mypage.photoBoardHint": "사진은 Study / Work / Travel 보드에 표시됩니다. 좋아요가 많은 사진이 먼저 나옵니다.",
+	"mypage.finishProfile": "완료하고 내 프로필 보기",
+	"mypage.finishMissing": "먼저 다음을 완성해 주세요",
+	"mypage.profileCompleted": "에이전시 프로필이 완성되었습니다!",
+	"mypage.profileCompletedPending": "모든 정보가 완성되었습니다! 관리자가 승인하면 프로필이 공개됩니다."
 }

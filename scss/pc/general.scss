@@ -432,15 +432,15 @@
 // ── Theme toggle (site header) ──────────────────────────────
 .theme-toggle {
 	@include glass-button(50%);
-	width: 38px;
-	height: 38px;
+	width: 32px;
+	height: 32px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	color: rgba(255, 255, 255, 0.85);
 	flex-shrink: 0;
 
-	svg { font-size: 20px; }
+	svg { font-size: 17px; }
 
 	&:hover:not(:disabled) { color: #ffffff; }
 }
@@ -451,16 +451,69 @@
 	margin: 8px 0;
 }
 
+// ── Fon musiqasi tugmasi (ixcham, ekvalayzerli) ──────────────
+.music-toggle {
+	@include glass-button(50%);
+	width: 32px;
+	height: 32px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: rgba(255, 255, 255, 0.85);
+	flex-shrink: 0;
+
+	svg { font-size: 16px; }
+
+	&:hover:not(:disabled) { color: #ffffff; }
+
+	// chalinayotganda — accent gradient + nur
+	&.playing {
+		background: $accent-gradient;
+		border-color: transparent;
+		box-shadow: 0 0 18px rgba(78, 127, 255, 0.45);
+	}
+
+	.music-eq {
+		display: flex;
+		align-items: flex-end;
+		gap: 2.5px;
+		height: 14px;
+
+		span {
+			width: 3px;
+			border-radius: 2px;
+			background: #ffffff;
+			animation: musicEq 0.9s ease-in-out infinite;
+
+			&:nth-child(1) { height: 60%; }
+			&:nth-child(2) { height: 100%; animation-delay: 0.2s; }
+			&:nth-child(3) { height: 45%; animation-delay: 0.4s; }
+		}
+	}
+}
+
+@keyframes musicEq {
+	0%, 100% { transform: scaleY(0.45); }
+	50%      { transform: scaleY(1); }
+}
+
+.top > .music-toggle {
+	@include glass-button-dark(50%);
+	margin: 8px 0;
+
+	&.playing { background: $accent-gradient; color: #fff; }
+}
+
 // ── Language Switcher (site header) ─────────────────────────
 .lang-switcher {
 	@include glass-button(8px);
 	display: flex;
 	align-items: center;
 	gap: 7px;
-	height: 38px;
-	padding: 0 12px;
+	height: 32px;
+	padding: 0 10px;
 	font-family: 'Poppins', sans-serif;
-	font-size: 13px;
+	font-size: 12px;
 	font-weight: 600;
 	letter-spacing: 0.2px;
 	white-space: nowrap;

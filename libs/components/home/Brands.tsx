@@ -1,51 +1,60 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { useUiLang } from '../../utils/translations';
 
-// Logolar Simple Icons CDN'dan olinadi: https://cdn.simpleicons.org/<slug>
-const BRANDS = [
-	{ name: 'Google', slug: 'google' },
-	{ name: 'Apple', slug: 'apple' },
-	{ name: 'Samsung', slug: 'samsung' },
-	{ name: 'LG', slug: 'lg' },
-	{ name: 'Naver', slug: 'naver' },
-	{ name: 'Kakao', slug: 'kakao' },
-	{ name: 'Meta', slug: 'meta' },
-	{ name: 'Netflix', slug: 'netflix' },
-	{ name: 'Tesla', slug: 'tesla' },
-	{ name: 'Hyundai', slug: 'hyundai' },
-	{ name: 'Kia', slug: 'kia' },
-	{ name: 'Toyota', slug: 'toyota' },
-	{ name: 'BMW', slug: 'bmw' },
-	{ name: 'Emirates', slug: 'emirates' },
-	{ name: 'Visa', slug: 'visa' },
-	{ name: 'Mastercard', slug: 'mastercard' },
-	{ name: 'PayPal', slug: 'paypal' },
-	{ name: 'Airbnb', slug: 'airbnb' },
-	{ name: 'Booking.com', slug: 'bookingdotcom' },
-	{ name: 'Uber', slug: 'uber' },
-	{ name: 'Spotify', slug: 'spotify' },
-	{ name: 'Nike', slug: 'nike' },
-	{ name: 'Sony', slug: 'sony' },
+// Mashhur yo'nalish davlatlari — chapga oqadigan lenta.
+// Bosilganda o'sha davlat bo'yicha xizmatlar sahifasiga o'tadi.
+const COUNTRIES = [
+	{ code: 'us', name: 'United States' },
+	{ code: 'gb', name: 'United Kingdom' },
+	{ code: 'kr', name: 'South Korea' },
+	{ code: 'de', name: 'Germany' },
+	{ code: 'ca', name: 'Canada' },
+	{ code: 'jp', name: 'Japan' },
+	{ code: 'au', name: 'Australia' },
+	{ code: 'ae', name: 'UAE' },
+	{ code: 'tr', name: 'Turkey' },
+	{ code: 'fr', name: 'France' },
+	{ code: 'it', name: 'Italy' },
+	{ code: 'es', name: 'Spain' },
+	{ code: 'nl', name: 'Netherlands' },
+	{ code: 'se', name: 'Sweden' },
+	{ code: 'ch', name: 'Switzerland' },
+	{ code: 'sg', name: 'Singapore' },
+	{ code: 'my', name: 'Malaysia' },
+	{ code: 'cn', name: 'China' },
+	{ code: 'pl', name: 'Poland' },
+	{ code: 'cz', name: 'Czech Republic' },
+	{ code: 'sa', name: 'Saudi Arabia' },
+	{ code: 'qa', name: 'Qatar' },
 ];
 
 const Brands = () => {
 	const ui = useUiLang();
+	const router = useRouter();
 
 	return (
 		<section className="home-brands">
-			<div className="container home-brands__header">
-				<span className="section-tag">{ui('home.globalBrands')}</span>
-				<h2>{ui('home.trustedByLeaders')}</h2>
-			</div>
-
 			<div className="home-brands__marquee">
 				<div className="home-brands__track">
-					{/* Uzluksiz aylanish uchun ro'yxat ikki marta chiziladi */}
-					{[...BRANDS, ...BRANDS].map((brand, i) => (
-						<div className="brand-item" key={i} aria-hidden={i >= BRANDS.length}>
-							<img src={`https://cdn.simpleicons.org/${brand.slug}`} alt={brand.name} loading="lazy" />
-							<span>{brand.name}</span>
-						</div>
+					{[...COUNTRIES, ...COUNTRIES].map((country, i) => (
+						<button
+							type="button"
+							className="brand-item"
+							key={i}
+							aria-hidden={i >= COUNTRIES.length}
+							tabIndex={i >= COUNTRIES.length ? -1 : 0}
+							onClick={() => router.push(`/service?country=${encodeURIComponent(country.name)}`)}
+						>
+							<img
+								className="brand-flag"
+								src={`https://flagcdn.com/w40/${country.code}.png`}
+								alt=""
+								loading="lazy"
+								aria-hidden="true"
+							/>
+							<span>{ui(country.name)}</span>
+						</button>
 					))}
 				</div>
 			</div>

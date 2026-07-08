@@ -197,19 +197,66 @@
 
 	.profile-main,
 	.contact-card {
+		position: relative;
 		background: #ffffff;
-		border: 1px solid rgba(10, 36, 114, 0.08);
-		border-radius: 8px;
-		box-shadow: 0 10px 30px rgba(10, 36, 114, 0.06);
+		border: 1px solid rgba(10, 36, 114, 0.06);
+		border-radius: 20px;
+		box-shadow: 0 14px 40px rgba(10, 36, 114, 0.08);
+		overflow: hidden;
+
+		// tepada nozik gradient chiziq
+		&::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 18px;
+			right: 18px;
+			height: 2px;
+			border-radius: 2px;
+			background: linear-gradient(90deg, transparent, rgba(78, 127, 255, 0.5), rgba(123, 91, 255, 0.5), transparent);
+		}
 	}
 
+	// Tab almashganda ikki karta chap va o'ngdan kelib birlashadi
+	.profile-main {
+		animation: mergeFromLeft 0.55s cubic-bezier(0.22, 0.9, 0.34, 1) both;
+	}
+
+	.contact-card {
+		animation: mergeFromRight 0.55s cubic-bezier(0.22, 0.9, 0.34, 1) both;
+	}
+
+	// Tablar — pill segmentli uslub
 	.profile-tabs {
-		border-bottom: 1px solid #edf1f7;
-		padding: 0 20px;
+		border-bottom: none;
+		padding: 16px 20px 0;
+		min-height: 0;
+
+		.MuiTabs-flexContainer {
+			gap: 6px;
+			background: #f2f5fd;
+			padding: 5px;
+			border-radius: 999px;
+			width: fit-content;
+		}
+
+		.MuiTabs-indicator { display: none; }
 
 		.MuiTab-root {
+			min-height: 0;
+			min-width: 0;
+			padding: 8px 22px;
+			border-radius: 999px;
 			font-weight: 800;
 			text-transform: none;
+			color: #64748b;
+			transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+
+			&.Mui-selected {
+				background: $accent-gradient;
+				color: #ffffff;
+				box-shadow: 0 6px 16px rgba(78, 127, 255, 0.35);
+			}
 		}
 	}
 
@@ -360,33 +407,46 @@
 	}
 
 	.contact-list {
-		border-bottom: 1px solid #edf1f7;
-		margin-bottom: 16px;
-		padding-bottom: 16px;
+		display: grid;
+		gap: 10px;
+		margin-bottom: 18px;
 
 		> div {
 			align-items: center;
-			color: $text-secondary;
+			color: $text-primary;
 			display: flex;
-			gap: 10px;
+			gap: 12px;
 			font-size: 14px;
-			margin-bottom: 12px;
+			font-weight: 500;
 			min-width: 0;
 			overflow-wrap: anywhere;
+			background: #f6f8fe;
+			border: 1px solid #e8edf9;
+			border-radius: 12px;
+			padding: 11px 14px;
+			transition: border-color 0.2s ease, transform 0.2s ease;
 
-			&:last-child {
-				margin-bottom: 0;
+			&:hover {
+				border-color: rgba(22, 73, 255, 0.3);
+				transform: translateX(3px);
 			}
 		}
 
 		svg {
 			color: $primary;
 			flex-shrink: 0;
-			font-size: 18px;
+			font-size: 16px;
+			width: 30px;
+			height: 30px;
+			padding: 7px;
+			border-radius: 9px;
+			background: rgba(22, 73, 255, 0.1);
+			box-sizing: border-box;
 		}
 
 		a {
 			color: $primary;
+			font-weight: 600;
 			text-decoration: none;
 		}
 	}
@@ -482,4 +542,15 @@
 			flex-direction: column;
 		}
 	}
+}
+
+// Ikki karta chap/o'ngdan kelib birlashish animatsiyasi
+@keyframes mergeFromLeft {
+	from { opacity: 0; transform: translateX(-56px); }
+	to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes mergeFromRight {
+	from { opacity: 0; transform: translateX(56px); }
+	to   { opacity: 1; transform: translateX(0); }
 }

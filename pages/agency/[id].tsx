@@ -218,7 +218,7 @@ const AgencyDetail: NextPage = () => {
 
 			<Stack className="container">
 				<Box className="detail-layout">
-					<Box className="profile-main">
+					<Box className="profile-main" key={`pm-${tab}`}>
 						<Tabs value={tab} onChange={(_, value) => setTab(value)} className="profile-tabs">
 							<Tab label={ui('agency.about')} />
 							<Tab label={`${ui('agency.reviews')} (${reviews.length})`} />
@@ -269,7 +269,7 @@ const AgencyDetail: NextPage = () => {
 						)}
 					</Box>
 
-					<Box className="contact-card">
+					<Box className="contact-card" key={`cc-${tab}`}>
 						<h3>{ui('agency.contactAgency')}</h3>
 						<p>{ui('agency.useTheAvailableChannelsOr')}</p>
 
