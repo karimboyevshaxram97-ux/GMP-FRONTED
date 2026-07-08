@@ -18,6 +18,7 @@ import { useUiLang } from '../utils/translations';
 import { NotificationType } from '../enums/common.enum';
 import LanguageSwitcher from './common/LanguageSwitcher';
 import ThemeToggle from './common/ThemeToggle';
+import MusicToggle from './common/MusicToggle';
 
 const navLinks = [
 	{ label: 'Home', href: '/home', match: (p: string, q: any) => p === '/home' || p === '/' },
@@ -135,6 +136,7 @@ const Top = () => {
 		return (
 			<Stack className={'top'}>
 				<ThemeToggle />
+				<MusicToggle />
 				<LanguageSwitcher />
 				<Link href={'/home'}><div>{ui('nav.home')}</div></Link>
 				<Link href={'/service?type=STUDY_ABROAD'}><div>{ui('nav.study')}</div></Link>
@@ -179,6 +181,7 @@ const Top = () => {
 					{/* RIGHT: Language selector + Login (guest) OR Avatar + notifications (logged in) */}
 					<Box className={'navbar-right'}>
 					<ThemeToggle />
+				<MusicToggle />
 					<LanguageSwitcher />
 					{!user?._id ? (
 						<Link href={'/account/join'}>
