@@ -31,7 +31,7 @@ async function doTokenRefresh(): Promise<string | null> {
 		});
 		const json = await res.json();
 		const data = json?.data?.refreshToken;
-		if (data?.accessToken) {
+		if (data?.accessToken && data?.refreshToken) {
 			localStorage.setItem('accessToken', data.accessToken);
 			localStorage.setItem('refreshToken', data.refreshToken);
 			return data.accessToken;

@@ -71,6 +71,8 @@ const withLayoutAdmin = (Component: any) => {
 				}
 
 				updateUserInfo(jwt);
+				const tokenUser = userVar();
+				const tokenAllowsAdmin = tokenUser.role === UserRole.SUPER_ADMIN;
 
 				try {
 					const client = initializeApollo();
@@ -90,6 +92,13 @@ const withLayoutAdmin = (Component: any) => {
 						setCurrentUser(me ? { ...me, preferredLanguage: normalizeLang(me.preferredLanguage) ?? Lang.UZ } : userVar());
 					}
 				} catch {
+					if (tokenAllowsAdmin) {
+						if (mounted) {
+							setIsAdmin(true);
+							setCurrentUser(tokenUser);
+						}
+						return;
+					}
 					router.replace('/account/join');
 					if (mounted) setIsAdmin(false);
 				}

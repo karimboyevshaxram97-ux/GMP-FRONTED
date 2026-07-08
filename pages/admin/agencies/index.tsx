@@ -146,7 +146,6 @@ const AdminAgencies: NextPage = () => {
 							<TableCell><b>{ui('auth.agency')}</b></TableCell>
 							<TableCell><b>{ui('help.email')}</b></TableCell>
 							<TableCell><b>{ui('agency.services')}</b></TableCell>
-							<TableCell><b>{ui('mypage.rating')}</b></TableCell>
 							<TableCell><b>{ui('mypage.status')}</b></TableCell>
 							<TableCell><b>{ui('admin.verification')}</b></TableCell>
 							<TableCell><b>{ui('admin.created')}</b></TableCell>
@@ -156,7 +155,7 @@ const AdminAgencies: NextPage = () => {
 					<TableBody>
 						{agencies.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={8} sx={{ textAlign: 'center', py: 5, color: '#aaa' }}>{ui('agency.noAgenciesFound')}</TableCell>
+								<TableCell colSpan={7} sx={{ textAlign: 'center', py: 5, color: '#aaa' }}>{ui('agency.noAgenciesFound')}</TableCell>
 							</TableRow>
 						) : agencies.map((agency: any) => (
 							<TableRow key={agency._id} hover>
@@ -172,7 +171,6 @@ const AdminAgencies: NextPage = () => {
 								</TableCell>
 								<TableCell sx={{ fontSize: 13 }}>{agency.email}</TableCell>
 								<TableCell sx={{ textAlign: 'center' }}>{agency.totalServices ?? 0}</TableCell>
-								<TableCell sx={{ textAlign: 'center' }}>{(agency.averageRating ?? 0).toFixed(1)}</TableCell>
 								<TableCell>
 									<Chip label={ui(agency.status)} size="small" color={statusColor[agency.status] ?? 'default'} />
 								</TableCell>
@@ -184,18 +182,21 @@ const AdminAgencies: NextPage = () => {
 								</TableCell>
 								<TableCell>
 									<Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
-										{agency.verificationStatus === 'PENDING' && (
+										{agency.verificationStatus === 'PENDING' ? (
 											<>
 												<Button size="small" variant="outlined" color="success" onClick={() => handleApprove(agency._id)}>{ui('mypage.approve')}</Button>
 												<Button size="small" variant="outlined" color="error" onClick={() => openRejectModal(agency._id)}>{ui('mypage.reject')}</Button>
 											</>
-										)}
-										{agency.status === 'SUSPENDED' ? (
-											<Button size="small" variant="outlined" color="success" onClick={() => handleActivate(agency._id)}>{ui('admin.activate')}</Button>
 										) : (
-											<Button size="small" variant="outlined" color="warning" onClick={() => handleSuspend(agency._id)}>{ui('admin.suspend')}</Button>
+											<>
+												{agency.status === 'SUSPENDED' ? (
+													<Button size="small" variant="outlined" color="success" onClick={() => handleActivate(agency._id)}>{ui('admin.activate')}</Button>
+												) : (
+													<Button size="small" variant="outlined" color="warning" onClick={() => handleSuspend(agency._id)}>{ui('admin.suspend')}</Button>
+												)}
+												<Button size="small" variant="outlined" color="error" onClick={() => handleDelete(agency._id, tr(agency.name))}>{ui('admin.delete')}</Button>
+											</>
 										)}
-										<Button size="small" variant="outlined" color="error" onClick={() => handleDelete(agency._id, tr(agency.name))}>{ui('admin.delete')}</Button>
 									</Box>
 								</TableCell>
 							</TableRow>
@@ -239,7 +240,6 @@ const AdminAgencies: NextPage = () => {
 							<Box><Typography variant="caption" color="text.secondary">{ui('mypage.website')}</Typography><Typography variant="body2">{detailAgency.website || '—'}</Typography></Box>
 							<Box><Typography variant="caption" color="text.secondary">{ui('mypage.location')}</Typography><Typography variant="body2">{[detailAgency.city, detailAgency.country].filter(Boolean).join(', ') || '—'}</Typography></Box>
 							<Box><Typography variant="caption" color="text.secondary">{ui('admin.servicesReviews')}</Typography><Typography variant="body2">{detailAgency.totalServices ?? 0} {ui('admin.services')} · {detailAgency.totalReviews ?? 0} {ui('agency.reviews2')}</Typography></Box>
-							<Box><Typography variant="caption" color="text.secondary">{ui('mypage.rating')}</Typography><Typography variant="body2">{(detailAgency.averageRating ?? 0).toFixed(1)} ★</Typography></Box>
 							<Box><Typography variant="caption" color="text.secondary">{ui('admin.registered')}</Typography><Typography variant="body2">{new Date(detailAgency.createdAt).toLocaleDateString()}</Typography></Box>
 						</Box>
 						{detailAgency.operatingCountries?.length > 0 && (
@@ -253,13 +253,12 @@ const AdminAgencies: NextPage = () => {
 						<Typography variant="caption" sx={{ fontFamily: 'monospace', fontSize: 11 }}>{detailAgency._id}</Typography>
 					</DialogContent>
 						<DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
-							{detailAgency.verificationStatus === 'PENDING' && (
+							{detailAgency.verificationStatus === 'PENDING' ? (
 								<>
 									<Button color="success" variant="contained" size="small" onClick={() => handleApprove(detailAgency._id)}>{ui('mypage.approve')}</Button>
 									<Button color="error" variant="outlined" size="small" onClick={() => openRejectModal(detailAgency._id)}>{ui('mypage.reject')}</Button>
 								</>
-							)}
-							{detailAgency.status === 'SUSPENDED' ? (
+							) : detailAgency.status === 'SUSPENDED' ? (
 								<Button color="success" variant="outlined" size="small" onClick={() => handleActivate(detailAgency._id)}>{ui('admin.activate')}</Button>
 							) : (
 								<Button color="warning" variant="outlined" size="small" onClick={() => handleSuspend(detailAgency._id)}>{ui('admin.suspend')}</Button>

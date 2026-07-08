@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import {
 	Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
 	Paper, Chip, Button, Pagination, TextField, Select, MenuItem, InputAdornment,
-	Dialog, DialogTitle, DialogContent, DialogActions, Typography, Divider, Rating,
+	Dialog, DialogTitle, DialogContent, DialogActions, Typography, Divider,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
@@ -128,7 +128,6 @@ const AdminServices: NextPage = () => {
 							<TableCell><b>{ui('admin.type')}</b></TableCell>
 							<TableCell><b>{ui('service.destination')}</b></TableCell>
 							<TableCell><b>{ui('service.price')}</b></TableCell>
-							<TableCell><b>{ui('mypage.rating')}</b></TableCell>
 							<TableCell><b>{ui('mypage.applications')}</b></TableCell>
 							<TableCell><b>{ui('mypage.status')}</b></TableCell>
 							<TableCell><b>{ui('admin.visibility')}</b></TableCell>
@@ -139,7 +138,7 @@ const AdminServices: NextPage = () => {
 					<TableBody>
 						{services.length === 0 ? (
 							<TableRow>
-								<TableCell colSpan={10} sx={{ textAlign: 'center', py: 5, color: '#aaa' }}>{ui('service.noServicesFound')}</TableCell>
+								<TableCell colSpan={9} sx={{ textAlign: 'center', py: 5, color: '#aaa' }}>{ui('service.noServicesFound')}</TableCell>
 							</TableRow>
 						) : services.map((svc: any) => (
 							<TableRow key={svc._id} hover>
@@ -160,12 +159,6 @@ const AdminServices: NextPage = () => {
 								<TableCell sx={{ fontSize: 13 }}>
 									{svc.price != null ? `$${svc.price}` : '—'}
 								</TableCell>
-								<TableCell>
-									<Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, fontSize: 13 }}>
-										<Rating value={svc.averageRating ?? 0} precision={0.1} readOnly size="small" />
-										<span>({svc.totalReviews ?? 0})</span>
-									</Box>
-								</TableCell>
 								<TableCell sx={{ textAlign: 'center' }}>{svc.currentApplicationCount ?? 0}</TableCell>
 								<TableCell>
 									<Chip label={ui(svc.status)} size="small" color={statusColor[svc.status] ?? 'default'} />
@@ -178,11 +171,10 @@ const AdminServices: NextPage = () => {
 								</TableCell>
 								<TableCell>
 									<Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
-										{svc.status !== 'ACTIVE' && (
-											<Button size="small" variant="outlined" color="success" onClick={() => handleSetStatus(svc._id, 'ACTIVE')}>{ui('admin.activate')}</Button>
-										)}
-										{svc.status !== 'ARCHIVED' && (
+										{svc.status === 'ACTIVE' ? (
 											<Button size="small" variant="outlined" color="warning" onClick={() => handleSetStatus(svc._id, 'ARCHIVED')}>{ui('admin.archive')}</Button>
+										) : (
+											<Button size="small" variant="outlined" color="success" onClick={() => handleSetStatus(svc._id, 'ACTIVE')}>{ui('admin.activate')}</Button>
 										)}
 										<Button size="small" variant="outlined" color="error" onClick={() => handleDelete(svc._id, tr(svc.name))}>{ui('admin.delete')}</Button>
 									</Box>
@@ -243,24 +235,16 @@ const AdminServices: NextPage = () => {
 									<Typography variant="caption" color="text.secondary">{ui('mypage.applications')}</Typography>
 									<Typography variant="body2">{detailService.currentApplicationCount ?? 0}</Typography>
 								</Box>
-								<Box>
-									<Typography variant="caption" color="text.secondary">{ui('mypage.rating')}</Typography>
-									<Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-										<Rating value={detailService.averageRating ?? 0} precision={0.1} readOnly size="small" />
-										<Typography variant="body2">({detailService.totalReviews ?? 0})</Typography>
-									</Box>
-								</Box>
 							</Box>
 							<Divider sx={{ mb: 2 }} />
 							<Typography variant="caption" color="text.secondary">{ui('admin.serviceId')}</Typography>
 							<Typography variant="body2" sx={{ fontFamily: 'monospace', fontSize: 12 }}>{detailService._id}</Typography>
 						</DialogContent>
 						<DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
-							{detailService.status !== 'ACTIVE' && (
-								<Button color="success" variant="outlined" size="small" onClick={() => handleSetStatus(detailService._id, 'ACTIVE')}>{ui('admin.activate')}</Button>
-							)}
-							{detailService.status !== 'ARCHIVED' && (
+							{detailService.status === 'ACTIVE' ? (
 								<Button color="warning" variant="outlined" size="small" onClick={() => handleSetStatus(detailService._id, 'ARCHIVED')}>{ui('admin.archive')}</Button>
+							) : (
+								<Button color="success" variant="outlined" size="small" onClick={() => handleSetStatus(detailService._id, 'ACTIVE')}>{ui('admin.activate')}</Button>
 							)}
 							<Button color="error" variant="outlined" size="small" onClick={() => handleDelete(detailService._id, tr(detailService.name))}>{ui('admin.delete')}</Button>
 							<Button onClick={() => setDetailService(null)}>{ui('admin.close')}</Button>

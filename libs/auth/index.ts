@@ -34,7 +34,8 @@ export const logIn = async (phoneNumber: string, password: string): Promise<void
 			fetchPolicy: 'network-only',
 		});
 
-		const { accessToken, refreshToken } = result?.data?.login;
+		const { accessToken, refreshToken } = result?.data?.login ?? {};
+		if (!accessToken || !refreshToken) throw new Error('Invalid auth response');
 		updateStorage({ accessToken, refreshToken });
 		updateUserInfo(accessToken);
 		const preferredLanguage = result?.data?.login?.user?.preferredLanguage;
@@ -70,7 +71,8 @@ export const signUp = async (input: {
 			},
 			fetchPolicy: 'network-only',
 		});
-		const { accessToken, refreshToken } = result?.data?.register;
+		const { accessToken, refreshToken } = result?.data?.register ?? {};
+		if (!accessToken || !refreshToken) throw new Error('Invalid auth response');
 		updateStorage({ accessToken, refreshToken });
 		updateUserInfo(accessToken);
 		const preferredLanguage = result?.data?.register?.user?.preferredLanguage;
@@ -121,6 +123,7 @@ export const refreshAuthTokens = async (): Promise<boolean> => {
 };
 
 export const updateStorage = ({ accessToken, refreshToken }: { accessToken: string; refreshToken: string }) => {
+	if (!accessToken || !refreshToken) throw new Error('Invalid auth tokens');
 	localStorage.setItem('accessToken', accessToken);
 	localStorage.setItem('refreshToken', refreshToken);
 	window.localStorage.setItem('login', Date.now().toString());
