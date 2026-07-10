@@ -1,5 +1,16 @@
 @import '../../variables';
 
+// Bu sahifa o'zi skroll bo'lmaydi (faqat chat ichi skroll qiladi), shuning
+// uchun navbar hech qachon "scrolled" holatga o'tmay, shaffof holicha oq fon
+// ustida deyarli ko'rinmay qoladi. Shu sahifada navbarni doim to'q ko'rsatamiz.
+body:has(.messages-page) #top .navbar-main {
+	background: rgba(10, 36, 114, 0.96);
+	box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
 $sidebar-w: 340px;
 $header-h: 68px;
 $input-h: 72px;
