@@ -23,39 +23,66 @@
 // Cards
 .agency-card {
 	background: #ffffff;
-	border: 1px solid rgba(10, 36, 114, 0.08);
-	border-radius: 8px;
+	border: 1px solid #eef1f8;
+	border-radius: 20px;
 	box-shadow: 0 10px 30px rgba(10, 36, 114, 0.06);
 	cursor: pointer;
 	height: 100%;
 	overflow: hidden;
-	transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+	position: relative;
+	transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.32s ease, border-color 0.32s ease;
+
+	// Gradient accent strip — reveals over the top edge of the photo on hover
+	&::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 4px;
+		background: linear-gradient(90deg, #1649ff 0%, #4e7fff 50%, #7b5bff 100%);
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+		z-index: 2;
+	}
 
 	&:hover {
 		border-color: rgba(22, 73, 255, 0.22);
-		box-shadow: 0 18px 42px rgba(10, 36, 114, 0.12);
-		transform: translateY(-3px);
+		box-shadow: 0 26px 54px rgba(22, 73, 255, 0.16);
+		transform: translateY(-8px);
+
+		&::before { transform: scaleX(1); }
 
 		.card-image img {
-			transform: scale(1.06);
+			transform: scale(1.08);
 		}
 
-		.profile-button {
-			background: $primary;
-			color: #ffffff;
+		.agency-title-row h3 {
+			color: $primary;
 		}
 	}
 
 	.card-image {
 		background: #eef3ff;
 		height: 210px;
+		overflow: hidden;
 		position: relative;
 
 		img {
 			height: 100%;
 			object-fit: cover;
-			transition: transform 0.4s ease;
+			transition: transform 0.5s ease;
 			width: 100%;
+		}
+
+		// Depth gradient — keeps the badge legible over any photo
+		&::after {
+			content: '';
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(to top, rgba(8, 14, 40, 0.42) 0%, transparent 55%);
+			pointer-events: none;
 		}
 
 		.like-btn {
@@ -73,6 +100,7 @@
 			right: 12px;
 			top: 12px;
 			width: 38px;
+			z-index: 2;
 
 			&.active {
 				background: #ff4757;
@@ -81,12 +109,31 @@
 		}
 
 		.verified-badge {
-			background: #ffffff;
+			align-items: center;
+			background: rgba(255, 255, 255, 0.96);
+			backdrop-filter: blur(6px);
+			-webkit-backdrop-filter: blur(6px);
+			border-radius: 999px;
 			bottom: 12px;
-			color: #247a3d;
+			box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+			color: #0f8a44;
+			display: inline-flex;
+			font-size: 11.5px;
 			font-weight: 800;
+			gap: 4px;
 			left: 12px;
+			padding: 5px 12px 5px 9px;
 			position: absolute;
+			z-index: 2;
+
+			svg,
+			.MuiChip-icon {
+				color: #0f8a44 !important;
+				font-size: 14px !important;
+				margin: 0 !important;
+			}
+
+			.MuiChip-label { padding: 0; }
 		}
 	}
 
@@ -94,37 +141,49 @@
 		display: flex;
 		flex-direction: column;
 		gap: 12px;
-		padding: 18px;
+		padding: 20px 20px 18px;
 	}
 
 	.agency-title-row {
 		align-items: flex-start;
 		display: flex;
-		gap: 12px;
+		gap: 10px;
 		justify-content: space-between;
 
 		h3 {
 			color: $text-primary;
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 1;
 			font-size: 18px;
 			font-weight: 800;
-			line-height: 1.25;
+			line-height: 1.3;
+			overflow: hidden;
+			transition: color 0.25s ease;
 		}
 
 		span {
-			background: #f1f5ff;
-			border-radius: 8px;
+			background: linear-gradient(135deg, rgba(22, 73, 255, 0.1), rgba(123, 91, 255, 0.1));
+			border-radius: 999px;
 			color: $primary;
-			font-size: 13px;
+			flex-shrink: 0;
+			font-size: 11.5px;
 			font-weight: 800;
-			padding: 5px 8px;
+			line-height: 1.3;
+			padding: 6px 12px;
+			text-align: center;
+			white-space: nowrap;
 		}
 	}
 
 	.agency-description {
 		color: $text-secondary;
-		font-size: 14px;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		font-size: 13.5px;
 		line-height: 1.6;
-		min-height: 44px;
+		overflow: hidden;
 	}
 
 	.country-row,
@@ -142,8 +201,9 @@
 
 		svg {
 			color: $primary;
-			font-size: 17px;
 			flex-shrink: 0;
+			font-size: 17px;
+			opacity: 0.75;
 		}
 	}
 
@@ -203,12 +263,13 @@
 		}
 
 		.profile-button {
-			@include glass-button-dark(999px);
-			font-size: 13px;
+			@include accent-button(999px);
+			font-size: 12.5px;
 			font-weight: 800;
+			letter-spacing: 0.2px;
 			margin-left: auto;
 			min-width: 0;
-			padding: 5px 14px;
+			padding: 8px 18px;
 			text-transform: none;
 		}
 	}
