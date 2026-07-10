@@ -1333,11 +1333,6 @@ $brands-bg: #f5f7fa; // yuqoridagi qidiruv bo'limi bilan bir xil — chegara sez
 	50%       { transform: translate(-30px, 20px) scale(1.04); }
 }
 
-@keyframes stepPulse {
-	0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
-	50%       { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
-}
-
 @keyframes cardFloat {
 	0%, 100% { transform: translateY(0px); }
 	50%       { transform: translateY(-6px); }
@@ -1347,11 +1342,6 @@ $brands-bg: #f5f7fa; // yuqoridagi qidiruv bo'limi bilan bir xil — chegara sez
 	0%   { transform: scale(1); opacity: 0.9; }
 	70%  { transform: scale(1.55); opacity: 0; }
 	100% { transform: scale(1.55); opacity: 0; }
-}
-
-@keyframes connectorFill {
-	from { height: 0; opacity: 0; }
-	to   { height: 100%; opacity: 1; }
 }
 
 .home-marketing {
@@ -1402,55 +1392,11 @@ $brands-bg: #f5f7fa; // yuqoridagi qidiruv bo'limi bilan bir xil — chegara sez
 		z-index: 1;
 	}
 
-	// Header
-	.hm-header {
-		text-align: center;
-		margin-bottom: 64px;
-		opacity: 0;
-		transform: translateY(24px);
-		transition: opacity 0.7s ease, transform 0.7s ease;
-
-		&.visible {
-			opacity: 1;
-			transform: translateY(0);
-		}
-
-		.section-tag {
-			display: inline-block;
-			background: rgba(99, 102, 241, 0.18);
-			border: 1px solid rgba(99, 102, 241, 0.35);
-			color: #a5b4fc;
-			font-size: 11px;
-			font-weight: 700;
-			text-transform: uppercase;
-			letter-spacing: 2.5px;
-			padding: 6px 18px;
-			border-radius: 100px;
-			margin-bottom: 16px;
-		}
-
-		h2 {
-			font-size: clamp(26px, 3vw, 40px);
-			font-weight: 800;
-			color: #fff;
-			margin-bottom: 12px;
-		}
-
-		p {
-			font-size: 16px;
-			color: rgba(255, 255, 255, 0.52);
-			max-width: 480px;
-			margin: 0 auto;
-			line-height: 1.65;
-		}
-	}
-
-	// Body 2-col (video ustuni kengroq — katta ekran effekti)
+	// Body — video birinchi va katta (sarlavhasiz, ekranga moslab)
 	.hm-body {
-		display: grid;
-		grid-template-columns: 0.75fr 1.55fr;
-		gap: 44px;
-		align-items: center;
+		display: flex;
+		flex-direction: column;
+		gap: 36px;
 		margin-bottom: 64px;
 		opacity: 0;
 		transform: translateY(32px);
@@ -1460,117 +1406,17 @@ $brands-bg: #f5f7fa; // yuqoridagi qidiruv bo'limi bilan bir xil — chegara sez
 			opacity: 1;
 			transform: translateY(0);
 		}
-
-		@media (max-width: 900px) {
-			grid-template-columns: 1fr;
-		}
 	}
 
-	// Steps
-	.hm-steps {
-		display: flex;
-		flex-direction: column;
-		gap: 0;
-	}
-
-	.hm-step {
-		display: flex;
-		align-items: flex-start;
-		gap: 18px;
-		padding: 20px 20px 20px 18px;
-		border-radius: 16px;
-		cursor: pointer;
-		position: relative;
-		opacity: 0;
-		transform: translateX(-20px);
-		transition: opacity 0.5s ease, transform 0.5s ease, background 0.3s ease;
-
-		&.in {
-			opacity: 1;
-			transform: translateX(0);
-		}
-
-		&.active {
-			background: rgba(99, 102, 241, 0.1);
-			border: 1px solid rgba(99, 102, 241, 0.25);
-
-			.step-num {
-				background: linear-gradient(135deg, #6366f1, #8b5cf6);
-				color: #fff;
-				animation: stepPulse 1.5s ease infinite;
-			}
-
-			.step-icon svg {
-				stroke: #a5b4fc;
-			}
-
-			h4 { color: #fff; }
-		}
-
-		&:not(.active) {
-			border: 1px solid transparent;
-
-			.step-num { background: rgba(255, 255, 255, 0.07); color: rgba(255,255,255,0.4); }
-			.step-icon svg { stroke: rgba(255,255,255,0.3); }
-			h4 { color: rgba(255,255,255,0.6); }
-
-			&:hover { background: rgba(255,255,255,0.04); }
-		}
-	}
-
-	.step-num {
-		font-size: 11px;
-		font-weight: 800;
-		letter-spacing: 1px;
-		width: 32px;
-		height: 32px;
-		border-radius: 8px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex-shrink: 0;
-		transition: all 0.3s ease;
-	}
-
-	.step-icon {
-		width: 40px;
-		height: 40px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex-shrink: 0;
-
-		svg {
-			width: 22px;
-			height: 22px;
-			transition: stroke 0.3s ease;
-		}
-	}
-
-	.step-body {
-		flex: 1;
-
-		h4 {
-			font-size: 15px;
-			font-weight: 700;
-			margin-bottom: 5px;
-			transition: color 0.3s ease;
-		}
-
-		p {
-			font-size: 13px;
-			color: rgba(255, 255, 255, 0.42);
-			line-height: 1.6;
-		}
-	}
-
-	.step-connector {
-		display: none; // connector handled by gap
-	}
-
-	// Video showcase (lite YouTube embed)
+	// Video showcase (lite YouTube embed) — konteynerning 99% enini egallaydi
 	.hm-preview {
 		position: relative;
+		width: 99%;
+		margin: 0 auto;
+
+		@media (max-width: 700px) {
+			width: 100%;
+		}
 	}
 
 	.hm-video {
@@ -1676,74 +1522,6 @@ $brands-bg: #f5f7fa; // yuqoridagi qidiruv bo'limi bilan bir xil — chegara sez
 		}
 	}
 
-	// Stats strip
-	.hm-stats-strip {
-		display: flex;
-		align-items: center;
-		padding: 28px 40px;
-		background: rgba(255, 255, 255, 0.04);
-		border: 1px solid rgba(255, 255, 255, 0.07);
-		border-radius: 20px;
-		gap: 0;
-		opacity: 0;
-		transform: translateY(20px);
-		transition: opacity 0.7s ease 0.3s, transform 0.7s ease 0.3s;
-
-		&.visible {
-			opacity: 1;
-			transform: translateY(0);
-		}
-
-		.hm-stat {
-			flex: 1;
-			text-align: center;
-
-			.hm-stat-num {
-				display: block;
-				font-size: 22px;
-				font-weight: 800;
-				background: linear-gradient(135deg, #fff, #a5b4fc);
-				-webkit-background-clip: text;
-				-webkit-text-fill-color: transparent;
-				background-clip: text;
-				line-height: 1;
-				margin-bottom: 4px;
-			}
-
-			.hm-stat-label {
-				font-size: 11px;
-				text-transform: uppercase;
-				letter-spacing: 1px;
-				color: rgba(255, 255, 255, 0.35);
-			}
-		}
-
-		.hm-stat-sep {
-			width: 1px;
-			height: 32px;
-			background: rgba(255, 255, 255, 0.08);
-			flex-shrink: 0;
-		}
-
-		.hm-cta-btn {
-			margin-left: 40px;
-			flex-shrink: 0;
-
-			a {
-				@include accent-button(999px);
-				display: inline-block;
-				padding: 12px 28px;
-				font-size: 14px;
-				font-weight: 700;
-				text-decoration: none;
-				white-space: nowrap;
-
-				&:hover:not(:disabled) {
-					transform: translateY(-2px);
-				}
-			}
-		}
-	}
 }
 
 /* ── LIVE CHAT SECTION ── */
