@@ -249,11 +249,32 @@ const Top = () => {
 								anchorEl={logoutAnchor}
 								open={logoutOpen}
 								onClose={() => setLogoutAnchor(null)}
-								sx={{ mt: '5px' }}
+								className="profile-menu"
+								PaperProps={{ className: 'profile-menu-paper' }}
+								sx={{ mt: '8px' }}
+								transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+								anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 							>
-								<MenuItem onClick={() => { router.push('/mypage'); setLogoutAnchor(null); }}>{ui('nav.myPage')}</MenuItem>
-								<MenuItem onClick={() => logOut()}>
-									<Logout fontSize="small" style={{ color: '#1649ff', marginRight: 8 }} />
+								<Box className="profile-menu__header">
+									<img className="profile-menu__avatar" src={avatarSrc(user?.avatar)} alt="avatar" />
+									<Box className="profile-menu__info">
+										<strong className="profile-menu__name">{user?.firstName} {user?.lastName}</strong>
+										{user?.role && <span className="profile-menu__role">{ui(`enum.${user.role}`)}</span>}
+									</Box>
+								</Box>
+
+								<Box className="profile-menu__divider" />
+
+								<MenuItem
+									className="profile-menu__item"
+									onClick={() => { router.push('/mypage'); setLogoutAnchor(null); }}
+								>
+									{ui('nav.myPage')}
+								</MenuItem>
+
+								<Box className="profile-menu__divider" />
+
+								<MenuItem className="profile-menu__item profile-menu__item--danger" onClick={() => logOut()}>
 									{ui('admin.logout')}
 								</MenuItem>
 							</Menu>

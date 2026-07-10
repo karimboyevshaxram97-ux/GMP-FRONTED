@@ -334,6 +334,36 @@ html.dark {
 		}
 	}
 
+	// Profil menyusi (avatar dropdown)
+	.profile-menu-paper.profile-menu-paper {
+		background: var(--dk-surface);
+		border-color: var(--dk-border);
+		box-shadow: 0 20px 54px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--dk-border);
+	}
+
+	.profile-menu__header {
+		background: linear-gradient(135deg, rgba(120, 140, 255, 0.14) 0%, rgba(157, 120, 255, 0.1) 100%);
+	}
+
+	.profile-menu__name { color: var(--dk-text); }
+
+	.profile-menu__role {
+		color: #9db4ff;
+		background: rgba(120, 140, 255, 0.16);
+	}
+
+	.profile-menu__divider { background: var(--dk-border); }
+
+	.profile-menu__item.profile-menu__item {
+		color: var(--dk-text);
+
+		&:hover { background: var(--dk-surface-2); }
+	}
+
+	.profile-menu__item--danger.profile-menu__item--danger {
+		&:hover { background: rgba(225, 29, 72, 0.14); }
+	}
+
 	// ── Service sahifasi ──────────────────────────────────────
 	.services-page,
 	.service-detail-page {
