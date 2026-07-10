@@ -42,7 +42,6 @@ const ServiceTypesSection = () => {
 
 			<div className="container">
 				<div className="home-service-types__header">
-					<span className="section-tag">{ui('home.whatWeOffer')}</span>
 					<h2>{ui('home.exploreOurServices')}</h2>
 					<p>{ui('home.everythingYouNeedToMake')}</p>
 				</div>
