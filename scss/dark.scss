@@ -284,10 +284,55 @@ html.dark {
 	}
 
 	// AI yordamchi modali
-	.ai-assist-modal { background: var(--dk-surface); }
-	.ai-assist-body { background: var(--dk-bg); }
-	.ai-msg-bot { background: var(--dk-surface-2); color: var(--dk-text); }
-	.ai-assist-footer { background: var(--dk-surface); border-color: var(--dk-border); }
+	.ai-assist-modal {
+		background: var(--dk-surface);
+		box-shadow: 0 32px 90px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--dk-border);
+	}
+
+	.ai-assist-body {
+		background: var(--dk-bg);
+
+		&::-webkit-scrollbar-thumb { background: rgba(157, 180, 255, 0.2); }
+	}
+
+	.ai-assist-empty {
+		color: var(--dk-muted);
+
+		.ai-empty-icon {
+			background: rgba(120, 140, 255, 0.14);
+			color: #9db4ff;
+		}
+	}
+
+	.ai-msg-bot {
+		background: var(--dk-surface-2);
+		color: var(--dk-text);
+		border-color: var(--dk-border);
+	}
+
+	.ai-msg-user {
+		background: linear-gradient(135deg, #3b5bff 0%, #7c5cff 100%);
+	}
+
+	.ai-typing-dot { background: var(--dk-muted); }
+
+	.ai-assist-footer {
+		background: var(--dk-surface);
+		border-color: var(--dk-border);
+
+		input {
+			background: var(--dk-surface-2);
+			color: var(--dk-text);
+
+			&::placeholder { color: var(--dk-muted); }
+
+			&:focus {
+				border-color: rgba(157, 180, 255, 0.4);
+				background: var(--dk-surface-2);
+				box-shadow: 0 0 0 3px rgba(120, 140, 255, 0.16);
+			}
+		}
+	}
 
 	// ── Service sahifasi ──────────────────────────────────────
 	.services-page,

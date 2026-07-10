@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import CloseIcon from '@mui/icons-material/Close';
 import SendIcon from '@mui/icons-material/Send';
 import { useUiLang } from '../../utils/translations';
@@ -87,7 +88,10 @@ const AiSearchAssistant = () => {
 
 						<div className="ai-assist-body" ref={bodyRef}>
 							{messages.length === 0 && (
-								<p className="ai-assist-empty">{ui('ai.hiAskMeAnythingAbout')}</p>
+								<div className="ai-assist-empty">
+									<span className="ai-empty-icon"><ChatBubbleOutlineIcon /></span>
+									<p>{ui('ai.hiAskMeAnythingAbout')}</p>
+								</div>
 							)}
 
 							{messages.map((msg, idx) => (
@@ -96,7 +100,13 @@ const AiSearchAssistant = () => {
 								</div>
 							))}
 
-							{loading && <div className="ai-msg-bot ai-msg-loading">{ui('ai.thinking')}</div>}
+							{loading && (
+								<div className="ai-msg-bot ai-msg-loading">
+									<span className="ai-typing-dot" />
+									<span className="ai-typing-dot" />
+									<span className="ai-typing-dot" />
+								</div>
+							)}
 							{error && <div className="ai-assist-error">{ui('ai.somethingWentWrongPleaseTry')}</div>}
 						</div>
 
