@@ -28,6 +28,8 @@
 	"auth.signIn": "Sign in",
 	"auth.phoneNumberOrEmail": "Phone number or email",
 	"auth.password": "Password",
+	"auth.showPassword": "Show password",
+	"auth.hidePassword": "Hide password",
 	"auth.orContinueWith": "or",
 	"auth.continueWithKakao": "Continue with Kakao",
 	"auth.continueWithNaver": "Continue with Naver",

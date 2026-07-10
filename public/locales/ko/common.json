@@ -28,6 +28,8 @@
 	"auth.signIn": "로그인",
 	"auth.phoneNumberOrEmail": "전화번호 또는 이메일",
 	"auth.password": "비밀번호",
+	"auth.showPassword": "비밀번호 표시",
+	"auth.hidePassword": "비밀번호 숨기기",
 	"auth.orContinueWith": "또는",
 	"auth.continueWithKakao": "카카오로 계속하기",
 	"auth.continueWithNaver": "네이버로 계속하기",

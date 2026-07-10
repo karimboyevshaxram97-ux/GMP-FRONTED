@@ -28,6 +28,8 @@
 	"auth.signIn": "Войти",
 	"auth.phoneNumberOrEmail": "Телефон или email",
 	"auth.password": "Пароль",
+	"auth.showPassword": "Показать пароль",
+	"auth.hidePassword": "Скрыть пароль",
 	"auth.orContinueWith": "или",
 	"auth.continueWithKakao": "Продолжить с Kakao",
 	"auth.continueWithNaver": "Продолжить с Naver",

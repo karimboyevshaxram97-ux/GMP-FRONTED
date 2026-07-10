@@ -305,6 +305,36 @@
 	}
 }
 
+// ── Parol maydoni: ko'rsatish/yashirish ko'zchasi ──────────────────────────────
+.jr-password-wrap {
+	position: relative;
+
+	input {
+		padding-right: 40px;
+	}
+}
+
+.jr-eye-btn.jr-eye-btn {
+	@include button-states;
+	position: absolute;
+	top: 50%;
+	right: 4px;
+	transform: translateY(-50%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 30px;
+	height: 30px;
+	background: transparent;
+	border: none;
+	border-radius: 7px;
+	color: #94a3b8;
+
+	svg { font-size: 18px; }
+
+	&:hover { color: #1649ff; background: rgba(22, 73, 255, 0.07); }
+}
+
 .jr-grid-2 {
 	display: grid;
 	grid-template-columns: 1fr 1fr;

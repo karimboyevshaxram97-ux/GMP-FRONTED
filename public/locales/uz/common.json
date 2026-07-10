@@ -28,6 +28,8 @@
 	"auth.signIn": "Kirish",
 	"auth.phoneNumberOrEmail": "Telefon raqam yoki email",
 	"auth.password": "Parol",
+	"auth.showPassword": "Parolni ko'rsatish",
+	"auth.hidePassword": "Parolni yashirish",
 	"auth.orContinueWith": "yoki",
 	"auth.continueWithKakao": "Kakao bilan davom etish",
 	"auth.continueWithNaver": "Naver bilan davom etish",

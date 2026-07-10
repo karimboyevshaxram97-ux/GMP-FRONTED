@@ -5,6 +5,8 @@ import Head from 'next/head';
 import { Box, Alert } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import BusinessIcon from '@mui/icons-material/Business';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import { useReactiveVar } from '@apollo/client';
 import { userVar } from '../../apollo/store';
 import { logIn, signUp, getJwtToken, updateUserInfo } from '../../libs/auth';
@@ -74,11 +76,13 @@ const Join: NextPage = () => {
 
 	const [loginPhone, setLoginPhone] = useState('');
 	const [loginPassword, setLoginPassword] = useState('');
+	const [showLoginPassword, setShowLoginPassword] = useState(false);
 
 	const [regFirstName, setRegFirstName] = useState('');
 	const [regLastName, setRegLastName] = useState('');
 	const [regPhone, setRegPhone] = useState('');
 	const [regPassword, setRegPassword] = useState('');
+	const [showRegPassword, setShowRegPassword] = useState(false);
 	const [regRole, setRegRole] = useState<UserRole>(UserRole.USER);
 	const isAdminMode = router.query.mode === 'admin';
 
@@ -128,7 +132,9 @@ const Join: NextPage = () => {
 		setError('');
 		try {
 			await signUp({ phoneNumber: regPhone, password: regPassword, firstName: regFirstName, lastName: regLastName, role: regRole });
-			if (regRole === UserRole.AGENCY_ADMIN) router.push('/mypage?tab=agency');
+			const currentUser = userVar();
+			if (currentUser.role === UserRole.SUPER_ADMIN) router.push('/admin');
+			else if (currentUser.role === UserRole.AGENCY_ADMIN) router.push('/mypage?tab=agency');
 			else router.push('/');
 		} catch (err: any) {
 			const msg = err?.graphQLErrors?.[0]?.message || err?.message || '';
@@ -223,13 +229,24 @@ const Join: NextPage = () => {
 								</div>
 								<div className="jr-field">
 									<label>{ui('auth.password')}</label>
-									<input
-										type="password"
-										placeholder="Enter your password"
-										value={loginPassword}
-										onChange={(e) => setLoginPassword(e.target.value)}
-										required
-									/>
+									<div className="jr-password-wrap">
+										<input
+											type={showLoginPassword ? 'text' : 'password'}
+											placeholder="Enter your password"
+											value={loginPassword}
+											onChange={(e) => setLoginPassword(e.target.value)}
+											required
+										/>
+										<button
+											type="button"
+											className="jr-eye-btn"
+											onClick={() => setShowLoginPassword((v) => !v)}
+											aria-label={showLoginPassword ? ui('auth.hidePassword') : ui('auth.showPassword')}
+											tabIndex={-1}
+										>
+											{showLoginPassword ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
+										</button>
+									</div>
 								</div>
 								<button type="submit" className="jr-btn" disabled={loading}>
 									{loading ? ui('auth.signingIn') : ui('auth.signIn')}
@@ -297,7 +314,24 @@ const Join: NextPage = () => {
 
 								<div className="jr-field">
 									<label>{ui('auth.password')}</label>
-									<input type="password" placeholder="Min 8 characters" value={regPassword} onChange={(e) => setRegPassword(e.target.value)} required />
+									<div className="jr-password-wrap">
+										<input
+											type={showRegPassword ? 'text' : 'password'}
+											placeholder="Min 8 characters"
+											value={regPassword}
+											onChange={(e) => setRegPassword(e.target.value)}
+											required
+										/>
+										<button
+											type="button"
+											className="jr-eye-btn"
+											onClick={() => setShowRegPassword((v) => !v)}
+											aria-label={showRegPassword ? ui('auth.hidePassword') : ui('auth.showPassword')}
+											tabIndex={-1}
+										>
+											{showRegPassword ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
+										</button>
+									</div>
 								</div>
 
 								<button type="submit" className="jr-btn" disabled={loading}>
