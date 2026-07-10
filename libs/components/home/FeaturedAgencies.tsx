@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@apollo/client';
 import { Box, Pagination, Rating } from '@mui/material';
@@ -16,6 +16,20 @@ const FeaturedAgencies = () => {
 	const tr = useLang();
 	const ui = useUiLang();
 	const [page, setPage] = useState(1);
+	const [visible, setVisible] = useState(false);
+	const gridRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries[0].isIntersecting) setVisible(true);
+			},
+			{ threshold: 0.2 },
+		);
+		if (gridRef.current) observer.observe(gridRef.current);
+		return () => observer.disconnect();
+	}, []);
+
 	const { data, previousData, loading } = useQuery(GET_AGENCIES, {
 		fetchPolicy: 'cache-and-network',
 		nextFetchPolicy: 'cache-first',
@@ -65,7 +79,7 @@ const FeaturedAgencies = () => {
 					</Link>
 				</div>
 
-				<div className="home-featured-agencies__grid">
+				<div className={`home-featured-agencies__grid${visible ? ' in-view' : ''}`} ref={gridRef}>
 					{showSkeletons
 						? Array(PAGE_LIMIT).fill(0).map((_, i) => (
 							<div key={i} className="agency-skeleton">

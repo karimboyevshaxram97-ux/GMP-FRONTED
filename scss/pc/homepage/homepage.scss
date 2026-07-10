@@ -967,6 +967,21 @@
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
 		gap: 22px;
+
+		// Skroll qilib yetib kelinganda paydo bo'ladi (JS .in-view klassini qo'shadi)
+		> * {
+			opacity: 0;
+			transform: translateY(26px) scale(0.97);
+		}
+
+		&.in-view > * {
+			@for $i from 1 through 4 {
+				&:nth-child(#{$i}) {
+					animation: taFloatIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+					animation-delay: #{$i * 0.09}s;
+				}
+			}
+		}
 	}
 
 	&__pagination {
@@ -1063,6 +1078,21 @@
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
 		gap: 24px;
+
+		// Skroll qilib yetib kelinganda paydo bo'ladi (JS .in-view klassini qo'shadi)
+		> * {
+			opacity: 0;
+			transform: translateY(26px) scale(0.97);
+		}
+
+		&.in-view > * {
+			@for $i from 1 through 4 {
+				&:nth-child(#{$i}) {
+					animation: taFloatIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+					animation-delay: #{$i * 0.09}s;
+				}
+			}
+		}
 	}
 
 	&__pagination {
@@ -2142,6 +2172,8 @@ $brands-bg: #f5f7fa; // yuqoridagi qidiruv bo'limi bilan bir xil — chegara sez
 			linear-gradient(180deg, rgba(22, 73, 255, 0.08) 0%, rgba(22, 73, 255, 0) 44%),
 			#ffffff;
 		box-shadow: 0 14px 36px rgba(10, 36, 114, 0.08);
+		opacity: 0;
+		transform: translateY(26px) scale(0.94);
 		transition: transform 0.26s ease, box-shadow 0.26s ease, border-color 0.26s ease;
 
 		&__avatar {
@@ -2225,7 +2257,10 @@ $brands-bg: #f5f7fa; // yuqoridagi qidiruv bo'limi bilan bir xil — chegara sez
 				inset 0 0 0 5px #eef4ff;
 		}
 
-		// staggered entrance
+	}
+
+	// Skroll qilib yetib kelinganda paydo bo'ladi (JS .in-view klassini qo'shadi)
+	&__grid.in-view .top-agency-card {
 		@for $i from 1 through 5 {
 			&:nth-child(#{$i}) {
 				animation: taFloatIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -2238,11 +2273,22 @@ $brands-bg: #f5f7fa; // yuqoridagi qidiruv bo'limi bilan bir xil — chegara sez
 @keyframes taFloatIn {
 	from {
 		opacity: 0;
-		transform: translateY(26px) scale(0.85);
+		transform: translateY(26px) scale(0.94);
 	}
 	to {
 		opacity: 1;
 		transform: translateY(0) scale(1);
+	}
+}
+
+// Foydalanuvchi "reduce motion" tanlagan bo'lsa — kartalar darhol ko'rinadi.
+@media (prefers-reduced-motion: reduce) {
+	.home-featured-agencies__grid > *,
+	.home-featured-services__grid > *,
+	.top-agencies__grid .top-agency-card {
+		animation: none !important;
+		opacity: 1 !important;
+		transform: none !important;
 	}
 }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@apollo/client';
 import StarIcon from '@mui/icons-material/Star';
@@ -10,6 +10,9 @@ import { useUiLang } from '../../utils/translations';
 const TopAgenciesSection = () => {
 	const tr = useLang();
 	const ui = useUiLang();
+	const [visible, setVisible] = useState(false);
+	const gridRef = useRef<HTMLDivElement>(null);
+
 	const { data } = useQuery(GET_AGENCIES, {
 		fetchPolicy: 'cache-and-network',
 		nextFetchPolicy: 'cache-first',
@@ -29,18 +32,31 @@ const TopAgenciesSection = () => {
 		.filter((agency: any) => agency.coverImage || agency.logo)
 		.slice(0, 5);
 
+	// agencies bo'sh bo'lganda (dastlabki render) grid hali chizilmagan bo'ladi,
+	// shuning uchun ma'lumot kelib grid paydo bo'lgach effektni qayta ishga tushiramiz.
+	useEffect(() => {
+		if (!gridRef.current) return;
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries[0].isIntersecting) setVisible(true);
+			},
+			{ threshold: 0.2 },
+		);
+		observer.observe(gridRef.current);
+		return () => observer.disconnect();
+	}, [agencies.length]);
+
 	if (agencies.length === 0) return null;
 
 	return (
 		<section className="top-agencies">
 			<div className="container">
 				<div className="top-agencies__head">
-					<span className="top-agencies__tag">{ui('home.verifiedPartners')}</span>
 					<h2>{ui('home.top5Agencies')}</h2>
 					<p>{ui('home.theHighestRatedAgenciesTrusted')}</p>
 				</div>
 
-				<div className="top-agencies__grid">
+				<div className={`top-agencies__grid${visible ? ' in-view' : ''}`} ref={gridRef}>
 					{agencies.map((agency) => {
 						const name = tr(agency.name) || ui('auth.agency');
 						const image = agency.coverImage || agency.logo;
