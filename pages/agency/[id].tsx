@@ -56,8 +56,8 @@ const AgencyDetail: NextPage = () => {
 	});
 
 	const [toggleLike] = useMutation(TOGGLE_LIKE);
-	const [followAgency] = useMutation(FOLLOW_AGENCY);
-	const [unfollowAgency] = useMutation(UNFOLLOW_AGENCY);
+	const [followAgency] = useMutation(FOLLOW_AGENCY, { refetchQueries: ['MyFollowingAgencies'] });
+	const [unfollowAgency] = useMutation(UNFOLLOW_AGENCY, { refetchQueries: ['MyFollowingAgencies'] });
 	const [createConversation] = useMutation(CREATE_OR_GET_CONVERSATION);
 	const [sendMessage] = useMutation(SEND_MESSAGE);
 	const [recordView] = useMutation(RECORD_VIEW);
