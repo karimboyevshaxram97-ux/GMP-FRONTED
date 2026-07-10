@@ -75,6 +75,12 @@ export const light = {
 					height: '48px',
 					width: '100%',
 					backgroundColor: '#fff',
+
+					// Ko'p qatorli (multiline) maydonlar rows= balandligiga qarab
+					// o'sishi kerak — bir qatorli 48px balandlikka qisib bo'lmaydi.
+					'&.MuiInputBase-multiline': {
+						height: 'auto',
+					},
 				},
 				notchedOutline: {
 					padding: '8px',
