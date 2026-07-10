@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useTranslation } from 'next-i18next';
+import { useTranslation, i18n } from 'next-i18next';
 import { LEGACY_UI_KEYS } from './legacy-ui-keys';
 
 /**
@@ -20,3 +20,14 @@ export function useUiLang(): (key: string) => string {
 		[t],
 	);
 }
+
+/**
+ * Non-hook translator for module-level code and class components (e.g.
+ * sweetAlert helpers, ErrorBoundary) that can't call useUiLang(). Reads
+ * through the global next-i18next instance, falling back before it's
+ * initialized (SSR/early client).
+ */
+export const translateStatic = (key: string, fallback: string): string => {
+	const value = i18n?.t(key, { ns: 'common' });
+	return value && value !== key ? value : fallback;
+};

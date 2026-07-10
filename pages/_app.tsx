@@ -14,6 +14,7 @@ import { Lang } from '../libs/enums/lang.enum';
 import { getSavedLang, normalizeLang } from '../libs/utils/lang';
 import { getJwtToken } from '../libs/auth';
 import { REACT_APP_CHAT_WS } from '../libs/config';
+import ErrorBoundary from '../libs/components/common/ErrorBoundary';
 import '../scss/app.scss';
 import '../scss/pc/main.scss';
 import '../scss/mobile/main.scss';
@@ -83,7 +84,9 @@ const App = ({ Component, pageProps }: AppProps) => {
 				<ApolloProvider client={client}>
 					<ThemeProvider theme={theme}>
 						<CssBaseline />
-						<Component {...pageProps} />
+						<ErrorBoundary key={router.asPath}>
+							<Component {...pageProps} />
+						</ErrorBoundary>
 					</ThemeProvider>
 				</ApolloProvider>
 			</Provider>

@@ -1,5 +1,7 @@
 @import '../variables';
 @import './components/hero';
+@import './components/error-state';
+@import './components/sweetalert';
 
 // Page header (legacy — kept for small headers)
 .page-header {

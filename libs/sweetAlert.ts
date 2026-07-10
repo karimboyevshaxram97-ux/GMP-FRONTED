@@ -1,24 +1,29 @@
 import Swal from 'sweetalert2';
-import { i18n } from 'next-i18next';
+import { translateStatic as tr } from './utils/translations';
 
-// Non-hook module: translate through the global i18next instance at call time,
-// falling back to English before i18n has initialized (SSR/early client).
-const tr = (key: string, fallback: string): string => {
-	const value = i18n?.t(key, { ns: 'common' });
-	return value && value !== key ? value : fallback;
-};
+// Sayt uslubiga moslangan Swal instansi — tugma inline stillari o'chirilgan
+// (buttonsStyling: false), CSS to'liq nazorat qiladi (qarang: error-state.scss
+// ichidagi .gmp-swal-* qoidalar).
+const SwalThemed = Swal.mixin({
+	buttonsStyling: false,
+	customClass: {
+		popup: 'gmp-swal-popup',
+		confirmButton: 'gmp-swal-confirm',
+		cancelButton: 'gmp-swal-cancel',
+	},
+});
 
 export const sweetErrorAlert = (msg?: string) => {
-	return Swal.fire({
+	return SwalThemed.fire({
 		icon: 'error',
 		title: tr('common.errorTitle', 'Error'),
 		text: msg ?? tr('errors.somethingWentWrong', 'Something went wrong!'),
-		confirmButtonColor: '#1649ff',
+		confirmButtonText: tr('common.ok', 'OK'),
 	});
 };
 
 export const sweetMixinErrorAlert = async (msg?: string) => {
-	await Swal.fire({
+	await SwalThemed.fire({
 		toast: true,
 		position: 'top-end',
 		showConfirmButton: false,
@@ -30,7 +35,7 @@ export const sweetMixinErrorAlert = async (msg?: string) => {
 };
 
 export const sweetMixinSuccessAlert = async (msg?: string) => {
-	await Swal.fire({
+	await SwalThemed.fire({
 		toast: true,
 		position: 'top-end',
 		showConfirmButton: false,
@@ -42,12 +47,10 @@ export const sweetMixinSuccessAlert = async (msg?: string) => {
 };
 
 export const sweetConfirmAlert = async (msg?: string): Promise<boolean> => {
-	const result = await Swal.fire({
+	const result = await SwalThemed.fire({
 		title: msg ?? tr('common.areYouSure', 'Are you sure?'),
 		icon: 'warning',
 		showCancelButton: true,
-		confirmButtonColor: '#1649ff',
-		cancelButtonColor: '#d33',
 		confirmButtonText: tr('common.yes', 'Yes'),
 		cancelButtonText: tr('common.no', 'No'),
 	});

@@ -1,0 +1,125 @@
+@import '../../variables';
+
+// ── 404 / 500 / kutilmagan xato — umumiy fallback ekrani ──────────────────
+.error-state-page {
+	position: relative;
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	padding: 24px;
+	background: linear-gradient(150deg, #0a1332 0%, #0e2261 55%, #101a3e 100%);
+
+	&__orb {
+		position: absolute;
+		border-radius: 50%;
+		filter: blur(90px);
+		pointer-events: none;
+	}
+
+	&__orb--1 {
+		width: 460px;
+		height: 460px;
+		background: rgba(78, 127, 255, 0.24);
+		top: -160px;
+		right: -100px;
+	}
+
+	&__orb--2 {
+		width: 380px;
+		height: 380px;
+		background: rgba(123, 91, 255, 0.2);
+		bottom: -180px;
+		left: -80px;
+	}
+
+	&__content {
+		position: relative;
+		z-index: 1;
+		text-align: center;
+		max-width: 460px;
+	}
+
+	&__code {
+		font-size: clamp(72px, 14vw, 124px);
+		font-weight: 900;
+		line-height: 1;
+		letter-spacing: -2px;
+		margin-bottom: 8px;
+		background: linear-gradient(135deg, #ffffff 0%, #9db4ff 55%, #7b5bff 100%);
+		-webkit-background-clip: text;
+		background-clip: text;
+		-webkit-text-fill-color: transparent;
+	}
+
+	&__icon {
+		width: 68px;
+		height: 68px;
+		margin: 0 auto 20px;
+		border-radius: 20px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(255, 255, 255, 0.08);
+		border: 1px solid rgba(255, 255, 255, 0.14);
+		color: #9db4ff;
+
+		svg { font-size: 30px; }
+	}
+
+	&__title {
+		font-size: clamp(20px, 3vw, 26px);
+		font-weight: 800;
+		color: #ffffff;
+		margin-bottom: 12px;
+	}
+
+	&__desc {
+		font-size: 14.5px;
+		line-height: 1.75;
+		color: rgba(255, 255, 255, 0.58);
+		margin-bottom: 32px;
+	}
+
+	&__actions {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 12px;
+		flex-wrap: wrap;
+	}
+
+	&__btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		height: 48px;
+		padding: 0 26px;
+		border-radius: 999px;
+		font-size: 14px;
+		font-weight: 700;
+		font-family: $font-family;
+		text-decoration: none;
+		border: none;
+		cursor: pointer;
+
+		svg { font-size: 18px; }
+	}
+
+	&__btn--primary {
+		@include accent-button(999px);
+	}
+
+	&__btn--secondary {
+		@include glass-button(999px);
+	}
+}
+
+@media (max-width: $mobile) {
+	.error-state-page {
+		&__desc { margin-bottom: 24px; }
+		&__actions { flex-direction: column; width: 100%; }
+		&__btn { width: 100%; justify-content: center; }
+	}
+}
