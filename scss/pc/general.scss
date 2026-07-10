@@ -565,22 +565,17 @@
 	&.playing { background: $accent-gradient; color: #fff; }
 }
 
-// ── Language Switcher (site header) ─────────────────────────
+// ── Language Switcher (site header) — yopiq holatda faqat bayroq ──
 .lang-switcher {
-	@include glass-button(8px);
+	@include glass-button(50%);
+	width: 32px;
+	height: 32px;
 	display: flex;
 	align-items: center;
-	gap: 7px;
-	height: 32px;
-	padding: 0 10px;
-	font-family: 'Poppins', sans-serif;
-	font-size: 12px;
-	font-weight: 600;
-	letter-spacing: 0.2px;
-	white-space: nowrap;
+	justify-content: center;
+	flex-shrink: 0;
 
 	.lang-switcher__flag { display: block; }
-	.lang-switcher__arrow { font-size: 16px; opacity: 0.7; }
 }
 
 .navbar .navbar-right {
@@ -591,7 +586,6 @@
 
 // Mobile top bar (light background) needs dark text
 .top > .lang-switcher {
-	@include glass-button-dark(8px);
-	width: fit-content;
+	@include glass-button-dark(50%);
 	margin: 8px 0;
 }
