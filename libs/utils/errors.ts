@@ -4,6 +4,7 @@ const AUTH_ERROR_PARTS = [
 	'user is not active',
 	'invalid token',
 	'no token provided',
+	'user not found',
 	'unauthorized',
 	'auth error',
 	'authentication',
@@ -41,7 +42,12 @@ export const toFriendlyError = (errOrMessage: any, fallback?: string): string =>
 	if (normalized.includes('not_allowed_request')) {
 		return tr('errors.applicationsClosed', 'Applications for this service are closed or the limit has been reached.');
 	}
-	if (normalized.includes('invalid token') || normalized.includes('no token provided') || normalized.includes('user is not active')) {
+	if (
+		normalized.includes('invalid token') ||
+		normalized.includes('no token provided') ||
+		normalized.includes('user is not active') ||
+		normalized.includes('user not found')
+	) {
 		return tr('errors.sessionExpired', 'Your session has expired. Please sign in again.');
 	}
 
