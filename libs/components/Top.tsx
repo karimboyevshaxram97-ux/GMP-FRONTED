@@ -1,17 +1,18 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { Stack, Box, Menu, MenuItem, Badge, Divider, Typography, IconButton, Tooltip } from '@mui/material';
+import { Stack, Box, Menu, MenuItem, Badge, Divider, Typography, IconButton, Tooltip, Drawer } from '@mui/material';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 import { Logout } from '@mui/icons-material';
 import { useReactiveVar, useQuery, useMutation } from '@apollo/client';
 import { userVar } from '../../apollo/store';
 import { getJwtToken, logOut, updateUserInfo } from '../auth';
 import { avatarSrc } from '../utils/avatar';
-import useDeviceDetect from '../hooks/useDeviceDetect';
 import { GET_MY_NOTIFICATIONS, GET_UNREAD_NOTIFICATION_COUNT } from '../../apollo/user/query';
 import { MARK_ALL_NOTIFICATIONS_AS_READ } from '../../apollo/user/mutation';
 import { useUiLang } from '../utils/translations';
@@ -31,10 +32,10 @@ const navLinks = [
 
 const Top = () => {
 	const ui = useUiLang();
-	const device = useDeviceDetect();
 	const user = useReactiveVar(userVar);
 	const router = useRouter();
 	const [scrolled, setScrolled] = useState(false);
+	const [mobileOpen, setMobileOpen] = useState(false);
 	const [logoutAnchor, setLogoutAnchor] = useState<null | HTMLElement>(null);
 	const [notifAnchor, setNotifAnchor] = useState<null | HTMLElement>(null);
 	const logoutOpen = Boolean(logoutAnchor);
@@ -132,25 +133,13 @@ const Top = () => {
 
 	const isMyPage = router.pathname.startsWith('/mypage');
 
-	if (device === 'mobile') {
-		return (
-			<Stack className={'top'}>
-				<ThemeToggle />
-				<MusicToggle />
-				<LanguageSwitcher />
-				<Link href={'/home'}><div>{ui('nav.home')}</div></Link>
-				<Link href={'/service?type=STUDY_ABROAD'}><div>{ui('nav.study')}</div></Link>
-				<Link href={'/service?type=WORK_ABROAD'}><div>{ui('nav.work')}</div></Link>
-				<Link href={'/service?type=TRAVEL'}><div>{ui('mypage.travel')}</div></Link>
-				<Link href={'/service?type=VISA_SERVICES'}><div>{ui('nav.visa')}</div></Link>
-				<Link href={'/service'}><div>{ui('footer.allServices')}</div></Link>
-				<Link href={'/agency/map'}><div>{ui('nav.map')}</div></Link>
-				{user?._id && <Link href={'/mypage'}><div>{ui('nav.myPage')}</div></Link>}
-			</Stack>
-		);
-	}
+	// Marshrut o'zgarsa mobil menyu yopilsin
+	useEffect(() => {
+		setMobileOpen(false);
+	}, [router.asPath]);
 
 	return (
+		<>
 		<div className={'navbar'}>
 			<div className={`navbar-main ${scrolled ? 'scrolled' : ''}`}>
 				<div className={'container'}>
@@ -272,9 +261,69 @@ const Top = () => {
 					)}
 					</Box>
 
+					{/* MOBILE: hamburger (faqat mobilda ko'rinadi — CSS orqali) */}
+					<IconButton
+						className={'mobile-menu-btn'}
+						onClick={() => setMobileOpen(true)}
+						aria-label={'menu'}
+					>
+						<MenuIcon />
+					</IconButton>
+
 				</div>
 			</div>
 		</div>
+
+		{/* MOBILE: slide-in drawer */}
+		<Drawer
+			anchor={'right'}
+			open={mobileOpen}
+			onClose={() => setMobileOpen(false)}
+			className={'mobile-drawer'}
+			PaperProps={{ className: 'mobile-drawer-paper' }}
+		>
+			<Box className={'mobile-drawer-header'}>
+				<span className={'drawer-logo'}>GMP</span>
+				<IconButton onClick={() => setMobileOpen(false)} aria-label={'close'}>
+					<CloseIcon />
+				</IconButton>
+			</Box>
+
+			<Box className={'mobile-drawer-links'}>
+				{navLinks.map((link) => (
+					<Link key={link.href} href={link.href}>
+						<div className={isActive(link.match) ? 'active' : ''}>{ui(link.label)}</div>
+					</Link>
+				))}
+				{user?._id && (
+					<Link href={'/mypage'}>
+						<div className={isMyPage ? 'active' : ''}>{ui('nav.myPage')}</div>
+					</Link>
+				)}
+			</Box>
+
+			<Box className={'mobile-drawer-footer'}>
+				<Box className={'drawer-toggles'}>
+					<ThemeToggle />
+					<MusicToggle />
+					<LanguageSwitcher />
+				</Box>
+				{!user?._id ? (
+					<Link href={'/account/join'}>
+						<div className={'drawer-join'}>
+							<AccountCircleOutlinedIcon />
+							<span>{ui('nav.loginRegister')}</span>
+						</div>
+					</Link>
+				) : (
+					<div className={'drawer-logout'} onClick={() => logOut()}>
+						<Logout fontSize={'small'} />
+						<span>{ui('admin.logout')}</span>
+					</div>
+				)}
+			</Box>
+		</Drawer>
+		</>
 	);
 
 };

@@ -1,44 +1,162 @@
 @import '../variables';
 
-@media (max-width: $mobile) {
-	#mobile-wrap {
-		min-height: 100vh;
+// ============================================================
+// MOBILE / RESPONSIVE
+// PC komponentlar qayta ishlatiladi — bu yerda faqat @media
+// orqali mobil ko'rinish beriladi. Alohida JSX daraxti yo'q.
+// ============================================================
+
+// Hamburger tugmasi standart (PC) holatda yashirin.
+// MUI IconButton'ning o'z stili (.MuiIconButton-root) runtime'da
+// keyin joylashtirilib, teng ustunlikda ustidan yozib yuborishi
+// mumkin — shu sabab ikki klass bilan ustunlikni oshiramiz.
+.navbar .mobile-menu-btn {
+	display: none;
+}
+
+// ── Mobil drawer (body ga portal qilinadi — navbar ichida emas) ──
+.mobile-drawer-paper {
+	width: 82vw !important;
+	max-width: 330px !important;
+	background: linear-gradient(160deg, #0c0a20 0%, #13103a 45%, #0d1b3e 100%) !important;
+	color: #fff !important;
+	box-sizing: border-box;
+	padding: 18px 18px 28px;
+	display: flex;
+	flex-direction: column;
+
+	.mobile-drawer-header {
 		display: flex;
-		flex-direction: column;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 6px;
+
+		.drawer-logo {
+			font-family: $font-family;
+			font-weight: 900;
+			font-size: 22px;
+			letter-spacing: 1px;
+			color: #fff;
+		}
+
+		.MuiIconButton-root {
+			color: rgba(255, 255, 255, 0.8);
+		}
 	}
 
+	.mobile-drawer-links {
+		display: flex;
+		flex-direction: column;
+		padding: 10px 0;
+		margin-top: 6px;
+		border-top: 1px solid rgba(255, 255, 255, 0.08);
+		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+		a > div {
+			font-family: $font-family;
+			font-size: 16px;
+			font-weight: 600;
+			color: rgba(255, 255, 255, 0.82);
+			padding: 14px 12px;
+			border-radius: 10px;
+			transition: background 0.2s ease, color 0.2s ease;
+
+			&:hover {
+				color: #fff;
+			}
+
+			&.active {
+				color: #fff;
+				background: rgba(255, 255, 255, 0.08);
+			}
+		}
+	}
+
+	.mobile-drawer-footer {
+		margin-top: auto;
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+		padding-top: 20px;
+
+		.drawer-toggles {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.drawer-join,
+		.drawer-logout {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 8px;
+			height: 46px;
+			border-radius: 12px;
+			font-family: $font-family;
+			font-weight: 700;
+			font-size: 14px;
+			cursor: pointer;
+
+			svg {
+				font-size: 18px;
+			}
+		}
+
+		.drawer-join {
+			background: $accent-gradient;
+			color: #fff;
+		}
+
+		.drawer-logout {
+			background: rgba(255, 255, 255, 0.08);
+			border: 1px solid rgba(255, 255, 255, 0.16);
+			color: #fff;
+		}
+	}
+}
+
+// ============================================================
+@media (max-width: $mobile) {
+	#pc-wrap {
+		min-height: 100vh;
+		overflow-x: hidden; // yon tomonga siljishning oldini olish
+	}
+
+	// ── Navbar: markaziy linklar va o'ng blok yashirin, hamburger ko'rinadi ──
 	.navbar {
 		.navbar-main {
-			height: 60px;
-			padding: 0 16px;
-
 			.container {
-				padding: 0;
+				padding: 0 16px;
 			}
 
 			.router-box {
-				gap: 16px;
+				display: none;
+			}
 
-				a div {
-					font-size: 13px;
+			.navbar-right {
+				display: none;
+			}
+
+			.mobile-menu-btn {
+				display: inline-flex;
+				color: #fff;
+				padding: 6px;
+
+				svg {
+					font-size: 26px;
+					color: #fff;
 				}
 			}
 		}
 	}
 
+	// Floating chat widget mobilda yashirin (kichik ekranni to'sadi)
+	.chatting {
+		display: none !important;
+	}
+
 	.container {
 		padding: 0 16px;
-	}
-
-	.page-header {
-		padding: 40px 16px;
-
-		h1 {
-			font-size: 24px;
-		}
-	}
-
-	.agency-card .card-image {
-		height: 140px;
 	}
 }
