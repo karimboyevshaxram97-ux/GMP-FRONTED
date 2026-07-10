@@ -561,3 +561,29 @@ $chat-h: calc(100vh - 80px - #{$header-h} - #{$input-h});
 		flex-shrink: 0;
 	}
 }
+
+/* ═══════════════ MESSAGES — MOBILE (≤768px) ═══════════════
+   Bitta panel ko'rinadi: standart holatda suhbatlar ro'yxati,
+   suhbat ochilganda (.conv-open) — chat oynasi. Orqaga tugma
+   (.msg-back-btn) ro'yxatga qaytaradi. */
+@media (max-width: $mobile) {
+	.messages-page {
+		.msg-layout {
+			grid-template-columns: 1fr;
+			box-shadow: none;
+		}
+
+		// Standart: ro'yxat ko'rinadi, chat yashirin
+		.msg-main { display: none; }
+
+		// Suhbat ochilganda: ro'yxat yashirin, chat butun enni egallaydi
+		.msg-layout.conv-open {
+			.msg-sidebar { display: none; }
+			.msg-main { display: flex; }
+		}
+
+		.msg-bubble { max-width: 82%; }
+		.msg-chat-messages { padding: 16px; }
+		.msg-chat-input { padding: 12px 14px; }
+	}
+}

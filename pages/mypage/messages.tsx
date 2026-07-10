@@ -221,7 +221,7 @@ const MessagesPage: NextPage = () => {
 
 	return (
 		<div className="messages-page">
-			<Box className="msg-layout">
+			<Box className={`msg-layout${activeConv ? ' conv-open' : ''}`}>
 				{/* ── Left sidebar ── */}
 				<Box className="msg-sidebar">
 					<Box className="msg-sidebar-header">

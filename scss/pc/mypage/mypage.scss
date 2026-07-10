@@ -691,6 +691,10 @@
 			grid-template-columns: 1fr;
 		}
 
+		.agency-stats-row {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
 		.mypage-content-card {
 			padding: 20px;
 		}

@@ -2708,3 +2708,112 @@ $brands-bg: #f5f7fa; // yuqoridagi qidiruv bo'limi bilan bir xil — chegara sez
 		strong { font-size: 20px; }
 	}
 }
+
+/* ═══════════════════════════════════════════════════════════
+   HOMEPAGE — MOBILE (≤768px)
+   PC komponentlar qayta ishlatiladi; faqat @media orqali moslash.
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: $mobile) {
+	/* ── HERO ── */
+	.home-hero {
+		height: auto;
+		min-height: 82vh;
+		padding: 100px 0 56px;
+
+		&__left { max-width: 100%; }
+		&__title { font-size: clamp(26px, 8vw, 34px); line-height: 1.2; }
+		&__subtitle { font-size: 13px; max-width: 100%; }
+		&__scroll { display: none; }
+	}
+
+	/* ── Bo'limlar vertikal ritmi ── */
+	.home-service-types,
+	.home-how,
+	.home-featured-agencies,
+	.home-featured-services,
+	.home-marketing,
+	.home-live-chat,
+	.top-agencies,
+	.home-cta {
+		padding-top: 56px;
+		padding-bottom: 56px;
+	}
+
+	.home-service-types__header,
+	.home-how__header,
+	.home-featured-agencies__header,
+	.home-featured-services__header {
+		margin-bottom: 34px;
+	}
+
+	/* ── SERVICE TYPES: 4 → 1 ── */
+	.home-service-types__grid {
+		grid-template-columns: 1fr;
+		gap: 16px;
+	}
+	.stype-card {
+		padding: 28px 22px 24px;
+
+		h3 { font-size: 20px; }
+		p { min-height: 0; margin-bottom: 20px; }
+	}
+
+	/* ── HOW IT WORKS: 3 → 1 (ulovchi chiziq yashirin) ── */
+	.home-how__steps {
+		grid-template-columns: 1fr;
+		gap: 40px;
+
+		&::before { display: none; }
+	}
+	.how-step { padding: 0 12px; }
+
+	/* ── FEATURED (agencies + services): 4 → 2, "view all" statik ── */
+	.home-featured-agencies__grid,
+	.home-featured-services__grid {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 16px;
+	}
+
+	.home-featured-agencies__header .view-all-link,
+	.home-featured-services__header .view-all-link {
+		position: static;
+		margin-top: 14px;
+		justify-content: center;
+	}
+
+	/* ── MARKETING: video ── */
+	.home-marketing {
+		.hm-body { gap: 24px; margin-bottom: 40px; }
+	}
+
+	/* ── LIVE CHAT: 2 → 1 ── */
+	.home-live-chat {
+		.container {
+			grid-template-columns: 1fr;
+			gap: 32px;
+		}
+		.hlc-widget { height: 420px; }
+		.hlc-stats { flex-wrap: wrap; gap: 16px 20px; }
+	}
+
+	/* ── BRANDS marquee: chekka fade kichikroq ── */
+	.home-brands__marquee {
+		&::before,
+		&::after { width: 60px; }
+	}
+
+	/* ── CTA tugmalari ── */
+	.home-cta .cta-btn {
+		height: 48px;
+		padding: 0 22px;
+		font-size: 14px;
+	}
+}
+
+/* ── Kichik telefonlar (≤560px): featured grid 2 → 1 ── */
+@media (max-width: 560px) {
+	.home-featured-agencies__grid,
+	.home-featured-services__grid {
+		grid-template-columns: 1fr;
+	}
+}

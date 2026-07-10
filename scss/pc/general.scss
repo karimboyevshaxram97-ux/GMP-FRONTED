@@ -691,3 +691,76 @@
 
 	&:hover { background: rgba(225, 29, 72, 0.06); }
 }
+
+/* ═══════════════ CARDS — MOBILE (≤768px) ═══════════════
+   Home/Service/Agency ro'yxatlarida ishlatiladigan umumiy
+   agency-card va service-card mobilda kichikroq bo'ladi. */
+@media (max-width: $mobile) {
+	.agency-card {
+		.card-image { height: 140px; }
+
+		.card-body { padding: 14px; gap: 8px; }
+
+		.agency-title-row h3 { font-size: 15px; }
+		.agency-title-row span { font-size: 11.5px; padding: 4px 7px; }
+
+		.agency-description { font-size: 12.5px; min-height: 0; }
+
+		.country-row,
+		.rating-row,
+		.agency-metrics span {
+			font-size: 11.5px;
+		}
+
+		.agency-metrics {
+			gap: 6px;
+			padding-top: 10px;
+
+			svg { font-size: 14px; }
+		}
+
+		.card-actions {
+			gap: 6px;
+			padding-top: 10px;
+
+			.action-btn {
+				font-size: 11px;
+				padding: 4px 9px;
+
+				svg { font-size: 14px; }
+			}
+
+			.profile-button {
+				font-size: 11px;
+				padding: 4px 10px;
+			}
+		}
+	}
+
+	.service-card {
+		.service-card-body { padding: 14px; gap: 7px; }
+
+		.service-type-badge { font-size: 10.5px; padding: 3px 9px; }
+
+		.service-name { font-size: 15px; }
+
+		.service-meta {
+			font-size: 11.5px;
+
+			.meta-icon { font-size: 13px; }
+		}
+
+		.service-rating-row .review-count { font-size: 11.5px; }
+
+		.service-footer { padding-top: 10px; }
+
+		.service-price { font-size: 17px; }
+
+		.service-action-btn {
+			font-size: 11px;
+			padding: 3px 8px;
+
+			svg { font-size: 13px; }
+		}
+	}
+}

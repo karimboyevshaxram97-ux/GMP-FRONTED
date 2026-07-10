@@ -917,3 +917,42 @@
 		}
 	}
 }
+
+/* ═══════════════ SERVICE — MOBILE polish (≤768px) ═══════════════ */
+@media (max-width: $mobile) {
+	.services-page {
+		.service-type-strip {
+			margin: -26px auto 26px;
+			gap: 4px;
+
+			.type-tab { padding: 9px 16px; }
+			.type-tab-label { font-size: 12.5px; }
+			.type-tab-sub { font-size: 10px; }
+		}
+
+		.service-results-head h2 { font-size: 24px; }
+
+		.photo-board {
+			margin-top: 28px;
+			&__head h2 { font-size: 18px; }
+		}
+
+		.related-agencies-head h2 { font-size: 20px; }
+
+		.empty-services { padding: 44px 18px; }
+	}
+
+	.service-detail-page {
+		.service-detail-hero { padding: 92px 0 40px; }
+		.service-detail-grid { gap: 20px; }
+
+		.service-intro { padding: 24px; }
+		.service-intro h1 { font-size: clamp(26px, 7vw, 32px); }
+
+		.price-panel { padding: 22px; }
+		.price-panel > strong { font-size: 36px; }
+
+		.service-main-card { padding: 22px; }
+		.service-main-card h2 { font-size: 20px; }
+	}
+}
