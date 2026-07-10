@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Menu, MenuItem } from '@mui/material';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CheckIcon from '@mui/icons-material/Check';
 import { Lang } from '../../enums/lang.enum';
 import { normalizeLang, setLang } from '../../utils/lang';
 import FlagIcon from './FlagIcon';
 
-const LANGS: ReadonlyArray<{ code: Lang; native: string }> = [
-	{ code: Lang.KO, native: '한국어' },
-	{ code: Lang.EN, native: 'English' },
-	{ code: Lang.UZ, native: "O'zbekcha" },
-	{ code: Lang.RU, native: 'Русский' },
+const LANGS: ReadonlyArray<{ code: Lang; native: string; code3: string }> = [
+	{ code: Lang.KO, native: '한국어', code3: 'KOR' },
+	{ code: Lang.EN, native: 'English', code3: 'ENG' },
+	{ code: Lang.UZ, native: "O'zbekcha", code3: 'UZB' },
+	{ code: Lang.RU, native: 'Русский', code3: 'RUS' },
 ];
 
 /**
@@ -39,10 +38,9 @@ const LanguageSwitcher = () => {
 				aria-haspopup="menu"
 				aria-expanded={Boolean(anchor)}
 				aria-label="Change language"
+				title={active.native}
 			>
 				<FlagIcon lang={active.code} size={20} className="lang-switcher__flag" />
-				<span className="lang-switcher__label">{active.native}</span>
-				<KeyboardArrowDownIcon className="lang-switcher__arrow" />
 			</button>
 			<Menu
 				anchorEl={anchor}
@@ -56,6 +54,7 @@ const LanguageSwitcher = () => {
 						key={lang.code}
 						selected={lang.code === current}
 						onClick={() => handleSelect(lang.code)}
+						title={lang.native}
 						sx={{
 							fontSize: 14,
 							fontWeight: lang.code === current ? 700 : 500,
@@ -66,7 +65,7 @@ const LanguageSwitcher = () => {
 						}}
 					>
 						<FlagIcon lang={lang.code} size={22} />
-						<span style={{ flex: 1 }}>{lang.native}</span>
+						<span style={{ flex: 1, fontWeight: 700, letterSpacing: '0.5px' }}>{lang.code3}</span>
 						{lang.code === current && <CheckIcon sx={{ fontSize: 16, color: '#1649ff' }} />}
 					</MenuItem>
 				))}
