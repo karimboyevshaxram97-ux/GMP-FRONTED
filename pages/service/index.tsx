@@ -11,16 +11,16 @@ import {
 	Box,
 	Grid,
 	Pagination,
-	Select,
-	MenuItem,
-	FormControl,
 	Button,
-	Chip,
 	Slider,
 	Skeleton,
 } from '@mui/material';
 import { useQuery, useMutation, useReactiveVar } from '@apollo/client';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import SearchIcon from '@mui/icons-material/Search';
+import StarIcon from '@mui/icons-material/Star';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TuneIcon from '@mui/icons-material/Tune';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import withLayoutMain from '../../libs/components/layout/LayoutHome';
@@ -38,6 +38,15 @@ import { AgencySortField } from '../../libs/enums/agency.enum';
 import { Agency } from '../../libs/types/agency/agency';
 import { getServiceTypeLabel } from '../../libs/utils';
 import { useUiLang } from '../../libs/utils/translations';
+import { sweetMixinErrorAlert } from '../../libs/sweetAlert';
+import { toFriendlyError } from '../../libs/utils/errors';
+
+const sortOptions = [
+	{ value: ServiceSortField.SERVICE_RANK, label: 'service.topRanked', icon: <TrendingUpIcon /> },
+	{ value: ServiceSortField.PRICE, label: 'service.price', icon: <AttachMoneyIcon /> },
+	{ value: ServiceSortField.AVERAGE_RATING, label: 'service.bestRated', icon: <StarIcon /> },
+	{ value: ServiceSortField.CREATED_AT, label: 'service.newestFirst', icon: <AccessTimeIcon /> },
+];
 
 const serviceTypeOptions = [
 	{ value: '', label: 'All Services', sub: 'Browse all', icon: <AppsIcon />, color: '#6366f1', bg: 'rgba(99,102,241,0.1)', shadow: 'rgba(99,102,241,0.3)' },
@@ -131,14 +140,22 @@ const ServiceList: NextPage = () => {
 
 	const handleServiceLike = async (serviceId: string) => {
 		if (!user?._id) { router.push('/account/join'); return; }
-		await toggleLike({ variables: { targetId: serviceId, targetType: LikeTargetType.SERVICE } });
-		refetch();
+		try {
+			await toggleLike({ variables: { targetId: serviceId, targetType: LikeTargetType.SERVICE } });
+			refetch();
+		} catch (err: any) {
+			await sweetMixinErrorAlert(toFriendlyError(err, ui('errors.failedToLike')));
+		}
 	};
 
 	const handleAgencyLike = async (agencyId: string) => {
 		if (!user?._id) { router.push('/account/join'); return; }
-		await toggleLike({ variables: { targetId: agencyId, targetType: LikeTargetType.AGENCY } });
-		refetchAgencies();
+		try {
+			await toggleLike({ variables: { targetId: agencyId, targetType: LikeTargetType.AGENCY } });
+			refetchAgencies();
+		} catch (err: any) {
+			await sweetMixinErrorAlert(toFriendlyError(err, ui('errors.failedToLike')));
+		}
 	};
 
 	const resetFilters = () => {
@@ -206,14 +223,18 @@ const ServiceList: NextPage = () => {
 						</Box>
 
 						<label>{ui('common.sortBy')}</label>
-						<FormControl fullWidth size="small">
-							<Select value={sort} onChange={(event) => setSort(event.target.value as ServiceSortField)}>
-								<MenuItem value={ServiceSortField.SERVICE_RANK}>{ui('service.topRanked')}</MenuItem>
-								<MenuItem value={ServiceSortField.PRICE}>{ui('service.price')}</MenuItem>
-								<MenuItem value={ServiceSortField.AVERAGE_RATING}>{ui('service.bestRated')}</MenuItem>
-								<MenuItem value={ServiceSortField.CREATED_AT}>{ui('service.newestFirst')}</MenuItem>
-							</Select>
-						</FormControl>
+						<Box className="sort-pills">
+							{sortOptions.map((option) => (
+								<button
+									key={option.value}
+									className={`sort-pill${sort === option.value ? ' active' : ''}`}
+									onClick={() => { setSort(option.value); setPage(1); }}
+								>
+									{option.icon}
+									{ui(option.label)}
+								</button>
+							))}
+						</Box>
 
 						<label>{ui('service.priceRange')}</label>
 						<Box className="price-label">${priceRange[0]} – ${priceRange[1]}</Box>
@@ -229,21 +250,12 @@ const ServiceList: NextPage = () => {
 							valueLabelDisplay="auto"
 						/>
 
-						<Button fullWidth variant="outlined" onClick={resetFilters}>
+						<Button fullWidth className="reset-filters-btn" onClick={resetFilters}>
 							{ui('service.resetFilters')}
 						</Button>
 					</Box>
 
 					<Box>
-						<Box className="service-results-head">
-							<Box>
-								<span>{ui('service.serviceDirectory')}</span>
-								<h2>{search ? `${ui('agency.resultsFor')} "${search}"` : ui('service.availableServices')}</h2>
-								<p>{total} {ui('service.servicesFound')}</p>
-							</Box>
-							{search && <Chip label={search} onDelete={() => pushServiceFilters({ type: serviceType, country })} />}
-						</Box>
-
 						<Box className="related-agencies-panel">
 							<Box className="related-agencies-head">
 								<span>{serviceType ? ui(getServiceTypeLabel(serviceType)) : ui('service.verifiedPartners')}</span>

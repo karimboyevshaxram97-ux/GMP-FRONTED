@@ -414,6 +414,11 @@ export const GET_PHOTO_COMMENTS = gql`
 		getPhotoComments(photoId: $photoId) {
 			_id
 			text
+			attachments {
+				url
+				type
+				name
+			}
 			userName
 			userAvatar
 			createdAt

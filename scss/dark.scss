@@ -67,6 +67,12 @@ html.dark {
 		.verified-badge { background: var(--dk-surface-2); }
 	}
 
+	// Booking-style agency tiles keep their text area visually separate.
+	.agency-card {
+		background: transparent;
+		box-shadow: none;
+	}
+
 	.card-footer,
 	.service-card-footer { border-color: var(--dk-border); }
 
@@ -236,13 +242,6 @@ html.dark {
 		.header-left p, .top-agencies__head p, p { color: var(--dk-text-2); }
 	}
 
-	.top-agencies__card {
-		background: var(--dk-surface);
-		border-color: var(--dk-border);
-
-		h3, strong, .top-agencies__name { color: var(--dk-text); }
-	}
-
 	.home-featured-agencies .agency-skeleton,
 	.home-featured-services .service-card {
 		background: var(--dk-surface);
@@ -393,8 +392,35 @@ html.dark {
 		border-color: var(--dk-border);
 		box-shadow: none;
 
-		h2, h3, .panel-title, label { color: var(--dk-text); }
+		h2, h3 { color: var(--dk-text); }
 		p, span { color: var(--dk-text-2); }
+	}
+
+	.service-filter-panel {
+		.panel-title { color: var(--dk-text); }
+		label { color: var(--dk-muted); }
+
+		.sort-pill {
+			background: var(--dk-surface-2);
+			border-color: var(--dk-border);
+			color: var(--dk-text-2);
+
+			&:hover { border-color: #9db4ff; color: #9db4ff; background: var(--dk-surface); }
+
+			&.active { color: #ffffff; }
+		}
+
+		.price-label { color: var(--dk-text); }
+
+		.MuiSlider-rail { background: var(--dk-border-strong); }
+
+		.reset-filters-btn {
+			background: var(--dk-surface-2);
+			border-color: var(--dk-border);
+			color: var(--dk-text);
+
+			&:hover { border-color: #9db4ff; color: #9db4ff; background: var(--dk-surface); }
+		}
 	}
 
 	.service-results-head,

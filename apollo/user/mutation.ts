@@ -299,6 +299,11 @@ export const CREATE_PHOTO_COMMENT = gql`
 		createPhotoComment(input: $input) {
 			_id
 			text
+			attachments {
+				url
+				type
+				name
+			}
 			userName
 			userAvatar
 			createdAt

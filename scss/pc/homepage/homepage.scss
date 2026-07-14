@@ -1936,105 +1936,79 @@ $brands-bg: #f5f7fa; // yuqoridagi qidiruv bo'limi bilan bir xil — chegara sez
 	.top-agency-card {
 		@include button-states;
 		position: relative;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: flex-start;
-		gap: 14px;
+		display: block;
+		overflow: hidden;
+		height: 240px;
 		text-decoration: none;
-		min-height: 272px;
-		padding: 24px 18px 22px;
-		border: 1px solid rgba(203, 216, 245, 0.9);
 		border-radius: 20px;
-		background:
-			linear-gradient(180deg, rgba(22, 73, 255, 0.08) 0%, rgba(22, 73, 255, 0) 44%),
-			#ffffff;
 		box-shadow: 0 14px 36px rgba(10, 36, 114, 0.08);
 		opacity: 0;
 		transform: translateY(26px) scale(0.94);
-		transition: transform 0.26s ease, box-shadow 0.26s ease, border-color 0.26s ease;
+		transition: transform 0.26s ease, box-shadow 0.26s ease;
 
-		&__avatar {
-			position: relative;
-			width: 152px;
-			height: 152px;
-			border-radius: 26px;
-			padding: 7px;
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: contain;
 			background: #ffffff;
-			border: 1px solid #e5ecfb;
-			box-shadow:
-				0 16px 30px rgba(22, 73, 255, 0.13),
-				inset 0 0 0 5px #f3f7ff;
-			transition: transform 0.26s ease, box-shadow 0.26s ease;
-
-			img {
-				width: 100%;
-				height: 100%;
-				border-radius: 20px;
-				object-fit: cover;
-				border: 0;
-			}
+			padding: 20px;
+			box-sizing: border-box;
+			display: block;
+			transition: transform 0.4s ease;
 		}
 
-		&__rank {
+		&::after {
+			content: '';
 			position: absolute;
-			top: -10px;
-			left: -10px;
-			z-index: 2;
-			width: 40px;
-			height: 40px;
+			inset: 0;
+			background: linear-gradient(180deg, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.55) 100%);
+		}
+
+		&__overlay {
+			position: absolute;
+			inset: 0;
+			z-index: 1;
 			display: flex;
-			align-items: center;
-			justify-content: center;
-			border-radius: 14px;
-			background: linear-gradient(135deg, $primary, #7b5bff);
-			color: #fff;
-			font-size: 17px;
-			font-weight: 900;
-			box-shadow: 0 10px 22px rgba(22, 73, 255, 0.25);
-			border: 3px solid #fff;
+			flex-direction: column;
+			justify-content: flex-end;
+			gap: 8px;
+			padding: 16px;
 		}
 
 		&__name {
-			font-size: 16px;
+			font-size: 15px;
 			font-weight: 900;
-			color: $text-primary;
+			color: #ffffff;
 			max-width: 100%;
-			min-height: 22px;
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
 		}
 
 		&__rating {
+			align-self: flex-start;
 			display: inline-flex;
 			align-items: center;
 			justify-content: center;
 			gap: 5px;
-			font-size: 14px;
-			font-weight: 700;
-			color: #f5a623;
-			background: #fff8e8;
-			border: 1px solid #ffe4ac;
+			font-size: 13px;
+			font-weight: 800;
+			color: #1a1a2e;
+			background: rgba(255, 255, 255, 0.94);
 			border-radius: 999px;
-			padding: 6px 12px;
+			padding: 5px 11px;
 
-			svg { font-size: 17px; }
+			svg { font-size: 15px; color: #f5a623; }
 		}
 
 		&:hover {
 			transform: translateY(-7px);
-			border-color: rgba(22, 73, 255, 0.28);
 			box-shadow: 0 24px 54px rgba(10, 36, 114, 0.14);
 		}
 
-		&:hover .top-agency-card__avatar {
-			transform: scale(1.04);
-			box-shadow:
-				0 22px 42px rgba(22, 73, 255, 0.18),
-				inset 0 0 0 5px #eef4ff;
+		&:hover img {
+			transform: scale(1.06);
 		}
-
 	}
 
 	// Skroll qilib yetib kelinganda paydo bo'ladi (JS .in-view klassini qo'shadi)
@@ -2063,10 +2037,234 @@ $brands-bg: #f5f7fa; // yuqoridagi qidiruv bo'limi bilan bir xil — chegara sez
 @media (prefers-reduced-motion: reduce) {
 	.home-featured-agencies__grid > *,
 	.home-featured-services__grid > *,
-	.top-agencies__grid .top-agency-card {
+	.top-agencies__grid .top-agency-card,
+	.top-liked-photos__grid .top-liked-photo-card {
 		animation: none !important;
 		opacity: 1 !important;
 		transform: none !important;
+	}
+}
+
+/* ── TOP LIKED PHOTOS ── */
+.top-liked-photos {
+	padding: 96px 0;
+	background: #ffffff;
+	position: relative;
+	overflow: hidden;
+	text-align: center;
+
+	.container {
+		position: relative;
+		z-index: 1;
+	}
+
+	&__head {
+		margin-bottom: 44px;
+
+		.top-liked-photos__tag {
+			display: inline-block;
+			background: rgba(22, 73, 255, 0.1);
+			color: $primary;
+			font-size: 11px;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 2.5px;
+			padding: 7px 20px;
+			border-radius: 100px;
+			margin-bottom: 18px;
+		}
+
+		h2 {
+			font-size: clamp(26px, 3.4vw, 42px);
+			font-weight: 900;
+			color: $text-primary;
+			margin-bottom: 12px;
+			line-height: 1.2;
+		}
+
+		p {
+			font-size: 16px;
+			color: $text-secondary;
+			max-width: 480px;
+			margin: 0 auto;
+			line-height: 1.6;
+		}
+	}
+
+	&__grid {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	&__row {
+		display: flex;
+		gap: 20px;
+
+		@media (max-width: 600px) {
+			flex-direction: column;
+		}
+	}
+
+	&__row--top .top-liked-photo-card {
+		flex: 1;
+		height: 300px;
+	}
+
+	&__row--bottom .top-liked-photo-card {
+		flex: 1;
+		height: 210px;
+	}
+
+	@media (max-width: 600px) {
+		&__row--top .top-liked-photo-card,
+		&__row--bottom .top-liked-photo-card {
+			height: 220px;
+		}
+	}
+}
+
+.top-liked-photo-card {
+	position: relative;
+	overflow: hidden;
+	border-radius: 20px;
+	cursor: pointer;
+	text-align: left;
+	box-shadow: 0 14px 36px rgba(10, 36, 114, 0.08);
+	opacity: 0;
+	transform: translateY(26px) scale(0.96);
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		transition: transform 0.4s ease;
+	}
+
+	&::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.65) 100%);
+	}
+
+	&__overlay {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		padding: 16px;
+	}
+
+	&__agency {
+		align-self: flex-start;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		max-width: 100%;
+		background: rgba(255, 255, 255, 0.18);
+		backdrop-filter: blur(6px);
+		border-radius: 999px;
+		padding: 6px 14px 6px 6px;
+
+		img {
+			width: 26px;
+			height: 26px;
+			border-radius: 50%;
+			object-fit: cover;
+			flex-shrink: 0;
+		}
+
+		span {
+			color: #fff;
+			font-weight: 700;
+			font-size: 14px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	}
+
+	&__likes {
+		align-self: flex-end;
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		background: rgba(255, 255, 255, 0.94);
+		color: #ff4757;
+		border-radius: 999px;
+		padding: 7px 14px;
+		font-weight: 800;
+		font-size: 14px;
+
+		svg { font-size: 16px; }
+	}
+
+	&:hover {
+		transform: translateY(-6px);
+		box-shadow: 0 24px 54px rgba(10, 36, 114, 0.16);
+	}
+
+	&:hover img { transform: scale(1.06); }
+}
+
+// Skroll qilib yetib kelinganda paydo bo'ladi (JS .in-view klassini qo'shadi)
+.top-liked-photos__grid.in-view {
+	.top-liked-photos__row--top .top-liked-photo-card {
+		@for $i from 1 through 2 {
+			&:nth-child(#{$i}) {
+				animation: taFloatIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+				animation-delay: #{$i * 0.08}s;
+			}
+		}
+	}
+
+	.top-liked-photos__row--bottom .top-liked-photo-card {
+		@for $i from 1 through 3 {
+			&:nth-child(#{$i}) {
+				animation: taFloatIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+				animation-delay: #{0.16 + $i * 0.08}s;
+			}
+		}
+	}
+}
+
+// ── Rasmni bosilganda kattalashtirib ko'rish (lightbox) ──
+.photo-lightbox {
+	position: fixed;
+	inset: 0;
+	background: rgba(4, 6, 14, 0.9);
+	z-index: 2100;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 24px;
+	cursor: zoom-out;
+
+	img {
+		max-width: 100%;
+		max-height: 100%;
+		object-fit: contain;
+		border-radius: 10px;
+		cursor: default;
+	}
+
+	&__close {
+		@include glass-button(50%);
+		position: absolute;
+		top: 16px;
+		right: 16px;
+		width: 40px;
+		height: 40px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		svg { font-size: 20px; color: #fff; }
 	}
 }
 

@@ -71,8 +71,6 @@ const withLayoutAdmin = (Component: any) => {
 				}
 
 				updateUserInfo(jwt);
-				const tokenUser = userVar();
-				const tokenAllowsAdmin = tokenUser.role === UserRole.SUPER_ADMIN;
 
 				try {
 					const client = initializeApollo();
@@ -92,13 +90,8 @@ const withLayoutAdmin = (Component: any) => {
 						setCurrentUser(me ? { ...me, preferredLanguage: normalizeLang(me.preferredLanguage) ?? Lang.UZ } : userVar());
 					}
 				} catch {
-					if (tokenAllowsAdmin) {
-						if (mounted) {
-							setIsAdmin(true);
-							setCurrentUser(tokenUser);
-						}
-						return;
-					}
+					// GET_ME xato bersa (masalan tarmoq xatosi) — client tomonda dekodlangan,
+					// imzosi tekshirilmagan JWT claim'iga ishonib ruxsat berish o'rniga rad etamiz.
 					router.replace('/account/join');
 					if (mounted) setIsAdmin(false);
 				}

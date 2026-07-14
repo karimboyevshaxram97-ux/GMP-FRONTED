@@ -150,12 +150,13 @@ const MyPage: NextPage = () => {
 	const [agencyCreating, setAgencyCreating] = useState(false);
 	const [agencyError, setAgencyError] = useState('');
 
-	// Images for the NEW agency (uploaded before the agency exists)
+	// Images for the NEW agency (kept locally until agency creation succeeds)
 	const newLogoInputRef = useRef<HTMLInputElement>(null);
 	const newCoverInputRef = useRef<HTMLInputElement>(null);
-	const [newLogo, setNewLogo] = useState<string | null>(null);
-	const [newCover, setNewCover] = useState<string | null>(null);
-	const [newImgUploading, setNewImgUploading] = useState<'logo' | 'cover' | null>(null);
+	const [newLogoFile, setNewLogoFile] = useState<File | null>(null);
+	const [newCoverFile, setNewCoverFile] = useState<File | null>(null);
+	const [newLogoPreview, setNewLogoPreview] = useState<string | null>(null);
+	const [newCoverPreview, setNewCoverPreview] = useState<string | null>(null);
 	const [editingLocation, setEditingLocation] = useState(false);
 	const [editCity, setEditCity] = useState('');
 	const [editHqCountry, setEditHqCountry] = useState('');
@@ -205,7 +206,7 @@ const MyPage: NextPage = () => {
 	const { data: appData } = useQuery(MY_APPLICATIONS, { skip: !user?._id });
 	const { data: followData } = useQuery(MY_FOLLOWING_AGENCIES, { skip: !user?._id });
 	const { data: convData, refetch: refetchConversations } = useQuery(MY_CONVERSATIONS, { skip: !user?._id });
-	const { data: myAgencyData, refetch: refetchMyAgency } = useQuery(MY_AGENCY, { skip: !user?._id || !isAgencyAdmin });
+	const { data: myAgencyData, loading: myAgencyLoading, refetch: refetchMyAgency } = useQuery(MY_AGENCY, { skip: !user?._id || !isAgencyAdmin });
 	const [updateMe] = useMutation(UPDATE_ME);
 	const [createAgency] = useMutation(CREATE_AGENCY);
 	const [updateMyAgency] = useMutation(UPDATE_MY_AGENCY);
@@ -308,8 +309,8 @@ const MyPage: NextPage = () => {
 	// Agentlik profilini yakunlash: to'liqlik tekshiruvi, so'ng ommaviy profil
 	const handleFinishProfile = async () => {
 		const missing: string[] = [];
-		if (!myAgency?.logo) missing.push('Logo');
-		if (!myAgency?.coverImage) missing.push('Cover');
+		if (!myAgency?.logo) missing.push(ui('mypage.logo'));
+		if (!myAgency?.coverImage) missing.push(ui('mypage.cover'));
 		if (!tr(myAgency?.description)) missing.push(ui('mypage.description'));
 		if (!myAgency?.phoneNumber) missing.push(ui('auth.phoneNumber'));
 		if (missing.length) {
@@ -338,31 +339,37 @@ const MyPage: NextPage = () => {
 		}
 	};
 
-	// Upload a logo/cover image for the agency that is being created (no agency yet)
-	const handleNewAgencyImage = async (e: React.ChangeEvent<HTMLInputElement>, type: 'logo' | 'cover') => {
+	const handleNewAgencyImage = (e: React.ChangeEvent<HTMLInputElement>, type: 'logo' | 'cover') => {
 		const file = e.target.files?.[0];
 		if (!file) return;
-		setNewImgUploading(type);
-		try {
-			const formData = new FormData();
-			formData.append('file', file);
-			const token = getJwtToken();
-			const res = await fetch(`${REACT_APP_API_URL}/upload/image?type=${type}`, {
-				method: 'POST',
-				headers: { Authorization: `Bearer ${token}` },
-				body: formData,
-			});
-			if (!res.ok) throw new Error((await res.json().catch(() => ({}))).message || 'Upload failed');
-			const { filename } = await res.json();
-			if (type === 'logo') setNewLogo(filename);
-			else setNewCover(filename);
-		} catch (err: any) {
-			await sweetMixinErrorAlert(err?.message || `Failed to upload ${type}`);
-		} finally {
-			setNewImgUploading(null);
-			if (type === 'logo' && newLogoInputRef.current) newLogoInputRef.current.value = '';
-			if (type === 'cover' && newCoverInputRef.current) newCoverInputRef.current.value = '';
-		}
+		if (type === 'logo') setNewLogoFile(file);
+		else setNewCoverFile(file);
+		const reader = new FileReader();
+		reader.onload = () => {
+			const preview = typeof reader.result === 'string' ? reader.result : null;
+			if (type === 'logo') {
+				setNewLogoPreview(preview);
+			} else {
+				setNewCoverPreview(preview);
+			}
+		};
+		reader.readAsDataURL(file);
+		if (type === 'logo' && newLogoInputRef.current) newLogoInputRef.current.value = '';
+		if (type === 'cover' && newCoverInputRef.current) newCoverInputRef.current.value = '';
+	};
+
+	const uploadNewAgencyImage = async (file: File, type: 'logo' | 'cover') => {
+		const formData = new FormData();
+		formData.append('file', file);
+		const token = getJwtToken();
+		const res = await fetch(`${REACT_APP_API_URL}/upload/image?type=${type}`, {
+			method: 'POST',
+			headers: { Authorization: `Bearer ${token}` },
+			body: formData,
+		});
+		if (!res.ok) throw new Error((await res.json().catch(() => ({}))).message || 'Upload failed');
+		const { filename } = await res.json();
+		return filename as string;
 	};
 
 	const handleCreateAgency = async (event: React.FormEvent) => {
@@ -381,8 +388,6 @@ const MyPage: NextPage = () => {
 						phoneNumber: agencyPhone || undefined,
 						website: agencyWebsite || undefined,
 						operatingCountries: countries,
-						logo: newLogo || undefined,
-						coverImage: newCover || undefined,
 						city: agencyCity || undefined,
 						country: agencyHqCountry || undefined,
 						address: agencyAddress || undefined,
@@ -391,11 +396,37 @@ const MyPage: NextPage = () => {
 					},
 				},
 			});
-			setNewLogo(null);
-			setNewCover(null);
+			let imageUploadError = '';
+			try {
+				const imageInput: { logo?: string; coverImage?: string } = {};
+				if (newLogoFile) {
+					try {
+						imageInput.logo = await uploadNewAgencyImage(newLogoFile, 'logo');
+					} catch (uploadErr: any) {
+						imageUploadError = toFriendlyError(uploadErr, ui('errors.failedToUploadLogo'));
+					}
+				}
+				if (newCoverFile) {
+					try {
+						imageInput.coverImage = await uploadNewAgencyImage(newCoverFile, 'cover');
+					} catch (uploadErr: any) {
+						imageUploadError = imageUploadError || toFriendlyError(uploadErr, ui('errors.failedToUploadCoverPhoto'));
+					}
+				}
+				if (Object.keys(imageInput).length > 0) {
+					await updateMyAgency({ variables: { input: imageInput } });
+				}
+			} catch (updateErr: any) {
+				imageUploadError = imageUploadError || toFriendlyError(updateErr, ui('errors.failedToUpdateAgencyInfo'));
+			}
+			setNewLogoFile(null);
+			setNewCoverFile(null);
+			setNewLogoPreview(null);
+			setNewCoverPreview(null);
 			await refetchMyAgency();
 			await refreshAuthTokens();
 			await sweetMixinSuccessAlert(ui('mypage.agencyCreatedPendingAdminApproval'));
+			if (imageUploadError) await sweetMixinErrorAlert(imageUploadError);
 		} catch (err: any) {
 			setAgencyError(toFriendlyError(err, ui('errors.failedToCreateAgency')));
 		} finally {
@@ -461,16 +492,20 @@ const MyPage: NextPage = () => {
 		setSvcSaving(true);
 		try {
 			const sourceCountries = svcSources.split(',').map((s) => s.trim()).filter(Boolean);
-			const nameObj = { en: svcName, uz: svcName, ru: svcName, ko: svcName };
-			const descObj = svcDesc ? { en: svcDesc, uz: svcDesc, ru: svcDesc, ko: svcDesc } : undefined;
 			const servicePrice = optionalNumber(svcPrice);
 			if (editingService) {
+				// Forma faqat bitta (en/uz fallback) matn maydonini ko'rsatadi — saqlashda
+				// faqat shu ikkitasini yozamiz, mavjud ru/ko tarjimalarini o'chirib yubormaslik uchun.
+				const name = { ...(editingService.name as object), en: svcName, uz: svcName };
+				const description = svcDesc
+					? { ...(editingService.description as object), en: svcDesc, uz: svcDesc }
+					: editingService.description;
 				await updateService({
 					variables: {
 						id: editingService._id,
 						input: {
-							name: nameObj,
-							description: descObj,
+							name,
+							description,
 							serviceType: svcType,
 							destinationCountry: svcDest,
 							sourceCountries,
@@ -481,6 +516,9 @@ const MyPage: NextPage = () => {
 				});
 				await sweetMixinSuccessAlert(ui('mypage.serviceUpdated'));
 			} else {
+				// Yangi xizmat — hali boshqa tildagi tarjima yo'q, barcha tillarga bir xil qiymat.
+				const nameObj = { en: svcName, uz: svcName, ru: svcName, ko: svcName };
+				const descObj = svcDesc ? { en: svcDesc, uz: svcDesc, ru: svcDesc, ko: svcDesc } : undefined;
 				await createService({
 					variables: {
 						agencyId: myAgency._id,
@@ -562,11 +600,17 @@ const MyPage: NextPage = () => {
 		if (!countries.length) return sweetMixinErrorAlert(ui('errors.atLeastOneOperatingCountry'));
 		setInfoSaving(true);
 		try {
+			// Forma faqat bitta (en/uz fallback) matn maydonini ko'rsatadi — saqlashda
+			// faqat shu ikkitasini yozamiz, mavjud ru/ko tarjimalarini o'chirib yubormaslik uchun.
+			const name = { ...(myAgency?.name as object), en: editAgencyName, uz: editAgencyName };
+			const description = editAgencyDesc
+				? { ...(myAgency?.description as object), en: editAgencyDesc, uz: editAgencyDesc }
+				: myAgency?.description;
 			await updateMyAgency({
 				variables: {
 					input: {
-						name: { en: editAgencyName, uz: editAgencyName, ru: editAgencyName, ko: editAgencyName },
-						description: editAgencyDesc ? { en: editAgencyDesc, uz: editAgencyDesc, ru: editAgencyDesc, ko: editAgencyDesc } : undefined,
+						name,
+						description,
 						phoneNumber: editAgencyPhone || undefined,
 						website: editAgencyWebsite || undefined,
 						operatingCountries: countries,
@@ -620,7 +664,7 @@ const MyPage: NextPage = () => {
 		{ icon: <PersonIcon />, label: ui('mypage.profile'), count: null },
 		{ icon: <AssignmentIcon />, label: ui('mypage.applications'), count: applications.length },
 		{ icon: <PeopleIcon />, label: ui('agency.following'), count: followings.length },
-		{ icon: <ChatIcon />, label: ui('mypage.messages'), count: conversations.filter((c: any) => c.unreadCount > 0).length || conversations.length },
+		{ icon: <ChatIcon />, label: ui('mypage.messages'), count: conversations.filter((c: any) => c.unreadCount > 0).length },
 		...(isAgencyAdmin ? [
 			{ icon: <BusinessIcon />, label: ui('mypage.myAgency'), count: null },
 			{ icon: <MiscellaneousServicesIcon />, label: ui('agency.services'), count: agencyServices.length },
@@ -815,7 +859,9 @@ const MyPage: NextPage = () => {
 							<Box>
 								<div className="content-head"><span>{ui('mypage.agencyManagement')}</span><h2>{ui('mypage.myAgency')}</h2></div>
 
-								{myAgency ? (
+								{myAgencyLoading ? (
+									<Box className="chat-loading"><CircularProgress size={28} /></Box>
+								) : myAgency ? (
 									<Box>
 										{/* ── Cover image ───────────────────────── */}
 										<Box className="agency-cover-upload">
@@ -969,23 +1015,21 @@ const MyPage: NextPage = () => {
 											<input ref={newCoverInputRef} type="file" accept="image/jpeg,image/png,image/webp" style={{ display: 'none' }} onChange={(e) => handleNewAgencyImage(e, 'cover')} />
 											<input ref={newLogoInputRef} type="file" accept="image/jpeg,image/png,image/webp" style={{ display: 'none' }} onChange={(e) => handleNewAgencyImage(e, 'logo')} />
 											<Box
-												onClick={() => newImgUploading === null && newCoverInputRef.current?.click()}
+												onClick={() => !agencyCreating && newCoverInputRef.current?.click()}
 												sx={{
 													position: 'relative', height: 150, borderRadius: 2, cursor: 'pointer',
 													border: '2px dashed #c7d2fe', overflow: 'hidden',
 													display: 'flex', alignItems: 'center', justifyContent: 'center',
-													backgroundImage: newCover ? `url(${REACT_APP_API_URL}/uploads/${newCover})` : undefined,
+													backgroundImage: newCoverPreview ? `url(${newCoverPreview})` : undefined,
 													backgroundSize: 'cover', backgroundPosition: 'center',
 													color: '#64748b', fontSize: 13, fontWeight: 600,
 												}}
 											>
-												{newImgUploading === 'cover'
-													? <CircularProgress size={22} />
-													: !newCover && <span><CameraAltIcon fontSize="small" sx={{ verticalAlign: 'middle', mr: 0.5 }} /> {ui('mypage.addCoverPhoto')}</span>}
+												{!newCoverPreview && <span><CameraAltIcon fontSize="small" sx={{ verticalAlign: 'middle', mr: 0.5 }} /> {ui('mypage.addCoverPhoto')}</span>}
 											</Box>
 											<Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mt: -3.5, ml: 2, position: 'relative', zIndex: 1 }}>
 												<Box
-													onClick={() => newImgUploading === null && newLogoInputRef.current?.click()}
+													onClick={() => !agencyCreating && newLogoInputRef.current?.click()}
 													sx={{
 														width: 64, height: 64, borderRadius: '50%', cursor: 'pointer',
 														border: '3px solid #fff', boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
@@ -993,14 +1037,12 @@ const MyPage: NextPage = () => {
 														display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1649ff',
 													}}
 												>
-													{newImgUploading === 'logo'
-														? <CircularProgress size={18} />
-														: newLogo
-														? <img src={`${REACT_APP_API_URL}/uploads/${newLogo}`} alt="logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+													{newLogoPreview
+														? <img src={newLogoPreview} alt="logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
 														: <BusinessIcon />}
 												</Box>
 												<span style={{ fontSize: 12, color: '#64748b', marginTop: 18 }}>
-													{newLogo ? ui('mypage.logoAddedClickToChange') : ui('mypage.clickCircleToAddLogo')}
+													{newLogoPreview ? ui('mypage.logoAddedClickToChange') : ui('mypage.clickCircleToAddLogo')}
 												</span>
 											</Box>
 										</Box>

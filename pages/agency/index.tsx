@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import {
@@ -13,6 +13,8 @@ import {
 	Button,
 	Chip,
 	Skeleton,
+	TextField,
+	InputAdornment,
 } from '@mui/material';
 import { useQuery, useMutation, useReactiveVar } from '@apollo/client';
 import SearchIcon from '@mui/icons-material/Search';
@@ -28,6 +30,9 @@ import { AgencyVerificationStatus, AgencySortField } from '../../libs/enums/agen
 import { SortDirection } from '../../libs/enums/common.enum';
 import { LikeTargetType } from '../../libs/enums/like.enum';
 import { useUiLang } from '../../libs/utils/translations';
+import { sweetMixinErrorAlert } from '../../libs/sweetAlert';
+import { toFriendlyError } from '../../libs/utils/errors';
+import { useDebounce } from '../../libs/hooks/useDebounce';
 
 const sortOptions = [
 	{ label: 'Top ranked', value: AgencySortField.AGENCY_RANK },
@@ -43,6 +48,9 @@ const AgencyHome: NextPage = () => {
 	const [search, setSearch] = useState('');
 	const [sort, setSort] = useState(AgencySortField.AGENCY_RANK);
 	const [page, setPage] = useState(1);
+	const debouncedSearch = useDebounce(search, 350);
+
+	useEffect(() => { setPage(1); }, [debouncedSearch]);
 
 	const { data: featuredData, refetch: refetchFeatured } = useQuery(GET_AGENCIES, {
 		fetchPolicy: 'cache-and-network',
@@ -63,7 +71,7 @@ const AgencyHome: NextPage = () => {
 		nextFetchPolicy: 'cache-first',
 		variables: {
 			input: {
-				text: search || undefined,
+				text: debouncedSearch || undefined,
 				verificationStatus: AgencyVerificationStatus.VERIFIED,
 				sort,
 				direction: SortDirection.DESC,
@@ -81,9 +89,13 @@ const AgencyHome: NextPage = () => {
 
 	const handleAgencyLike = async (agencyId: string) => {
 		if (!user?._id) { router.push('/account/join'); return; }
-		await toggleLike({ variables: { targetId: agencyId, targetType: LikeTargetType.AGENCY } });
-		refetch();
-		refetchFeatured();
+		try {
+			await toggleLike({ variables: { targetId: agencyId, targetType: LikeTargetType.AGENCY } });
+			refetch();
+			refetchFeatured();
+		} catch (err: any) {
+			await sweetMixinErrorAlert(toFriendlyError(err, ui('errors.failedToLike')));
+		}
 	};
 
 	const handleSortChange = (value: AgencySortField) => {
@@ -154,6 +166,20 @@ const AgencyHome: NextPage = () => {
 						<p>{total} {ui('agency.agenciesFound')}</p>
 					</Box>
 					<Box className="toolbar-actions">
+						<TextField
+							size="small"
+							placeholder={ui('agency.searchByAgencyNameOr')}
+							value={search}
+							onChange={(event) => setSearch(event.target.value)}
+							sx={{ minWidth: 240 }}
+							InputProps={{
+								startAdornment: (
+									<InputAdornment position="start">
+										<SearchIcon fontSize="small" />
+									</InputAdornment>
+								),
+							}}
+						/>
 						{search && <Chip label={search} onDelete={clearSearch} />}
 						<Chip icon={<VerifiedIcon />} label={ui('agency.verifiedOnly')} className="verified-filter" />
 						<Button

@@ -18,7 +18,7 @@ const TopAgenciesSection = () => {
 		nextFetchPolicy: 'cache-first',
 		variables: {
 			input: {
-				sort: 'AVERAGE_RATING',
+				sort: 'CREATED_AT',
 				direction: 'DESC',
 				page: 1,
 				limit: 12,
@@ -29,7 +29,7 @@ const TopAgenciesSection = () => {
 	});
 
 	const agencies: any[] = (data?.getAgencies?.list ?? [])
-		.filter((agency: any) => agency.coverImage || agency.logo)
+		.filter((agency: any) => agency.logo || agency.coverImage)
 		.slice(0, 5);
 
 	// agencies bo'sh bo'lganda (dastlabki render) grid hali chizilmagan bo'ladi,
@@ -59,7 +59,7 @@ const TopAgenciesSection = () => {
 				<div className={`top-agencies__grid${visible ? ' in-view' : ''}`} ref={gridRef}>
 					{agencies.map((agency) => {
 						const name = tr(agency.name) || ui('auth.agency');
-						const image = agency.coverImage || agency.logo;
+						const image = agency.logo || agency.coverImage;
 						const rating = agency.averageRating ?? agency.memberData?.memberRank ?? null;
 
 						return (
@@ -69,15 +69,15 @@ const TopAgenciesSection = () => {
 								className="top-agency-card"
 								title={name}
 							>
-								<div className="top-agency-card__avatar">
-									<img src={`${REACT_APP_API_URL}/uploads/${image}`} alt={name} />
+								<img src={`${REACT_APP_API_URL}/uploads/${image}`} alt={name} />
+								<div className="top-agency-card__overlay">
+									{rating != null && (
+										<span className="top-agency-card__rating">
+											<StarIcon /> {Number(rating).toFixed(1)}
+										</span>
+									)}
+									<strong className="top-agency-card__name">{name}</strong>
 								</div>
-								<strong className="top-agency-card__name">{name}</strong>
-								{rating != null && (
-									<span className="top-agency-card__rating">
-										<StarIcon /> {Number(rating).toFixed(1)}
-									</span>
-								)}
 							</Link>
 						);
 					})}

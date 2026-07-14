@@ -17,5 +17,5 @@ export const userVar = makeVar<CustomJwtPayload>({
 	lastName: '',
 	avatar: '',
 	phoneNumber: '',
-	preferredLanguage: Lang.EN,
+	preferredLanguage: Lang.KO,
 });

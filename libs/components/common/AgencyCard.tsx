@@ -27,16 +27,15 @@ const AgencyCard = ({ agency, onClick, onLike }: Props) => {
 	const countries = agency.operatingCountries ?? [];
 	const description = tr(agency.description) || ui('agency.defaultCardDescription');
 	const liked = isLiked(agency.meLiked);
+	const cardImageUrl = (agency as any).coverImage
+		? `${REACT_APP_API_URL}/uploads/${(agency as any).coverImage}`
+		: getImageUrl(agency.logo, '/img/hero-bg.jpg');
 
 	return (
 		<Box className="agency-card" onClick={onClick}>
 			<Box className="card-image">
 				<img
-					src={
-						(agency as any).coverImage
-							? `${REACT_APP_API_URL}/uploads/${(agency as any).coverImage}`
-							: getImageUrl(agency.logo, '/img/hero-bg.jpg')
-					}
+					src={cardImageUrl}
 					alt={tr(agency.name)}
 				/>
 				{agency.verificationStatus === AgencyVerificationStatus.VERIFIED && (

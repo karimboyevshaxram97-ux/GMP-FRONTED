@@ -10,6 +10,7 @@ import FeaturedServices from '../libs/components/home/FeaturedServices';
 import Brands from '../libs/components/home/Brands';
 import VideoSection from '../libs/components/home/VideoSection';
 import TopAgenciesSection from '../libs/components/home/TopAgenciesSection';
+import TopLikedPhotos from '../libs/components/home/TopLikedPhotos';
 import CtaBanner from '../libs/components/home/CtaBanner';
 
 // Leaflet requires window — disable SSR
@@ -23,6 +24,7 @@ const Homepage = () => (
 		<HeroSection />
 		<SearchSection />
 		<Brands />
+		<TopLikedPhotos />
 		<ServiceTypesSection />
 		<HowItWorks />
 		<FeaturedAgencies />

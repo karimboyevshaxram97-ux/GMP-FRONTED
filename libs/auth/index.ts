@@ -149,7 +149,11 @@ export const updateUserInfo = (jwtToken: string) => {
 	const tokenLang = normalizeLang(claims.preferredLanguage);
 	const nextLang = getSavedLang() ?? tokenLang ?? Lang.KO;
 
+	// JWT claims are a small subset of the User profile (no bio/nationality/dateOfBirth) —
+	// merge onto the existing userVar() instead of replacing it wholesale, otherwise a
+	// token refresh right after a profile save wipes fields the JWT never carried.
 	userVar({
+		...userVar(),
 		_id: claims._id ?? '',
 		email: claims.email ?? '',
 		role: claims.role ?? UserRole.USER,
@@ -177,7 +181,7 @@ export const logOut = (redirectTo?: string) => {
 		lastName: '',
 		avatar: '',
 		phoneNumber: '',
-		preferredLanguage: Lang.UZ,
+		preferredLanguage: Lang.KO,
 	});
 
 	if (redirectTo) window.location.href = redirectTo;

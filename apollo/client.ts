@@ -17,7 +17,20 @@ function getHeaders() {
 	return headers;
 }
 
+// Bir vaqtda bir nechta so'rov 401 olsa, hammasi shu bitta umumiy promise'ni kutadi —
+// aks holda ikkinchi chaqiruv birinchisi allaqachon rotatsiya qilib bo'lgan (bir martalik)
+// refresh token bilan ishlab, muvaffaqiyatsiz bo'lib, amal qilib turgan sessiyani chiqarib yuborardi.
+let refreshInFlight: Promise<string | null> | null = null;
+
 async function doTokenRefresh(): Promise<string | null> {
+	if (refreshInFlight) return refreshInFlight;
+	refreshInFlight = performTokenRefresh().finally(() => {
+		refreshInFlight = null;
+	});
+	return refreshInFlight;
+}
+
+async function performTokenRefresh(): Promise<string | null> {
 	const refreshToken = getRefreshToken();
 	if (!refreshToken) return null;
 	try {

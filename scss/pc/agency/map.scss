@@ -218,7 +218,8 @@ $panel-height: calc(100vh - #{$map-navbar} - #{$filter-height});
     width: 72px;
     height: 72px;
     border-radius: 8px;
-    object-fit: cover;
+    object-fit: contain;
+    padding: 5px;
     flex-shrink: 0;
     background: #f0f4ff;
     border: 1px solid #e8eaf0;
@@ -408,7 +409,8 @@ $panel-height: calc(100vh - #{$map-navbar} - #{$filter-height});
       width: 44px;
       height: 44px;
       border-radius: 8px;
-      object-fit: cover;
+      object-fit: contain;
+      padding: 4px;
       border: 1px solid #e8eaf0;
     }
 

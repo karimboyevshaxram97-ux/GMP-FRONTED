@@ -50,6 +50,9 @@ export const toFriendlyError = (errOrMessage: any, fallback?: string): string =>
 	) {
 		return tr('errors.sessionExpired', 'Your session has expired. Please sign in again.');
 	}
+	if (normalized.includes('completed application is required')) {
+		return tr('service.reviewRequiresCompletedApplication', 'You can leave a review after your application for this service is completed.');
+	}
 
 	return message || defaultFallback;
 };

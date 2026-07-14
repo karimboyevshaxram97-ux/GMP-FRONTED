@@ -23,9 +23,12 @@ import { userVar } from '../../apollo/store';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { getImageUrl, isLiked, isFollowed } from '../../libs/utils';
 import { REACT_APP_API_URL } from '../../libs/config';
-import { sweetMixinSuccessAlert } from '../../libs/sweetAlert';
+import { sweetMixinSuccessAlert, sweetMixinErrorAlert } from '../../libs/sweetAlert';
+import { toFriendlyError } from '../../libs/utils/errors';
 import { LikeTargetType } from '../../libs/enums/like.enum';
+import { ViewTargetType } from '../../libs/enums/view.enum';
 import { AgencyVerificationStatus } from '../../libs/enums/agency.enum';
+import { UserRole } from '../../libs/enums/user.enum';
 import { useUiLang } from '../../libs/utils/translations';
 
 const AgencyDetail: NextPage = () => {
@@ -63,13 +66,17 @@ const AgencyDetail: NextPage = () => {
 	const [recordView] = useMutation(RECORD_VIEW);
 
 	const fetchedAgency = data?.getAgency;
-	const agency = fetchedAgency?.status === 'ACTIVE' && fetchedAgency?.verificationStatus === AgencyVerificationStatus.VERIFIED
-		? fetchedAgency
-		: null;
+	const canViewRestricted =
+		!!user?._id && (fetchedAgency?.owner === user._id || user.role === UserRole.SUPER_ADMIN);
+	const isPublic =
+		fetchedAgency?.status === 'ACTIVE' && fetchedAgency?.verificationStatus === AgencyVerificationStatus.VERIFIED;
+	// Egasi (yoki SUPER_ADMIN) hali PENDING/INACTIVE agency'ni ham oldindan ko'ra olishi kerak —
+	// aks holda "View Public Profile" tugmasi tasdiqlanmagan agency uchun doim "topilmadi" ko'rsatardi.
+	const agency = isPublic || canViewRestricted ? fetchedAgency : null;
 
 	useEffect(() => {
 		if (agency?._id) {
-			recordView({ variables: { targetId: agency._id, targetType: 'AGENCY' } }).catch(() => {});
+			recordView({ variables: { targetId: agency._id, targetType: ViewTargetType.AGENCY } }).catch(() => {});
 		}
 	}, [agency?._id, recordView]);
 	const reviews = reviewData?.reviewsByAgency ?? [];
@@ -84,20 +91,28 @@ const AgencyDetail: NextPage = () => {
 
 	const handleLike = async () => {
 		if (!requireLogin() || !agency) return;
-		await toggleLike({ variables: { targetId: agency._id, targetType: LikeTargetType.AGENCY } });
-		refetch();
+		try {
+			await toggleLike({ variables: { targetId: agency._id, targetType: LikeTargetType.AGENCY } });
+			refetch();
+		} catch (err: any) {
+			await sweetMixinErrorAlert(toFriendlyError(err, ui('errors.failedToLike')));
+		}
 	};
 
 	const handleFollow = async () => {
 		if (!requireLogin() || !agency) return;
 		const followed = isFollowed(agency.meFollowed);
-		if (followed) {
-			await unfollowAgency({ variables: { agencyId: agency._id } });
-		} else {
-			await followAgency({ variables: { agencyId: agency._id } });
+		try {
+			if (followed) {
+				await unfollowAgency({ variables: { agencyId: agency._id } });
+			} else {
+				await followAgency({ variables: { agencyId: agency._id } });
+			}
+			await sweetMixinSuccessAlert(followed ? ui('agency.unfollowed') : ui('agency.followingAgency'));
+			refetch();
+		} catch (err: any) {
+			await sweetMixinErrorAlert(toFriendlyError(err, ui('errors.failedToFollow')));
 		}
-		await sweetMixinSuccessAlert(followed ? ui('agency.unfollowed') : ui('agency.followingAgency'));
-		refetch();
 	};
 
 	const handleMessageBtn = () => {

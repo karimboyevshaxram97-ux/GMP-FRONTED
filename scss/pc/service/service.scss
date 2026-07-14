@@ -344,13 +344,85 @@
 				line-height: 1.5;
 				word-break: break-word;
 			}
+
+			&__attachments {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 6px;
+				margin-top: 6px;
+
+				img, video {
+					width: 90px;
+					height: 90px;
+					border-radius: 10px;
+					object-fit: cover;
+					background: #0b0e1a;
+				}
+
+				// Faqat rasmlar kattalashtirib ko'rish uchun bosiladi — video'da
+				// brauzerning o'zining controls/fullscreen imkoniyati bor.
+				img { cursor: zoom-in; }
+			}
+		}
+
+		&__input-wrap {
+			display: flex;
+			flex-direction: column;
+			border-top: 1px solid #edf1f7;
+		}
+
+		&__attachments-preview {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px;
+			padding: 10px 18px 0;
+
+			.staged-attachment {
+				position: relative;
+				width: 56px;
+				height: 56px;
+				border-radius: 10px;
+				overflow: hidden;
+				flex-shrink: 0;
+				background: #0b0e1a;
+
+				img, video {
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+				}
+
+				button {
+					position: absolute;
+					top: 2px;
+					right: 2px;
+					width: 18px;
+					height: 18px;
+					border-radius: 50%;
+					background: rgba(0, 0, 0, 0.65);
+					color: #fff;
+					border: none;
+					padding: 0;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					cursor: pointer;
+
+					svg { font-size: 12px; }
+				}
+			}
+		}
+
+		&__emoji-popover {
+			padding: 8px 18px 0;
+
+			> div { width: 100% !important; }
 		}
 
 		&__input {
 			display: flex;
 			gap: 10px;
 			padding: 14px 18px;
-			border-top: 1px solid #edf1f7;
 
 			input {
 				flex: 1;
@@ -379,32 +451,66 @@
 				flex-shrink: 0;
 
 				svg { font-size: 18px; }
+
+				&:disabled {
+					opacity: 0.4;
+					cursor: not-allowed;
+				}
+			}
+
+			.attach-btn.active {
+				background: $accent-gradient;
+				color: #fff;
 			}
 		}
 	}
 
-	// ── Filtr paneli: yumshoq, tepa gradient chiziqli karta ──
+	// ── Izohga qo'shilgan rasmni kattalashtirib ko'rish (lightbox) ──
+	.attachment-lightbox {
+		position: fixed;
+		inset: 0;
+		background: rgba(4, 6, 14, 0.9);
+		z-index: 2100;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 24px;
+		cursor: zoom-out;
+
+		img {
+			max-width: 100%;
+			max-height: 100%;
+			object-fit: contain;
+			border-radius: 10px;
+			cursor: default;
+		}
+
+		&__close {
+			@include glass-button(50%);
+			position: absolute;
+			top: 16px;
+			right: 16px;
+			width: 40px;
+			height: 40px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			svg { font-size: 20px; color: #fff; }
+		}
+	}
+
+	// ── Filtr paneli: navy gradient + glassmorphism (service-detail-hero bilan bir oilada) ──
 	.service-filter-panel {
 		position: sticky;
 		top: 108px;
 		height: fit-content;
 		padding: 24px;
 		background: #ffffff;
-		border: 1px solid rgba(10, 36, 114, 0.06);
+		border: 1px solid #e5e9f2;
 		border-radius: 20px;
-		box-shadow: 0 14px 40px rgba(10, 36, 114, 0.07);
+		box-shadow: 0 10px 30px rgba(10, 36, 114, 0.05);
 		overflow: hidden;
-
-		&::before {
-			content: '';
-			position: absolute;
-			top: 0;
-			left: 18px;
-			right: 18px;
-			height: 2px;
-			border-radius: 2px;
-			background: linear-gradient(90deg, transparent, rgba(78, 127, 255, 0.5), rgba(123, 91, 255, 0.5), transparent);
-		}
 
 		.panel-title {
 			align-items: center;
@@ -433,57 +539,89 @@
 			font-size: 11px;
 			font-weight: 800;
 			letter-spacing: 1.2px;
-			margin: 20px 0 8px;
+			margin: 20px 0 10px;
 			text-transform: uppercase;
+		}
+
+		.sort-pills {
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+
+		.sort-pill {
+			@include button-states;
+			align-items: center;
+			background: #ffffff;
+			border: 1px solid #e5e9f2;
+			border-radius: 12px;
+			color: $text-secondary;
+			display: flex;
+			font-family: $font-family;
+			font-size: 13px;
+			font-weight: 700;
+			gap: 10px;
+			padding: 10px 12px;
+			text-align: left;
+			width: 100%;
+
+			svg { font-size: 17px; flex-shrink: 0; opacity: 0.85; }
+
+			&:hover { border-color: $primary; color: $primary; background: #f0f4ff; }
+
+			&.active {
+				background: $primary;
+				border-color: $primary;
+				color: #ffffff;
+
+				svg { opacity: 1; }
+			}
 		}
 
 		.price-label {
-			font-size: 17px;
+			font-size: 19px;
 			font-weight: 800;
-			margin-bottom: 6px;
-			background: linear-gradient(90deg, $primary, #7b5bff);
-			-webkit-background-clip: text;
-			background-clip: text;
-			-webkit-text-fill-color: transparent;
-		}
-	}
-
-	// ── Natijalar sarlavhasi: kartasiz, katta tipografiya ──
-	.service-results-head {
-		align-items: flex-end;
-		display: flex;
-		justify-content: space-between;
-		gap: 16px;
-		margin-bottom: 22px;
-		padding: 2px 4px;
-
-		span {
-			color: $primary;
-			display: block;
-			font-size: 11px;
-			font-weight: 800;
-			letter-spacing: 2px;
-			text-transform: uppercase;
-			margin-bottom: 6px;
-		}
-
-		h2 {
-			color: $text-primary;
-			font-size: 28px;
-			font-weight: 800;
-			letter-spacing: -0.4px;
 			margin-bottom: 8px;
+			color: $text-primary;
 		}
 
-		p {
-			display: inline-flex;
-			align-items: center;
-			background: rgba(22, 73, 255, 0.08);
-			border-radius: 999px;
-			color: $primary;
-			font-size: 12.5px;
+		.MuiSlider-root { color: $primary; }
+
+		.MuiSlider-rail { background: #e5e9f2; opacity: 1; }
+
+		.MuiSlider-track { background: $primary; border: none; }
+
+		.MuiSlider-thumb {
+			background: #ffffff;
+			border: 3px solid $primary;
+			box-shadow: 0 2px 8px rgba(10, 36, 114, 0.18);
+
+			&:hover, &.Mui-focusVisible { box-shadow: 0 0 0 8px rgba(22, 73, 255, 0.14); }
+		}
+
+		.MuiSlider-valueLabel {
+			background: $text-primary;
+			color: #ffffff;
+			font-weight: 800;
+			border-radius: 8px;
+		}
+
+		.reset-filters-btn {
+			@include button-states;
+			background: #ffffff;
+			border: 1.5px solid #e5e9f2;
+			border-radius: 12px;
+			color: $text-primary;
+
+			&:hover { border-color: $primary; color: $primary; background: #f0f4ff; }
+
+			font-family: $font-family;
+			font-size: 13px;
 			font-weight: 700;
-			padding: 5px 14px;
+			margin-top: 22px;
+			padding: 11px;
+			text-transform: none;
+			width: 100%;
 		}
 	}
 
@@ -574,15 +712,6 @@
 
 		.service-filter-panel {
 			position: static;
-		}
-	}
-}
-
-@media (max-width: 768px) {
-	.services-page {
-		.service-results-head {
-			align-items: flex-start;
-			flex-direction: column;
 		}
 	}
 }
@@ -929,8 +1058,6 @@
 			.type-tab-label { font-size: 12.5px; }
 			.type-tab-sub { font-size: 10px; }
 		}
-
-		.service-results-head h2 { font-size: 24px; }
 
 		.photo-board {
 			margin-top: 28px;

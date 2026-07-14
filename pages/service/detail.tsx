@@ -10,11 +10,12 @@ import PublicIcon from '@mui/icons-material/Public';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import SendIcon from '@mui/icons-material/Send';
 import VerifiedIcon from '@mui/icons-material/Verified';
-import { GET_SERVICE, REVIEWS_BY_SERVICE } from '../../apollo/user/query';
+import { GET_SERVICE, REVIEWS_BY_SERVICE, MY_APPLICATIONS } from '../../apollo/user/query';
 import { TOGGLE_LIKE, CREATE_APPLICATION, CREATE_REVIEW, RECORD_VIEW } from '../../apollo/user/mutation';
 import { userVar } from '../../apollo/store';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { LikeTargetType } from '../../libs/enums/like.enum';
+import { ViewTargetType } from '../../libs/enums/view.enum';
 import { getServiceTypeLabel, isLiked, formatPrice } from '../../libs/utils';
 import { useLang } from '../../libs/utils/lang';
 import { sweetMixinSuccessAlert, sweetMixinErrorAlert } from '../../libs/sweetAlert';
@@ -34,6 +35,7 @@ const ServiceDetail: NextPage = () => {
 
 	const { data, loading, refetch } = useQuery(GET_SERVICE, { variables: { id: serviceId }, skip: !serviceId });
 	const { data: reviewData, refetch: refetchReviews } = useQuery(REVIEWS_BY_SERVICE, { variables: { serviceId }, skip: !serviceId });
+	const { data: myAppsData } = useQuery(MY_APPLICATIONS, { skip: !user?._id });
 
 	const [toggleLike] = useMutation(TOGGLE_LIKE);
 	const [createApplication] = useMutation(CREATE_APPLICATION);
@@ -44,13 +46,16 @@ const ServiceDetail: NextPage = () => {
 
 	useEffect(() => {
 		if (service?._id) {
-			recordView({ variables: { targetId: service._id, targetType: 'SERVICE' } }).catch(() => {});
+			recordView({ variables: { targetId: service._id, targetType: ViewTargetType.SERVICE } }).catch(() => {});
 		}
 	}, [service?._id, recordView]);
 	const reviews = reviewData?.reviewsByService ?? [];
 	const isServiceFull = Number.isFinite(service?.maxApplicationCount)
 		&& service.maxApplicationCount > 0
 		&& (service.currentApplicationCount ?? 0) >= service.maxApplicationCount;
+	const canReview = (myAppsData?.myApplications ?? []).some(
+		(app: any) => app.service === service?._id && app.isReviewEligible,
+	);
 
 	const requireLogin = () => {
 		if (!user?._id) {
@@ -62,8 +67,12 @@ const ServiceDetail: NextPage = () => {
 
 	const handleLike = async () => {
 		if (!requireLogin() || !service) return;
-		await toggleLike({ variables: { targetId: service._id, targetType: LikeTargetType.SERVICE } });
-		refetch();
+		try {
+			await toggleLike({ variables: { targetId: service._id, targetType: LikeTargetType.SERVICE } });
+			refetch();
+		} catch (err: any) {
+			await sweetMixinErrorAlert(toFriendlyError(err, ui('errors.failedToLike')));
+		}
 	};
 
 	const handleApply = async () => {
@@ -211,21 +220,25 @@ const ServiceDetail: NextPage = () => {
 						)}
 
 						{user?._id && (
-							<Box className="review-form">
-								<h3>{ui('service.writeAReview')}</h3>
-								<Rating value={reviewRating} onChange={(_, value) => setReviewRating(value ?? 5)} />
-								<TextField
-									fullWidth
-									multiline
-									rows={3}
-									placeholder={ui('service.shareYourExperience')}
-									value={reviewComment}
-									onChange={(event) => setReviewComment(event.target.value)}
-								/>
-								<Button variant="contained" startIcon={<SendIcon />} onClick={handleReview} disabled={reviewSubmitting}>
-									{reviewSubmitting ? ui('mypage.submitting') : ui('service.submitReview')}
-								</Button>
-							</Box>
+							canReview ? (
+								<Box className="review-form">
+									<h3>{ui('service.writeAReview')}</h3>
+									<Rating value={reviewRating} onChange={(_, value) => setReviewRating(value ?? 5)} />
+									<TextField
+										fullWidth
+										multiline
+										rows={3}
+										placeholder={ui('service.shareYourExperience')}
+										value={reviewComment}
+										onChange={(event) => setReviewComment(event.target.value)}
+									/>
+									<Button variant="contained" startIcon={<SendIcon />} onClick={handleReview} disabled={reviewSubmitting}>
+										{reviewSubmitting ? ui('mypage.submitting') : ui('service.submitReview')}
+									</Button>
+								</Box>
+							) : (
+								<Box className="empty-services">{ui('service.reviewRequiresCompletedApplication')}</Box>
+							)
 						)}
 					</Box>
 				</Box>

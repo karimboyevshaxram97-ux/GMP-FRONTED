@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@apollo/client';
 import { Box, Pagination, Rating } from '@mui/material';
@@ -91,57 +91,60 @@ const FeaturedAgencies = () => {
 								</div>
 							</div>
 						))
-						: agencies.map((agency) => (
-							<Link key={agency._id} href={`/agency/${agency._id}`} style={{ textDecoration: 'none' }}>
-								<div className="agency-card">
-									<div className="card-image">
-										{agency.coverImage || agency.logo ? (
-											<img
-												src={`${REACT_APP_API_URL}/uploads/${agency.coverImage || agency.logo}`}
-												alt={tr(agency.name)}
-											/>
-										) : (
-											<div
-												className="card-image__placeholder"
-												style={{ background: pickGradient(agency._id || tr(agency.name)) }}
-											>
-												<span>{(tr(agency.name) || '?').charAt(0).toUpperCase()}</span>
+						: agencies.map((agency) => {
+							const imageUrl = agency.coverImage || agency.logo
+								? `${REACT_APP_API_URL}/uploads/${agency.coverImage || agency.logo}`
+								: '';
+
+							return (
+								<Link key={agency._id} href={`/agency/${agency._id}`} style={{ textDecoration: 'none' }}>
+									<div className="agency-card">
+										<div className="card-image">
+											{agency.coverImage || agency.logo ? (
+												<img src={imageUrl} alt={tr(agency.name)} />
+											) : (
+												<div
+													className="card-image__placeholder"
+													style={{ background: pickGradient(agency._id || tr(agency.name)) }}
+												>
+													<span>{(tr(agency.name) || '?').charAt(0).toUpperCase()}</span>
+												</div>
+											)}
+											{agency.verificationStatus === 'VERIFIED' && (
+												<div className="verified-badge">
+													<VerifiedIcon style={{ fontSize: 13, marginRight: 3 }} />
+													{ui('admin.verified')}
+												</div>
+											)}
+										</div>
+										<div className="card-body">
+											<div className="agency-title-row">
+												<h3>{tr(agency.name)}</h3>
+												<span>{agency.totalServices} {ui('admin.services')}</span>
 											</div>
-										)}
-										{agency.verificationStatus === 'VERIFIED' && (
-											<div className="verified-badge">
-												<VerifiedIcon style={{ fontSize: 13, marginRight: 3 }} />
-												{ui('admin.verified')}
+											<p className="agency-description">
+												{tr(agency.description) || ui('home.trustedMigrationAndTravelAgency')}
+											</p>
+											{agency.operatingCountries?.length > 0 && (
+												<div className="country-row">
+													<LocationOnOutlinedIcon />
+													{agency.operatingCountries.slice(0, 3).join(', ')}
+												</div>
+											)}
+											<div className="rating-row">
+												<Rating value={agency.averageRating ?? 0} readOnly size="small" precision={0.5} />
+												<span>{(agency.averageRating ?? 0).toFixed(1)} ({agency.totalReviews})</span>
 											</div>
-										)}
+											<div className="card-actions">
+												<button className="profile-button">
+													{ui('map.viewProfile')}
+												</button>
+											</div>
+										</div>
 									</div>
-									<div className="card-body">
-										<div className="agency-title-row">
-											<h3>{tr(agency.name)}</h3>
-											<span>{agency.totalServices} {ui('admin.services')}</span>
-										</div>
-										<p className="agency-description">
-											{tr(agency.description) || ui('home.trustedMigrationAndTravelAgency')}
-										</p>
-										{agency.operatingCountries?.length > 0 && (
-											<div className="country-row">
-												<LocationOnOutlinedIcon />
-												{agency.operatingCountries.slice(0, 3).join(', ')}
-											</div>
-										)}
-										<div className="rating-row">
-											<Rating value={agency.averageRating ?? 0} readOnly size="small" precision={0.5} />
-											<span>{(agency.averageRating ?? 0).toFixed(1)} ({agency.totalReviews})</span>
-										</div>
-										<div className="card-actions">
-											<button className="profile-button">
-												{ui('map.viewProfile')}
-											</button>
-										</div>
-									</div>
-								</div>
-							</Link>
-						))}
+								</Link>
+							);
+						})}
 				</div>
 
 				{total > PAGE_LIMIT && (
