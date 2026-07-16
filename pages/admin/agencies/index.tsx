@@ -11,7 +11,7 @@ import { useQuery, useMutation } from '@apollo/client';
 import { ADMIN_AGENCIES } from '../../../apollo/admin/query';
 import { APPROVE_AGENCY, REJECT_AGENCY, SUSPEND_AGENCY, ACTIVATE_AGENCY, ADMIN_DELETE_AGENCY } from '../../../apollo/admin/mutation';
 import withLayoutAdmin from '../../../libs/components/layout/LayoutAdmin';
-import { sweetConfirmAlert, sweetMixinSuccessAlert } from '../../../libs/sweetAlert';
+import { sweetConfirmAlert, sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../../libs/sweetAlert';
 import { REACT_APP_API_URL } from '../../../libs/config';
 import { useLang } from '../../../libs/utils/lang';
 import { useDebounce } from '../../../libs/hooks/useDebounce';
@@ -84,28 +84,40 @@ const AdminAgencies: NextPage = () => {
 	const handleSuspend = async (agencyId: string) => {
 		const ok = await sweetConfirmAlert(ui('admin.suspendThisAgencyUsersWill'));
 		if (!ok) return;
-		await suspendAgency({ variables: { input: { agencyId } } });
-		await sweetMixinSuccessAlert(ui('admin.agencySuspended'));
-		setDetailAgency(null);
-		refetch();
+		try {
+			await suspendAgency({ variables: { input: { agencyId } } });
+			await sweetMixinSuccessAlert(ui('admin.agencySuspended'));
+			setDetailAgency(null);
+			await refetch();
+		} catch (err: any) {
+			await sweetMixinErrorAlert(err?.message || ui('admin.failedToUpdate'));
+		}
 	};
 
 	const handleActivate = async (agencyId: string) => {
 		const ok = await sweetConfirmAlert(ui('admin.activateThisAgency'));
 		if (!ok) return;
-		await activateAgency({ variables: { agencyId } });
-		await sweetMixinSuccessAlert(ui('admin.agencyActivated'));
-		setDetailAgency(null);
-		refetch();
+		try {
+			await activateAgency({ variables: { agencyId } });
+			await sweetMixinSuccessAlert(ui('admin.agencyActivated'));
+			setDetailAgency(null);
+			await refetch();
+		} catch (err: any) {
+			await sweetMixinErrorAlert(err?.message || ui('admin.failedToUpdate'));
+		}
 	};
 
 	const handleDelete = async (agencyId: string, name: string) => {
 		const ok = await sweetConfirmAlert(`${ui('admin.permanentlyDelete')} "${name}"? ${ui('admin.thisCannotBeUndone')}`);
 		if (!ok) return;
-		await deleteAgency({ variables: { agencyId } });
-		await sweetMixinSuccessAlert(ui('admin.agencyDeleted'));
-		setDetailAgency(null);
-		refetch();
+		try {
+			await deleteAgency({ variables: { agencyId } });
+			await sweetMixinSuccessAlert(ui('admin.agencyDeleted'));
+			setDetailAgency(null);
+			await refetch();
+		} catch (err: any) {
+			await sweetMixinErrorAlert(err?.message || ui('admin.failedToUpdate'));
+		}
 	};
 
 	const statusColor: any = { ACTIVE: 'success', SUSPENDED: 'error', INACTIVE: 'default' };

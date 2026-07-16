@@ -23,14 +23,13 @@
 		"animejs": "^4.5.0",
 		"apollo-link-token-refresh": "^0.4.0",
 		"apollo-upload-client": "^17.0.0",
-		"axios": "^0.27.2",
 		"emoji-picker-react": "^4.19.1",
 		"graphql": "^15.5.0",
 		"i18next": "^24.2.3",
 		"jwt-decode": "^3.1.2",
 		"leaflet": "^1.9.4",
 		"moment": "^2.29.3",
-		"next": "14.2.0",
+		"next": "15.5.20",
 		"next-i18next": "^15.4.3",
 		"next-images": "^1.8.4",
 		"numeral": "^2.0.6",
@@ -41,13 +40,12 @@
 		"react-leaflet": "^4.2.1",
 		"react-moment": "^1.1.2",
 		"react-redux": "^8.0.5",
-		"react-slick": "^0.28.1",
+		"react-slick": "^0.31.0",
 		"recharts": "^3.9.0",
 		"sass": "^1.49.9",
 		"slick-carousel": "^1.8.1",
 		"subscriptions-transport-ws": "^0.9.19",
-		"sweetalert2": "^11.7.27",
-		"swiper": "^8.3.1"
+		"sweetalert2": "^11.7.27"
 	},
 	"devDependencies": {
 		"@types/apollo-upload-client": "^17.0.0",
@@ -58,7 +56,7 @@
 		"@types/react-dom": "^18.2.0",
 		"@types/react-slick": "^0.23.8",
 		"eslint": "8.9.0",
-		"eslint-config-next": "12.1.0",
+		"eslint-config-next": "15.5.20",
 		"prettier": "2.7.1",
 		"typescript": "^5.9.3"
 	}

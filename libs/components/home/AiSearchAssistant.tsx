@@ -71,7 +71,7 @@ const AiSearchAssistant = () => {
 				title={ui('ai.askAi')}
 			>
 				<AutoAwesomeIcon />
-				<span>AI</span>
+				<span>{ui('ai.aIAssistant')}</span>
 			</button>
 
 			{open && (

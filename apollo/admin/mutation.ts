@@ -54,6 +54,14 @@ export const UNBAN_USER = gql`
 	}
 `;
 
+export const ADMIN_DELETE_USER = gql`
+	mutation AdminDeleteUser($userId: String!) {
+		adminDeleteUser(userId: $userId) {
+			_id
+		}
+	}
+`;
+
 export const ADMIN_DELETE_AGENCY = gql`
 	mutation AdminDeleteAgency($agencyId: String!) {
 		adminDeleteAgency(agencyId: $agencyId) {

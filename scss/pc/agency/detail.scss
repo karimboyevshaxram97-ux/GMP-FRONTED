@@ -297,6 +297,54 @@
 		}
 	}
 
+	.agency-services-heading {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(190px, 0.8fr);
+		align-items: end;
+		gap: 24px;
+		margin-bottom: 22px;
+
+		span {
+			display: block;
+			margin-bottom: 6px;
+			color: $primary;
+			font-size: 9px;
+			font-weight: 900;
+			letter-spacing: 1.2px;
+			text-transform: uppercase;
+		}
+
+		h2 { margin-bottom: 0; }
+		p { font-size: 12px; line-height: 1.6; }
+	}
+
+	.agency-services-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+		gap: 14px;
+
+		.service-card {
+			min-width: 0;
+			border-radius: 14px;
+
+			.service-card-body { gap: 8px; padding: 17px; }
+			.service-type-badge { width: fit-content; font-size: 9px; padding: 4px 9px; }
+			.service-name { min-height: 42px; font-size: 16px; }
+			.service-meta { font-size: 11px; }
+			.service-rating-row .MuiRating-root { font-size: 16px; }
+			.service-price { font-size: 18px; }
+			.service-action-btn { padding: 4px 8px; font-size: 11px; }
+		}
+	}
+
+	.agency-services-pagination {
+		display: flex;
+		justify-content: center;
+		margin-top: 24px;
+
+		.MuiPaginationItem-root { border-radius: 9px; font-weight: 800; }
+	}
+
 	.review-item {
 		border-bottom: 1px solid #edf1f7;
 		padding: 18px 0;
@@ -318,6 +366,68 @@
 			}
 		}
 	}
+
+	.agency-review-form {
+		display: grid;
+		grid-template-columns: minmax(180px, 0.72fr) minmax(280px, 1.28fr);
+		gap: 24px;
+		margin: 4px 0 28px;
+		padding: 22px;
+		border: 1px solid #dbe4f4;
+		border-left: 5px solid $primary;
+		border-radius: 14px;
+		background: #f8faff;
+
+		&__intro {
+			padding-right: 20px;
+			border-right: 1px solid #dfe6f2;
+
+			> span {
+				display: block;
+				margin-bottom: 8px;
+				color: $primary;
+				font-size: 10px;
+				font-weight: 900;
+				letter-spacing: 1.15px;
+				text-transform: uppercase;
+			}
+
+			strong { display: block; color: $text-primary; font-size: 18px; line-height: 1.3; }
+			p { margin-top: 8px; font-size: 12px; line-height: 1.6; }
+		}
+
+		&__fields {
+			display: flex;
+			align-items: flex-start;
+			flex-direction: column;
+			gap: 11px;
+
+			label { color: $text-secondary; font-size: 11px; font-weight: 800; }
+
+			.MuiButton-root {
+				align-self: flex-end;
+				min-width: 150px;
+				border-radius: 10px;
+				font-weight: 800;
+				text-transform: none;
+			}
+		}
+	}
+
+	.agency-review-status,
+	.agency-review-login {
+		margin: 4px 0 28px;
+		padding: 18px 20px;
+		border: 1px solid #dbe4f4;
+		border-radius: 12px;
+		background: #f8faff;
+
+		strong { display: block; margin: 7px 0 4px; color: $text-primary; font-size: 14px; }
+		p { font-size: 12px; line-height: 1.6; }
+	}
+
+	.agency-review-status[data-status='PENDING'] { border-left: 4px solid #f2a900; }
+	.agency-review-status[data-status='APPROVED'] { border-left: 4px solid #18a577; }
 
 	.contact-card {
 		height: fit-content;
@@ -538,6 +648,17 @@
 		.contact-card {
 			padding: 20px;
 		}
+
+		.agency-review-form {
+			grid-template-columns: 1fr;
+			padding: 18px;
+
+			&__intro { padding-right: 0; padding-bottom: 14px; border-right: 0; border-bottom: 1px solid #dfe6f2; }
+			&__fields .MuiButton-root { align-self: stretch; }
+		}
+
+		.agency-services-heading { grid-template-columns: 1fr; gap: 8px; }
+		.agency-services-grid { grid-template-columns: 1fr; }
 
 		.agency-profile-loading {
 			flex-direction: column;

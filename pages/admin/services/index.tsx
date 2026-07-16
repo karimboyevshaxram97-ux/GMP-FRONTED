@@ -72,13 +72,15 @@ const AdminServices: NextPage = () => {
 	};
 
 	const handleSetStatus = async (id: string, newStatus: string) => {
+		const ok = await sweetConfirmAlert(`${newStatus === 'SUSPENDED' ? ui('admin.suspend') : ui('admin.activate')}?`);
+		if (!ok) return;
 		try {
 			await updateService({
 				variables: {
 					id,
 					input: {
 						status: newStatus,
-						visibility: newStatus === 'ARCHIVED' ? 'ARCHIVED' : 'PUBLIC',
+						visibility: newStatus === 'SUSPENDED' ? 'ARCHIVED' : 'PUBLIC',
 					},
 				},
 			});
@@ -172,7 +174,7 @@ const AdminServices: NextPage = () => {
 								<TableCell>
 									<Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
 										{svc.status === 'ACTIVE' ? (
-											<Button size="small" variant="outlined" color="warning" onClick={() => handleSetStatus(svc._id, 'ARCHIVED')}>{ui('admin.archive')}</Button>
+											<Button size="small" variant="outlined" color="warning" onClick={() => handleSetStatus(svc._id, 'SUSPENDED')}>{ui('admin.suspend')}</Button>
 										) : (
 											<Button size="small" variant="outlined" color="success" onClick={() => handleSetStatus(svc._id, 'ACTIVE')}>{ui('admin.activate')}</Button>
 										)}
@@ -242,7 +244,7 @@ const AdminServices: NextPage = () => {
 						</DialogContent>
 						<DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
 							{detailService.status === 'ACTIVE' ? (
-								<Button color="warning" variant="outlined" size="small" onClick={() => handleSetStatus(detailService._id, 'ARCHIVED')}>{ui('admin.archive')}</Button>
+								<Button color="warning" variant="outlined" size="small" onClick={() => handleSetStatus(detailService._id, 'SUSPENDED')}>{ui('admin.suspend')}</Button>
 							) : (
 								<Button color="success" variant="outlined" size="small" onClick={() => handleSetStatus(detailService._id, 'ACTIVE')}>{ui('admin.activate')}</Button>
 							)}

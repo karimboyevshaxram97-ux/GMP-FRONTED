@@ -121,6 +121,29 @@ export const CREATE_APPLICATION = gql`
 	}
 `;
 
+export const REQUEST_APPLICATION_DOCUMENT = gql`
+	mutation RequestApplicationDocument($input: RequestApplicationDocumentInput!) {
+		requestApplicationDocument(input: $input) {
+			_id
+			kind
+			label
+			required
+			status
+		}
+	}
+`;
+
+export const REVIEW_APPLICATION_DOCUMENT = gql`
+	mutation ReviewApplicationDocument($input: ReviewApplicationDocumentInput!) {
+		reviewApplicationDocument(input: $input) {
+			_id
+			status
+			rejectionReason
+			reviewedAt
+		}
+	}
+`;
+
 export const CREATE_REVIEW = gql`
 	mutation CreateReview($input: CreateReviewInput!) {
 		createReview(input: $input) {
@@ -299,6 +322,11 @@ export const CREATE_PHOTO_COMMENT = gql`
 		createPhotoComment(input: $input) {
 			_id
 			text
+			parentComment
+			likeCount
+			meLiked {
+				myFavorite
+			}
 			attachments {
 				url
 				type

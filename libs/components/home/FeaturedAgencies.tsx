@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { useQuery } from '@apollo/client';
 import { Box, Pagination, Rating } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import { GET_AGENCIES } from '../../../apollo/user/query';
 import { REACT_APP_API_URL } from '../../config';
@@ -12,6 +11,24 @@ import { useUiLang } from '../../utils/translations';
 
 const PAGE_LIMIT = 4;
 
+// Deterministic gradient palette so each agency without an image looks distinct
+const PLACEHOLDER_GRADIENTS = [
+	'linear-gradient(135deg, #1649ff 0%, #4e7fff 100%)',
+	'linear-gradient(135deg, #7c3aed 0%, #c084fc 100%)',
+	'linear-gradient(135deg, #059669 0%, #6ee7b7 100%)',
+	'linear-gradient(135deg, #db2777 0%, #fb7185 100%)',
+	'linear-gradient(135deg, #ea580c 0%, #fbbf24 100%)',
+	'linear-gradient(135deg, #0369a1 0%, #38bdf8 100%)',
+];
+
+const pickGradient = (key: string) => {
+	let hash = 0;
+	for (let i = 0; i < key.length; i++) hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
+	return PLACEHOLDER_GRADIENTS[hash % PLACEHOLDER_GRADIENTS.length];
+};
+
+// Bento joylashuv: chapda katta karta (profil tugmasi bilan), o'ngda 2 kichik
+// karta + pastda bitta gorizontal karta. Sahifa almashganda ham shu tartib.
 const FeaturedAgencies = () => {
 	const tr = useLang();
 	const ui = useUiLang();
@@ -50,21 +67,48 @@ const FeaturedAgencies = () => {
 	const total: number = view?.getAgencies?.metaCounter?.[0]?.total ?? 0;
 	const showSkeletons = loading && agencies.length === 0;
 
-	// Deterministic gradient palette so each agency without an image looks distinct
-	const PLACEHOLDER_GRADIENTS = [
-		'linear-gradient(135deg, #1649ff 0%, #4e7fff 100%)',
-		'linear-gradient(135deg, #7c3aed 0%, #c084fc 100%)',
-		'linear-gradient(135deg, #059669 0%, #6ee7b7 100%)',
-		'linear-gradient(135deg, #db2777 0%, #fb7185 100%)',
-		'linear-gradient(135deg, #ea580c 0%, #fbbf24 100%)',
-		'linear-gradient(135deg, #0369a1 0%, #38bdf8 100%)',
-	];
+	const renderMedia = (agency: any) => (
+		<div className="hfa-media">
+			{agency.coverImage || agency.logo ? (
+				<img
+					src={`${REACT_APP_API_URL}/uploads/${agency.coverImage || agency.logo}`}
+					alt={tr(agency.name)}
+					loading="lazy"
+				/>
+			) : (
+				<div className="hfa-placeholder" style={{ background: pickGradient(agency._id || tr(agency.name)) }}>
+					<span>{(tr(agency.name) || '?').charAt(0).toUpperCase()}</span>
+				</div>
+			)}
+			{agency.verificationStatus === 'VERIFIED' && (
+				<span className="hfa-verified">
+					<VerifiedIcon /> {ui('admin.verified')}
+				</span>
+			)}
+		</div>
+	);
 
-	const pickGradient = (key: string) => {
-		let hash = 0;
-		for (let i = 0; i < key.length; i++) hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
-		return PLACEHOLDER_GRADIENTS[hash % PLACEHOLDER_GRADIENTS.length];
+	// "tavsif · davlat · davlat" ko'rinishidagi bir qatorli meta
+	const metaLine = (agency: any, withDescription: boolean) => {
+		const parts: string[] = [];
+		if (withDescription) {
+			const description = tr(agency.description);
+			if (description) parts.push(description);
+		}
+		parts.push(...(agency.operatingCountries?.slice(0, 2) ?? []));
+		return parts.join(' · ') || ui('home.trustedMigrationAndTravelAgency');
 	};
+
+	const renderRating = (agency: any, suffix = '') => (
+		<div className="hfa-rating">
+			<Rating value={agency.averageRating ?? 0} readOnly size="small" precision={0.5} />
+			<span>
+				{(agency.averageRating ?? 0).toFixed(1)} ({agency.totalReviews ?? 0}){suffix}
+			</span>
+		</div>
+	);
+
+	const [featureAgency, smallOne, smallTwo, wideAgency] = agencies;
 
 	return (
 		<section className="home-featured-agencies">
@@ -79,72 +123,55 @@ const FeaturedAgencies = () => {
 					</Link>
 				</div>
 
-				<div className={`home-featured-agencies__grid${visible ? ' in-view' : ''}`} ref={gridRef}>
-					{showSkeletons
-						? Array(PAGE_LIMIT).fill(0).map((_, i) => (
-							<div key={i} className="agency-skeleton">
-								<div className="sk-img" />
-								<div className="sk-body">
-									<div className="sk-line" />
-									<div className="sk-line" style={{ width: '75%' }} />
-									<div className="sk-line-sm" />
-								</div>
-							</div>
-						))
-						: agencies.map((agency) => {
-							const imageUrl = agency.coverImage || agency.logo
-								? `${REACT_APP_API_URL}/uploads/${agency.coverImage || agency.logo}`
-								: '';
-
-							return (
-								<Link key={agency._id} href={`/agency/${agency._id}`} style={{ textDecoration: 'none' }}>
-									<div className="agency-card">
-										<div className="card-image">
-											{agency.coverImage || agency.logo ? (
-												<img src={imageUrl} alt={tr(agency.name)} />
-											) : (
-												<div
-													className="card-image__placeholder"
-													style={{ background: pickGradient(agency._id || tr(agency.name)) }}
-												>
-													<span>{(tr(agency.name) || '?').charAt(0).toUpperCase()}</span>
-												</div>
-											)}
-											{agency.verificationStatus === 'VERIFIED' && (
-												<div className="verified-badge">
-													<VerifiedIcon style={{ fontSize: 13, marginRight: 3 }} />
-													{ui('admin.verified')}
-												</div>
-											)}
+				<div className={`home-featured-agencies__bento${visible ? ' in-view' : ''}`} ref={gridRef}>
+					{showSkeletons ? (
+						Array(4).fill(0).map((_, i) => <div key={i} className="agency-skeleton" />)
+					) : (
+						<>
+							{featureAgency && (
+								<Link href={`/agency/${featureAgency._id}`} className="hfa-card hfa-card--feature">
+									{renderMedia(featureAgency)}
+									<div className="hfa-body">
+										<div className="hfa-name-row">
+											<h3>{tr(featureAgency.name)}</h3>
+											<span className="hfa-chip">
+												{featureAgency.totalServices ?? 0} {ui('admin.services')}
+											</span>
 										</div>
-										<div className="card-body">
-											<div className="agency-title-row">
-												<h3>{tr(agency.name)}</h3>
-												<span>{agency.totalServices} {ui('admin.services')}</span>
-											</div>
-											<p className="agency-description">
-												{tr(agency.description) || ui('home.trustedMigrationAndTravelAgency')}
-											</p>
-											{agency.operatingCountries?.length > 0 && (
-												<div className="country-row">
-													<LocationOnOutlinedIcon />
-													{agency.operatingCountries.slice(0, 3).join(', ')}
-												</div>
-											)}
-											<div className="rating-row">
-												<Rating value={agency.averageRating ?? 0} readOnly size="small" precision={0.5} />
-												<span>{(agency.averageRating ?? 0).toFixed(1)} ({agency.totalReviews})</span>
-											</div>
-											<div className="card-actions">
-												<button className="profile-button">
-													{ui('map.viewProfile')}
-												</button>
-											</div>
-										</div>
+										<div className="hfa-meta">{metaLine(featureAgency, true)}</div>
+										{renderRating(featureAgency)}
+										<span className="hfa-profile-btn">{ui('map.viewProfile')}</span>
 									</div>
 								</Link>
-							);
-						})}
+							)}
+
+							{[smallOne, smallTwo].filter(Boolean).map((agency: any) => (
+								<Link key={agency._id} href={`/agency/${agency._id}`} className="hfa-card hfa-card--small">
+									{renderMedia(agency)}
+									<div className="hfa-body">
+										<div className="hfa-name-row">
+											<h3>{tr(agency.name)}</h3>
+										</div>
+										<div className="hfa-meta">{metaLine(agency, false)}</div>
+										{renderRating(agency)}
+									</div>
+								</Link>
+							))}
+
+							{wideAgency && (
+								<Link href={`/agency/${wideAgency._id}`} className="hfa-card hfa-card--wide">
+									{renderMedia(wideAgency)}
+									<div className="hfa-body">
+										<div className="hfa-name-row">
+											<h3>{tr(wideAgency.name)}</h3>
+										</div>
+										<div className="hfa-meta">{metaLine(wideAgency, true)}</div>
+										{renderRating(wideAgency, ` · ${wideAgency.totalServices ?? 0} ${ui('admin.services')}`)}
+									</div>
+								</Link>
+							)}
+						</>
+					)}
 				</div>
 
 				{total > PAGE_LIMIT && (

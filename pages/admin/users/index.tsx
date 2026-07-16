@@ -7,11 +7,12 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import BlockIcon from '@mui/icons-material/Block';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useQuery, useMutation } from '@apollo/client';
 import { ADMIN_USERS } from '../../../apollo/admin/query';
-import { BAN_USER, UNBAN_USER } from '../../../apollo/admin/mutation';
+import { ADMIN_DELETE_USER, BAN_USER, UNBAN_USER } from '../../../apollo/admin/mutation';
 import withLayoutAdmin from '../../../libs/components/layout/LayoutAdmin';
-import { sweetConfirmAlert, sweetMixinSuccessAlert } from '../../../libs/sweetAlert';
+import { sweetConfirmAlert, sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../../libs/sweetAlert';
 import { useDebounce } from '../../../libs/hooks/useDebounce';
 import { useUiLang } from '../../../libs/utils/translations';
 import { avatarSrc } from '../../../libs/utils/avatar';
@@ -53,24 +54,45 @@ const AdminUsers: NextPage = () => {
 
 	const [banUser] = useMutation(BAN_USER);
 	const [unbanUser] = useMutation(UNBAN_USER);
+	const [deleteUser] = useMutation(ADMIN_DELETE_USER);
 
 	const handleBan = async (userId: string, isBanned: boolean) => {
 		const ok = await sweetConfirmAlert(isBanned ? ui('admin.unbanThisUser') : ui('admin.banThisUser'));
 		if (!ok) return;
-		if (isBanned) {
-			await unbanUser({ variables: { userId } });
-		} else {
-			await banUser({ variables: { input: { userId } } });
+		try {
+			if (isBanned) {
+				await unbanUser({ variables: { userId } });
+			} else {
+				await banUser({ variables: { input: { userId } } });
+			}
+			await sweetMixinSuccessAlert(isBanned ? ui('admin.userUnbanned') : ui('admin.userBanned'));
+			setDetailUser(null);
+			await refetch();
+		} catch (err: any) {
+			await sweetMixinErrorAlert(err?.message || ui('admin.failedToUpdate'));
 		}
-		await sweetMixinSuccessAlert(isBanned ? ui('admin.userUnbanned') : ui('admin.userBanned'));
-		refetch();
+	};
+
+	const handleDelete = async (userId: string, name: string) => {
+		const ok = await sweetConfirmAlert(`${ui('admin.permanentlyDelete')} "${name}"? ${ui('admin.thisCannotBeUndone')}`);
+		if (!ok) return;
+		try {
+			await deleteUser({ variables: { userId } });
+			await sweetMixinSuccessAlert(ui('admin.userDeleted'));
+			setDetailUser(null);
+			setSelected((prev) => prev.filter((id) => id !== userId));
+			await refetch();
+		} catch (err: any) {
+			await sweetMixinErrorAlert(err?.message || ui('admin.failedToDeleteUser'));
+		}
 	};
 
 	const toggleSelect = (id: string) => {
 		setSelected((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]);
 	};
 
-	const selectableUsers = users.filter((u) => u.role !== 'SUPER_ADMIN');
+	const isBulkBanEligible = (user: any) => user.role !== 'SUPER_ADMIN' && user.status !== 'BANNED';
+	const selectableUsers = users.filter(isBulkBanEligible);
 	const allSelected = selectableUsers.length > 0 && selectableUsers.every((u) => selected.includes(u._id));
 
 	const toggleAll = () => {
@@ -81,12 +103,20 @@ const AdminUsers: NextPage = () => {
 		if (!selected.length) return;
 		const ok = await sweetConfirmAlert(`${ui('admin.ban')} ${selected.length} ${ui('admin.selected')}?`);
 		if (!ok) return;
-		for (const userId of selected) {
-			await banUser({ variables: { input: { userId } } });
+		const targets = selected.filter((userId) => users.some((user) => user._id === userId && isBulkBanEligible(user)));
+		const results = await Promise.allSettled(
+			targets.map((userId) => banUser({ variables: { input: { userId } } })),
+		);
+		const successCount = results.filter((result) => result.status === 'fulfilled').length;
+		const failedCount = results.length - successCount;
+		if (successCount) {
+			await sweetMixinSuccessAlert(`${successCount} ${ui('admin.usersBanned')}`);
 		}
-		await sweetMixinSuccessAlert(`${selected.length} ${ui('admin.usersBanned')}`);
+		if (failedCount) {
+			await sweetMixinErrorAlert(`${failedCount} ${ui('admin.failedToUpdate')}`);
+		}
 		setSelected([]);
-		refetch();
+		await refetch();
 	};
 
 	const roleColor: any = { SUPER_ADMIN: 'error', AGENCY_ADMIN: 'warning', USER: 'default' };
@@ -161,7 +191,7 @@ const AdminUsers: NextPage = () => {
 						) : users.map((user: any) => (
 							<TableRow key={user._id} hover selected={selected.includes(user._id)}>
 								<TableCell padding="checkbox">
-									{user.role !== 'SUPER_ADMIN' && (
+									{isBulkBanEligible(user) && (
 										<Checkbox size="small" checked={selected.includes(user._id)} onChange={() => toggleSelect(user._id)} />
 									)}
 								</TableCell>
@@ -181,12 +211,17 @@ const AdminUsers: NextPage = () => {
 								</TableCell>
 								<TableCell>
 									{user.role !== 'SUPER_ADMIN' && (
-										<Button size="small" variant="outlined"
-											color={user.status === 'BANNED' ? 'success' : 'warning'}
-											onClick={() => handleBan(user._id, user.status === 'BANNED')}
-										>
-											{user.status === 'BANNED' ? ui('admin.unban') : ui('admin.ban')}
-										</Button>
+										<Box sx={{ display: 'flex', gap: 0.5 }}>
+											<Button size="small" variant="outlined"
+												color={user.status === 'BANNED' ? 'success' : 'warning'}
+												onClick={() => handleBan(user._id, user.status === 'BANNED')}
+											>
+												{user.status === 'BANNED' ? ui('admin.unban') : ui('admin.ban')}
+											</Button>
+											<Button size="small" variant="outlined" color="error" onClick={() => handleDelete(user._id, `${user.firstName} ${user.lastName}`.trim() || user.email)}>
+												{ui('admin.delete')}
+											</Button>
+										</Box>
 									)}
 								</TableCell>
 							</TableRow>
@@ -244,9 +279,20 @@ const AdminUsers: NextPage = () => {
 							{detailUser.role !== 'SUPER_ADMIN' && (
 								<Button size="small" variant="outlined"
 									color={detailUser.status === 'BANNED' ? 'success' : 'warning'}
-									onClick={() => { handleBan(detailUser._id, detailUser.status === 'BANNED'); setDetailUser(null); }}
+									onClick={() => handleBan(detailUser._id, detailUser.status === 'BANNED')}
 								>
 									{detailUser.status === 'BANNED' ? ui('admin.unban') : ui('admin.ban')}
+								</Button>
+							)}
+							{detailUser.role !== 'SUPER_ADMIN' && (
+								<Button
+									size="small"
+									variant="outlined"
+									color="error"
+									startIcon={<DeleteIcon />}
+									onClick={() => handleDelete(detailUser._id, `${detailUser.firstName} ${detailUser.lastName}`.trim() || detailUser.email)}
+								>
+									{ui('admin.deleteUser')}
 								</Button>
 							)}
 							<Button onClick={() => setDetailUser(null)}>{ui('admin.close')}</Button>

@@ -33,6 +33,7 @@ import { ServiceType } from '../../libs/enums/service.enum';
 import { toFriendlyError } from '../../libs/utils/errors';
 import { useUiLang } from '../../libs/utils/translations';
 import AgencyPhotos from '../../libs/components/mypage/AgencyPhotos';
+import ApplicationDocumentsPanel from '../../libs/components/mypage/ApplicationDocumentsPanel';
 
 // ── Helper components ────────────────────────────────────────────────────────
 
@@ -74,23 +75,32 @@ function FollowingAgencyRow({ follow, onOpen }: { follow: any; onOpen: () => voi
 
 function ApplicationRow({ app, onOpen }: { app: any; onOpen: () => void }) {
 	const ui = useUiLang();
+	const [documentsOpen, setDocumentsOpen] = useState(false);
 	return (
-		<Box key={app._id} className="list-row">
-			<div style={{ flex: 1 }}>
-				<strong style={{ display: 'block', cursor: 'pointer', color: '#1649ff' }} onClick={onOpen}>
-					{ui('mypage.application')} #{app._id.slice(-6)}
-				</strong>
-				<span style={{ display: 'block', fontSize: 12, color: '#888' }}>
-					{ui('mypage.applied')}: {new Date(app.appliedAt).toLocaleDateString()}
-				</span>
-				{app.paymentStatus && (
-					<span className="payment-badge" data-status={app.paymentStatus}>
-						{ui('mypage.payment')}: {ui(app.paymentStatus)}
+		<Box className="application-entry">
+			<Box className="list-row">
+				<div style={{ flex: 1 }}>
+					<strong style={{ display: 'block', cursor: 'pointer', color: '#1649ff' }} onClick={onOpen}>
+						{ui('mypage.application')} #{app._id.slice(-6)}
+					</strong>
+					<span style={{ display: 'block', fontSize: 12, color: '#888' }}>
+						{ui('mypage.applied')}: {new Date(app.appliedAt).toLocaleDateString()}
 					</span>
-				)}
-				{app.notes && <span style={{ display: 'block', fontSize: 12, color: '#666', marginTop: 2 }}>{app.notes}</span>}
-			</div>
-			<Chip label={app.status} sx={{ bgcolor: applicationStatusColors[app.status] || '#9e9e9e', color: '#fff', fontWeight: 700 }} />
+					{app.paymentStatus && (
+						<span className="payment-badge" data-status={app.paymentStatus}>
+							{ui('mypage.payment')}: {ui(app.paymentStatus)}
+						</span>
+					)}
+					{app.notes && <span style={{ display: 'block', fontSize: 12, color: '#666', marginTop: 2 }}>{app.notes}</span>}
+				</div>
+				<Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+					<Chip label={app.status} sx={{ bgcolor: applicationStatusColors[app.status] || '#9e9e9e', color: '#fff', fontWeight: 700 }} />
+					<Button size="small" variant={documentsOpen ? 'contained' : 'outlined'} onClick={() => setDocumentsOpen((open) => !open)}>
+						{ui('documents.title')}
+					</Button>
+				</Box>
+			</Box>
+			{documentsOpen && <ApplicationDocumentsPanel applicationId={app._id} agencyId={app.agency} serviceId={app.service} mode="user" />}
 		</Box>
 	);
 }
@@ -179,6 +189,7 @@ const MyPage: NextPage = () => {
 
 	// Applications received (for agency admin)
 	const [appStatusFilter, setAppStatusFilter] = useState('');
+	const [agencyDocumentApplication, setAgencyDocumentApplication] = useState('');
 	const isAgencyAdmin = user?.role === UserRole.AGENCY_ADMIN;
 
 	useEffect(() => {
@@ -1115,7 +1126,10 @@ const MyPage: NextPage = () => {
 											</span>
 										</div>
 										<Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-											<Chip label={svc.status} size="small" color={svc.status === 'ACTIVE' ? 'success' : svc.status === 'DRAFT' ? 'warning' : 'default'} />
+											<span className={`service-status-chip service-status-chip--${String(svc.status).toLowerCase()}`}>
+												<span className="service-status-chip__dot" />
+												{svc.status}
+											</span>
 											<IconButton size="small" onClick={() => openServiceForm(svc)}><EditIcon fontSize="small" /></IconButton>
 											<IconButton size="small" color="error" onClick={() => handleDeleteService(svc._id, svc.name?.en || svc.name?.uz || 'service')}><DeleteIcon fontSize="small" /></IconButton>
 										</Box>
@@ -1181,7 +1195,8 @@ const MyPage: NextPage = () => {
 								{agencyApplications.length === 0 ? (
 									<Box className="empty-state">{ui('mypage.noApplicationsReceivedYet')}</Box>
 								) : agencyApplications.filter((a: any) => !appStatusFilter || a.status === appStatusFilter).map((app: any) => (
-									<Box key={app._id} className="list-row">
+									<Box key={app._id} className="application-entry">
+									<Box className="list-row">
 										<div style={{ flex: 1 }}>
 											<strong>{ui('mypage.application')} #{app._id.slice(-6)}</strong>
 											<span style={{ display: 'block', fontSize: 12, color: '#888' }}>{ui('mypage.applied')}: {new Date(app.appliedAt).toLocaleDateString()}</span>
@@ -1189,6 +1204,7 @@ const MyPage: NextPage = () => {
 										</div>
 										<Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
 											<Chip label={app.status} size="small" sx={{ bgcolor: applicationStatusColors[app.status] || '#9e9e9e', color: '#fff', fontWeight: 700 }} />
+											<Button size="small" variant={agencyDocumentApplication === app._id ? 'contained' : 'outlined'} onClick={() => setAgencyDocumentApplication((current) => current === app._id ? '' : app._id)}>{ui('documents.title')}</Button>
 											{app.status === 'SUBMITTED' && (
 												<Button size="small" variant="outlined" onClick={() => handleUpdateAppStatus(app._id, 'UNDER_REVIEW')}>{ui('common.review')}</Button>
 											)}
@@ -1202,6 +1218,8 @@ const MyPage: NextPage = () => {
 												<Button size="small" variant="outlined" color="primary" onClick={() => handleUpdateAppStatus(app._id, 'COMPLETED')}>{ui('mypage.complete')}</Button>
 											)}
 										</Box>
+										</Box>
+										{agencyDocumentApplication === app._id && <ApplicationDocumentsPanel applicationId={app._id} agencyId={app.agency} serviceId={app.service} mode="agency" />}
 									</Box>
 								))}
 							</Box>

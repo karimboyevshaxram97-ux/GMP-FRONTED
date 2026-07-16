@@ -18,11 +18,12 @@ import { userVar } from '../../../apollo/store';
 import { REACT_APP_API_URL } from '../../config';
 import { LikeTargetType } from '../../enums/like.enum';
 import { ViewTargetType } from '../../enums/view.enum';
-import { avatarSrc } from '../../utils/avatar';
 import { useLang } from '../../utils/lang';
 import { useUiLang } from '../../utils/translations';
 import { getJwtToken } from '../../auth';
 import { sweetMixinErrorAlert } from '../../sweetAlert';
+import { getServiceTypeLabel } from '../../utils';
+import PhotoCommentThread from '../common/PhotoCommentThread';
 
 // PhotoBoard `pages/service/index.tsx` orqali getStaticProps bilan build vaqtida
 // SSR qilinadi — brauzer-only kutubxonani statik import qilish next build'ni buzadi.
@@ -54,8 +55,10 @@ const PhotoBoard = ({ serviceType }: { serviceType?: string }) => {
 	const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 	const [attachmentSending, setAttachmentSending] = useState(false);
 	const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+	const [replyingTo, setReplyingTo] = useState<{ id: string; name: string } | null>(null);
 	const imageInputRef = useRef<HTMLInputElement>(null);
 	const videoInputRef = useRef<HTMLInputElement>(null);
+	const commentInputRef = useRef<HTMLInputElement>(null);
 
 	const { data, refetch } = useQuery(GET_PHOTOS, {
 		fetchPolicy: 'cache-and-network',
@@ -84,6 +87,13 @@ const PhotoBoard = ({ serviceType }: { serviceType?: string }) => {
 	const total: number = data?.getPhotos?.metaCounter?.[0]?.total ?? 0;
 	const pageCount = Math.ceil(total / PAGE_SIZE);
 	const comments: any[] = commentsData?.getPhotoComments ?? [];
+	const replyCopy = (key: 'service.replyingTo' | 'service.replyPlaceholder' | 'service.cancelReply', name = '') => {
+		const translated = ui(key);
+		if (translated !== key) return translated.replace('{{name}}', name);
+		if (key === 'service.replyingTo') return `${name} ga javob yozyapsiz`;
+		if (key === 'service.replyPlaceholder') return `${name} ga javob yozing...`;
+		return 'Javob berishni bekor qilish';
+	};
 
 	const openPhoto = (photo: any) => {
 		setSelected(photo);
@@ -92,10 +102,24 @@ const PhotoBoard = ({ serviceType }: { serviceType?: string }) => {
 		setStagedVideo(null);
 		setShowEmojiPicker(false);
 		setLightboxImage(null);
+		setReplyingTo(null);
 		loadComments({ variables: { photoId: photo._id } });
 		recordView({ variables: { targetId: photo._id, targetType: ViewTargetType.PHOTO } })
 			.then(() => refetch())
 			.catch(() => undefined);
+	};
+
+	const handleCommentLike = async (comment: any) => {
+		if (!user?._id) { router.push('/account/join'); return; }
+		await toggleLike({
+			variables: { targetId: comment._id, targetType: LikeTargetType.PHOTO_COMMENT },
+		});
+		await refetchComments?.();
+	};
+
+	const handleReply = (comment: any) => {
+		setReplyingTo({ id: comment._id, name: comment.userName || 'User' });
+		requestAnimationFrame(() => commentInputRef.current?.focus());
 	};
 
 	const handleLike = async (event: React.MouseEvent, photoId: string) => {
@@ -209,6 +233,7 @@ const PhotoBoard = ({ serviceType }: { serviceType?: string }) => {
 				variables: {
 					input: {
 						photoId: selected._id,
+						parentCommentId: replyingTo?.id || undefined,
 						text: text || undefined,
 						attachmentUrls: attachmentUrls.length ? attachmentUrls : undefined,
 					},
@@ -221,6 +246,7 @@ const PhotoBoard = ({ serviceType }: { serviceType?: string }) => {
 			setStagedImages([]);
 			setStagedVideo(null);
 			setShowEmojiPicker(false);
+			setReplyingTo(null);
 			refetchComments?.();
 			const result = await refetch();
 			const updated = result?.data?.getPhotos?.list?.find((p: any) => p._id === selected._id);
@@ -237,19 +263,24 @@ const PhotoBoard = ({ serviceType }: { serviceType?: string }) => {
 	const selectedLiked = Boolean(selected?.meLiked?.[0]?.myFavorite);
 
 	return (
-		<Box className="photo-board">
+		<Box className={`photo-board photo-board--${(serviceType || 'all').toLowerCase().replace(/_/g, '-')}`}>
 			<Box className="photo-board__head">
-				<h2>{ui('service.photoBoard')}</h2>
-				<p>{ui('service.mostLikedPhotos')}</p>
+				<Box>
+					<span className="photo-board__kicker">{ui(getServiceTypeLabel(serviceType || ''))}</span>
+					<h2>{ui('service.photoBoard')}</h2>
+					<p>{ui('service.mostLikedPhotos')}</p>
+				</Box>
+				<strong>{String(total).padStart(2, '0')}</strong>
 			</Box>
 
 			<Box className="photo-board__grid">
-				{photos.map((photo) => {
+				{photos.map((photo, index) => {
 					const liked = Boolean(photo.meLiked?.[0]?.myFavorite);
 
 					return (
 						<Box key={photo._id} className="photo-card" onClick={() => openPhoto(photo)}>
 							<img src={`${REACT_APP_API_URL}/uploads/${photo.image}`} alt="" loading="lazy" />
+							<span className="photo-card__rank">{String(index + 1).padStart(2, '0')}</span>
 
 							<Box className="photo-card__stats">
 								<button
@@ -328,35 +359,25 @@ const PhotoBoard = ({ serviceType }: { serviceType?: string }) => {
 								{comments.length === 0 ? (
 									<p className="no-comments">{ui('service.noCommentsYet')}</p>
 								) : (
-									comments.map((comment) => (
-										<Box key={comment._id} className="photo-comment">
-											<img src={avatarSrc(comment.userAvatar)} alt="" />
-											<Box>
-												<strong>{comment.userName || 'User'}</strong>
-												{comment.text && <p>{comment.text}</p>}
-												{comment.attachments?.length > 0 && (
-													<Box className="photo-comment__attachments">
-														{comment.attachments.map((attachment: any, index: number) =>
-															attachment.type === 'video' ? (
-																<video key={index} src={`${REACT_APP_API_URL}${attachment.url}`} controls />
-															) : (
-																<img
-																key={index}
-																src={`${REACT_APP_API_URL}${attachment.url}`}
-																alt=""
-																onClick={() => setLightboxImage(`${REACT_APP_API_URL}${attachment.url}`)}
-															/>
-															),
-														)}
-													</Box>
-												)}
-											</Box>
-										</Box>
-									))
+									<PhotoCommentThread
+										comments={comments}
+										replyLabel={ui('service.reply')}
+										onLike={handleCommentLike}
+										onReply={handleReply}
+										onImageClick={setLightboxImage}
+									/>
 								)}
 							</Box>
 
 							<Box className="photo-modal__input-wrap">
+								{replyingTo && (
+									<Box className="photo-modal__replying">
+										<span>{replyCopy('service.replyingTo', replyingTo.name)}</span>
+										<button type="button" onClick={() => setReplyingTo(null)} aria-label={replyCopy('service.cancelReply')}>
+											<CloseIcon />
+										</button>
+									</Box>
+								)}
 								{(stagedImages.length > 0 || stagedVideo) && (
 									<Box className="photo-modal__attachments-preview">
 										{stagedImages.map((item, index) => (
@@ -428,9 +449,10 @@ const PhotoBoard = ({ serviceType }: { serviceType?: string }) => {
 									</button>
 									<input
 										type="text"
+										ref={commentInputRef}
 										value={commentText}
 										onChange={(event) => setCommentText(event.target.value)}
-										placeholder={ui('service.writeComment')}
+										placeholder={replyingTo ? replyCopy('service.replyPlaceholder', replyingTo.name) : ui('service.writeComment')}
 										maxLength={500}
 									/>
 									<button

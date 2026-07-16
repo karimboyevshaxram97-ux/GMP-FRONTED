@@ -3,6 +3,150 @@
 @import './components/error-state';
 @import './components/sweetalert';
 
+// Foto sharhlari barcha board va homepage modallarida bir xil ko'rinadi.
+.photo-comment-thread {
+	display: flex;
+	width: 100%;
+	flex-direction: column;
+	gap: 14px;
+	text-align: left;
+
+	&__branch {
+		min-width: 0;
+		text-align: left;
+	}
+
+	&__item {
+		display: flex;
+		gap: 10px;
+		width: 100%;
+		min-width: 0;
+		align-items: flex-start;
+		cursor: text;
+		text-align: left;
+	}
+
+	&__avatar {
+		width: 30px;
+		height: 30px;
+		flex: 0 0 auto;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+
+	&__body {
+		min-width: 0;
+		flex: 1;
+		text-align: left;
+
+		> p {
+			margin: 1px 0 0;
+			color: $text-secondary;
+			font-size: 13px;
+			line-height: 1.5;
+			word-break: break-word;
+		}
+	}
+
+	&__heading {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 4px 7px;
+		min-height: 18px;
+		text-align: left;
+
+		strong {
+			color: $text-primary;
+			font-size: 12px;
+			line-height: 1.35;
+		}
+
+		span {
+			display: inline-flex;
+			align-items: center;
+			max-width: 100%;
+			padding: 2px 7px;
+			overflow: hidden;
+			border-radius: 999px;
+			background: #eef2ff;
+			color: #526ad0;
+			font-size: 10px;
+			font-weight: 800;
+			line-height: 1.4;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+	}
+
+	&__attachments {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+		margin-top: 6px;
+
+		img, video {
+			width: 90px;
+			height: 90px;
+			border-radius: 10px;
+			object-fit: cover;
+			background: #0b0e1a;
+		}
+
+		img { cursor: zoom-in; }
+	}
+
+	&__actions {
+		display: flex;
+		align-items: center;
+		gap: 13px;
+		margin-top: 5px;
+
+		button {
+			display: inline-flex;
+			align-items: center;
+			gap: 4px;
+			min-height: 22px;
+			padding: 0;
+			border: 0;
+			background: transparent;
+			color: #8994a7;
+			font-family: inherit;
+			font-size: 11px;
+			font-weight: 700;
+			cursor: pointer;
+
+			&:hover { color: $primary; }
+			&.liked { color: #ff4757; }
+			svg { font-size: 15px; }
+		}
+	}
+
+	&__replies {
+		display: flex;
+		position: relative;
+		flex-direction: column;
+		gap: 12px;
+		margin: 10px 0 0 14px;
+		padding-left: 16px;
+
+		&::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			bottom: 4px;
+			left: 0;
+			width: 1px;
+			background: linear-gradient(180deg, #b9c7ef, #e3e8f1);
+		}
+	}
+
+	.photo-comment-thread__replies .photo-comment-thread__replies {
+		margin-left: 8px;
+		padding-left: 12px;
+	}
+}
+
 // Page header (legacy — kept for small headers)
 .page-header {
 	background: linear-gradient(135deg, $primary-dark 0%, $primary 100%);
@@ -48,7 +192,7 @@
 			box-shadow: 0 16px 34px rgba(10, 36, 114, 0.12);
 		}
 
-		.card-image img {
+		.card-image .card-image__photo {
 			transform: none;
 		}
 
@@ -59,19 +203,31 @@
 
 	.card-image {
 		align-items: center;
-		aspect-ratio: auto;
+		aspect-ratio: 16 / 9;
 		background: #f3f5f9;
 		border: 1px solid #edf0f5;
 		border-radius: 14px;
 		display: flex;
-		height: clamp(260px, 22vw, 320px);
 		isolation: isolate;
 		justify-content: center;
 		overflow: hidden;
 		position: relative;
 		transition: border-color 0.25s ease, box-shadow 0.25s ease;
 
-		img {
+		/* Orqa fon: rasmning xiralashtirilgan nusxasi — asosiy rasm "contain"
+		   bo'lganda bo'sh joylarni to'ldiradi, hech narsa qirqilmaydi */
+		.card-image__backdrop {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			filter: blur(20px) saturate(1.15);
+			transform: scale(1.15); /* blur chetidagi shaffof halqani yashiradi */
+			z-index: 0;
+		}
+
+		.card-image__photo {
 			box-sizing: border-box;
 			filter: none;
 			height: 100%;
@@ -81,6 +237,13 @@
 			transition: transform 0.35s ease, filter 0.35s ease;
 			width: 100%;
 			z-index: 1;
+		}
+
+		/* Logo fallback: logotip kichik va kvadrat bo'ladi — chetidan joy
+		   qoldirib ko'rsatamiz, orqa fonni esa yumshoqroq qilamiz */
+		&.card-image--logo {
+			.card-image__photo { object-fit: contain; padding: 26px; }
+			.card-image__backdrop { filter: blur(34px) saturate(1.1); opacity: 0.45; }
 		}
 
 		// Depth gradient — keeps the badge legible over any photo
@@ -263,6 +426,12 @@
 				border-color: #ff4757;
 				color: #ff4757;
 			}
+
+			&.metric-action {
+				justify-content: center;
+				padding: 6px;
+				width: 28px;
+			}
 		}
 
 		.profile-button {
@@ -376,6 +545,7 @@
 	.service-action-btn {
 		@include button-states;
 		align-items: center;
+		background: transparent;
 		border: 1px solid #e8edf7;
 		border-radius: 999px;
 		color: $text-secondary;
@@ -383,6 +553,7 @@
 		font-size: 13px;
 		font-weight: 600;
 		gap: 4px;
+		font-family: inherit;
 		padding: 4px 10px;
 		user-select: none;
 

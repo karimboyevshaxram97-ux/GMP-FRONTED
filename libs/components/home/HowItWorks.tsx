@@ -35,9 +35,9 @@ const HowItWorks = () => {
 
 				<div className="home-how__steps">
 					{steps.map((step, i) => (
-						<div key={i} className="how-step">
-							<div className="how-step__num">{step.num}</div>
-							<span className="how-step__icon">{step.icon}</span>
+						<div key={i} className="hiw-card">
+							<span className="hiw-card__num">{step.num}</span>
+							<span className="hiw-card__icon">{step.icon}</span>
 							<h3>{ui(step.title)}</h3>
 							<p>{ui(step.desc)}</p>
 						</div>

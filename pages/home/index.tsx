@@ -20,6 +20,9 @@ const HomepageMapSection = dynamic(
 
 const Homepage = () => (
 	<div className="homepage">
+		{/* "Yirtilgan chekka" — yon tomonlardagi diagonal chiziqli naqsh (hero'dan pastda) */}
+		<div className="homepage__frayed homepage__frayed--left" aria-hidden="true" />
+		<div className="homepage__frayed homepage__frayed--right" aria-hidden="true" />
 		<HeroSection />
 		<SearchSection />
 		<Brands />

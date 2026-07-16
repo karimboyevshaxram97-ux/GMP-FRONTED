@@ -2,4 +2,5 @@ export enum LikeTargetType {
 	AGENCY = 'AGENCY',
 	SERVICE = 'SERVICE',
 	PHOTO = 'PHOTO',
+	PHOTO_COMMENT = 'PHOTO_COMMENT',
 }

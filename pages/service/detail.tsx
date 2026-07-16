@@ -10,7 +10,7 @@ import PublicIcon from '@mui/icons-material/Public';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import SendIcon from '@mui/icons-material/Send';
 import VerifiedIcon from '@mui/icons-material/Verified';
-import { GET_SERVICE, REVIEWS_BY_SERVICE, MY_APPLICATIONS } from '../../apollo/user/query';
+import { GET_SERVICE, REVIEWS_BY_SERVICE } from '../../apollo/user/query';
 import { TOGGLE_LIKE, CREATE_APPLICATION, CREATE_REVIEW, RECORD_VIEW } from '../../apollo/user/mutation';
 import { userVar } from '../../apollo/store';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
@@ -35,7 +35,6 @@ const ServiceDetail: NextPage = () => {
 
 	const { data, loading, refetch } = useQuery(GET_SERVICE, { variables: { id: serviceId }, skip: !serviceId });
 	const { data: reviewData, refetch: refetchReviews } = useQuery(REVIEWS_BY_SERVICE, { variables: { serviceId }, skip: !serviceId });
-	const { data: myAppsData } = useQuery(MY_APPLICATIONS, { skip: !user?._id });
 
 	const [toggleLike] = useMutation(TOGGLE_LIKE);
 	const [createApplication] = useMutation(CREATE_APPLICATION);
@@ -53,9 +52,22 @@ const ServiceDetail: NextPage = () => {
 	const isServiceFull = Number.isFinite(service?.maxApplicationCount)
 		&& service.maxApplicationCount > 0
 		&& (service.currentApplicationCount ?? 0) >= service.maxApplicationCount;
-	const canReview = (myAppsData?.myApplications ?? []).some(
-		(app: any) => app.service === service?._id && app.isReviewEligible,
-	);
+
+	useEffect(() => {
+		if (!service?._id || !router.asPath.includes('#service-reviews')) return;
+
+		const frame = window.requestAnimationFrame(() => {
+			const reviewsSection = document.getElementById('service-reviews');
+			if (!reviewsSection) return;
+
+			reviewsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			window.setTimeout(() => {
+				reviewsSection.querySelector<HTMLTextAreaElement>('textarea')?.focus({ preventScroll: true });
+			}, 450);
+		});
+
+		return () => window.cancelAnimationFrame(frame);
+	}, [service?._id, router.asPath]);
 
 	const requireLogin = () => {
 		if (!user?._id) {
@@ -98,6 +110,7 @@ const ServiceDetail: NextPage = () => {
 				variables: { input: { agencyId: service.agency, serviceId: service._id, rating: reviewRating, comment: reviewComment } },
 			});
 			setReviewComment('');
+			await Promise.all([refetchReviews(), refetch()]);
 			await sweetMixinSuccessAlert(ui('service.yourReviewWasSentFor'));
 		} catch (err: any) {
 			await sweetMixinErrorAlert(toFriendlyError(err, ui('service.failedToSubmitReview')));
@@ -206,7 +219,7 @@ const ServiceDetail: NextPage = () => {
 						)}
 					</Box>
 
-					<Box className="service-main-card">
+					<Box id="service-reviews" className="service-main-card service-reviews-card">
 						<h2>{ui('agency.reviews')} ({reviews.length})</h2>
 						{reviews.length ? (
 							reviews.map((review: any) => (
@@ -219,27 +232,21 @@ const ServiceDetail: NextPage = () => {
 							<Box className="empty-services">{ui('agency.noReviewsYet')}</Box>
 						)}
 
-						{user?._id && (
-							canReview ? (
-								<Box className="review-form">
-									<h3>{ui('service.writeAReview')}</h3>
-									<Rating value={reviewRating} onChange={(_, value) => setReviewRating(value ?? 5)} />
-									<TextField
-										fullWidth
-										multiline
-										rows={3}
-										placeholder={ui('service.shareYourExperience')}
-										value={reviewComment}
-										onChange={(event) => setReviewComment(event.target.value)}
-									/>
-									<Button variant="contained" startIcon={<SendIcon />} onClick={handleReview} disabled={reviewSubmitting}>
-										{reviewSubmitting ? ui('mypage.submitting') : ui('service.submitReview')}
-									</Button>
-								</Box>
-							) : (
-								<Box className="empty-services">{ui('service.reviewRequiresCompletedApplication')}</Box>
-							)
-						)}
+						<Box className="review-form">
+							<h3>{ui('service.writeAReview')}</h3>
+							<Rating value={reviewRating} onChange={(_, value) => setReviewRating(value ?? 5)} />
+							<TextField
+								fullWidth
+								multiline
+								rows={3}
+								placeholder={ui('service.shareYourExperience')}
+								value={reviewComment}
+								onChange={(event) => setReviewComment(event.target.value)}
+							/>
+							<Button variant="contained" startIcon={<SendIcon />} onClick={handleReview} disabled={reviewSubmitting}>
+								{reviewSubmitting ? ui('mypage.submitting') : ui('service.submitReview')}
+							</Button>
+						</Box>
 					</Box>
 				</Box>
 			</Stack>

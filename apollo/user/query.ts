@@ -196,6 +196,13 @@ export const GET_SERVICES_BY_AGENCY = gql`
 			price
 			processingTime
 			status
+			averageRating
+			totalReviews
+			viewCount
+			likeCount
+			meLiked {
+				myFavorite
+			}
 		}
 	}
 `;
@@ -215,6 +222,29 @@ export const MY_APPLICATIONS = gql`
 	}
 `;
 
+export const APPLICATION_DOCUMENTS = gql`
+	query ApplicationDocuments($applicationId: String!) {
+		applicationDocuments(applicationId: $applicationId) {
+			_id
+			application
+			user
+			agency
+			kind
+			label
+			required
+			status
+			originalName
+			mimeType
+			size
+			rejectionReason
+			uploadedAt
+			reviewedAt
+			createdAt
+			updatedAt
+		}
+	}
+`;
+
 export const REVIEWS_BY_AGENCY = gql`
 	query ReviewsByAgency($agencyId: String!) {
 		reviewsByAgency(agencyId: $agencyId) {
@@ -224,6 +254,18 @@ export const REVIEWS_BY_AGENCY = gql`
 			service
 			rating
 			comment
+			createdAt
+		}
+	}
+`;
+
+export const MY_REVIEW_BY_AGENCY = gql`
+	query MyReviewByAgency($agencyId: String!) {
+		myReviewByAgency(agencyId: $agencyId) {
+			_id
+			rating
+			comment
+			status
 			createdAt
 		}
 	}
@@ -414,6 +456,11 @@ export const GET_PHOTO_COMMENTS = gql`
 		getPhotoComments(photoId: $photoId) {
 			_id
 			text
+			parentComment
+			likeCount
+			meLiked {
+				myFavorite
+			}
 			attachments {
 				url
 				type

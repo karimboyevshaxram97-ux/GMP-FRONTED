@@ -60,21 +60,40 @@ const App = ({ Component, pageProps }: AppProps) => {
 	useEffect(() => {
 		if (!REACT_APP_CHAT_WS) return;
 
-		const token = getJwtToken();
-		const query = token ? `?token=${encodeURIComponent(token)}` : '';
-		const ws = new WebSocket(`${REACT_APP_CHAT_WS}${query}`);
+		let disposed = false;
+		let retryAttempt = 0;
+		let retryTimer: ReturnType<typeof setTimeout> | null = null;
+		let activeSocket: WebSocket | null = null;
 
-		ws.onerror = () => {
-			if (socketVar() === ws) socketVar(null);
+		const connect = () => {
+			if (disposed) return;
+			const token = getJwtToken();
+			const query = token ? `?token=${encodeURIComponent(token)}` : '';
+			const ws = new WebSocket(`${REACT_APP_CHAT_WS}${query}`);
+			activeSocket = ws;
+			socketVar(ws);
+
+			ws.onopen = () => {
+				retryAttempt = 0;
+				ws.send(JSON.stringify({ event: 'getOnlineCount' }));
+			};
+			ws.onerror = () => ws.close();
+			ws.onclose = () => {
+				if (socketVar() === ws) socketVar(null);
+				if (disposed) return;
+				const delay = Math.min(1000 * 2 ** retryAttempt, 10000);
+				retryAttempt++;
+				retryTimer = setTimeout(connect, delay);
+			};
 		};
-		ws.onclose = () => {
-			if (socketVar() === ws) socketVar(null);
-		};
-		socketVar(ws);
+
+		connect();
 
 		return () => {
-			if (socketVar() === ws) socketVar(null);
-			ws.close();
+			disposed = true;
+			if (retryTimer) clearTimeout(retryTimer);
+			if (activeSocket && socketVar() === activeSocket) socketVar(null);
+			activeSocket?.close();
 		};
 	}, [user?._id]);
 

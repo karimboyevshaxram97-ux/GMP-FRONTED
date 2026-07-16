@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NextPage } from 'next';
-import { useMutation } from '@apollo/client';
+import Link from 'next/link';
+import { useMutation, useReactiveVar } from '@apollo/client';
 import { Box, Container, Snackbar, Alert } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
@@ -11,8 +12,10 @@ import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import withLayoutMain from '../../libs/components/layout/LayoutHome';
 import { CREATE_SUPPORT_TICKET } from '../../apollo/user/mutation';
+import { userVar } from '../../apollo/store';
 import { useUiLang } from '../../libs/utils/translations';
 
 const faqs = [
@@ -120,6 +123,7 @@ const faqs = [
 
 const HelpPage: NextPage = () => {
 	const ui = useUiLang();
+	const user = useReactiveVar(userVar);
 	const [expanded, setExpanded] = useState<number | false>(false);
 	const [search, setSearch] = useState('');
 	const [form, setForm] = useState({ name: '', email: '', message: '' });
@@ -127,6 +131,16 @@ const HelpPage: NextPage = () => {
 	const [submitError, setSubmitError] = useState('');
 	const [createSupportTicket, { loading: sending }] = useMutation(CREATE_SUPPORT_TICKET);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
+
+	useEffect(() => {
+		if (!user?._id) return;
+		const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim();
+		setForm((current) => ({
+			...current,
+			name: current.name || fullName,
+			email: current.email || user.email || '',
+		}));
+	}, [user?._id, user?.firstName, user?.lastName, user?.email]);
 
 	const filtered = faqs.filter(
 		(f) =>
@@ -379,6 +393,10 @@ const HelpPage: NextPage = () => {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setSubmitError('');
+		if (!user?._id) {
+			setSubmitError(ui('help.loginRequiredDescription'));
+			return;
+		}
 		try {
 			await createSupportTicket({
 				variables: {
@@ -516,7 +534,7 @@ const HelpPage: NextPage = () => {
 								<h3>{ui('help.sendUsAMessage')}</h3>
 								<p>{ui('help.wellGetBackToYou')}</p>
 							</div>
-							<Box component="form" onSubmit={handleSubmit} className="cf-form">
+							{user?._id ? <Box component="form" onSubmit={handleSubmit} className="cf-form">
 								<div className="cf-row">
 									<div className="cf-field">
 										<label>{ui('help.yourName')}</label>
@@ -556,7 +574,16 @@ const HelpPage: NextPage = () => {
 									{sending ? ui('agency.sending') : ui('help.sendMessage')}
 									<span className="cf-arrow">→</span>
 								</button>
-							</Box>
+							</Box> : (
+								<div className="cf-auth-required">
+									<div className="cf-auth-required__icon"><LockOutlinedIcon /></div>
+									<h4>{ui('help.loginRequiredTitle')}</h4>
+									<p>{ui('help.loginRequiredDescription')}</p>
+									<Link href="/account/join" className="cf-auth-required__button" passHref>
+										{ui('help.loginOrRegister')} <span>→</span>
+									</Link>
+								</div>
+							)}
 						</div>
 
 					</div>

@@ -12,6 +12,15 @@ import { useUiLang } from '../../utils/translations';
 
 const PAGE_LIMIT = 4;
 
+const serviceVisuals: Record<string, string> = {
+	STUDY_ABROAD: '/img/study-bg.jpg',
+	WORK_ABROAD: '/img/work-bg.jpg',
+	TRAVEL: '/img/travel-bg.jpg',
+	VISA_SERVICES: '/img/visa-bg.jpg',
+};
+
+const getServiceModifier = (serviceType: string) => serviceType.toLowerCase().replace(/_/g, '-');
+
 const FeaturedServices = () => {
 	const tr = useLang();
 	const ui = useUiLang();
@@ -63,46 +72,58 @@ const FeaturedServices = () => {
 				<div className={`home-featured-services__grid${visible ? ' in-view' : ''}`} ref={gridRef}>
 					{showSkeletons
 						? Array(PAGE_LIMIT).fill(0).map((_, i) => (
-							<div key={i} className="service-card">
-								<div className="service-card-body" style={{ gap: 12 }}>
-									<div style={{ height: 28, background: '#f0f4ff', borderRadius: 100, width: 110 }} />
-									<div style={{ height: 18, background: '#f0f4ff', borderRadius: 6 }} />
-									<div style={{ height: 14, background: '#f0f4ff', borderRadius: 6, width: '70%' }} />
+							<div key={i} className="service-card service-card--skeleton">
+								<div className="featured-service-media" />
+								<div className="featured-service-info">
+									<div className="service-card-body" style={{ gap: 12 }}>
+										<div style={{ height: 28, background: '#f0f4ff', borderRadius: 100, width: 110 }} />
+										<div style={{ height: 18, background: '#f0f4ff', borderRadius: 6 }} />
+										<div style={{ height: 14, background: '#f0f4ff', borderRadius: 6, width: '70%' }} />
+									</div>
 								</div>
 							</div>
 						))
-						: services.map((service) => (
+						: services.map((service, index) => (
 							<Link key={service._id} href={`/service/detail?id=${service._id}`} style={{ textDecoration: 'none' }}>
-								<div className="service-card">
-									<div className="service-card-body">
-										<span className="service-type-badge">
-											{ui(serviceTypeLabels[service.serviceType] ?? service.serviceType)}
-										</span>
-										<p className="service-name">{tr(service.name)}</p>
-										{service.destinationCountry && (
-											<div className="service-meta">
-												<LocationOnOutlinedIcon className="meta-icon" />
-												{service.destinationCountry}
-											</div>
-										)}
-										{service.processingTime && (
-											<div className="service-meta">
-												<AccessTimeOutlinedIcon className="meta-icon" />
-												{service.processingTime}
-											</div>
-										)}
-										<div className="service-rating-row">
-											<Rating value={service.averageRating ?? 0} readOnly size="small" precision={0.5} />
-											<span className="review-count">({service.totalReviews})</span>
-										</div>
+								<div className={`service-card service-card--${getServiceModifier(service.serviceType)}`}>
+									<div className="featured-service-media">
+										<img
+											src={serviceVisuals[service.serviceType] ?? '/img/all-service-bg.jpg'}
+											alt=""
+										/>
+										<span className="featured-service-rank">{String(index + 1).padStart(2, '0')}</span>
 									</div>
-									<div className="service-footer">
-										<div className="service-price">
-											{service.price ? `$${service.price.toLocaleString()}` : ui('help.contactUs')}
+									<div className="featured-service-info">
+										<div className="service-card-body">
+											<span className="service-type-badge">
+												{ui(serviceTypeLabels[service.serviceType] ?? service.serviceType)}
+											</span>
+											<p className="service-name">{tr(service.name)}</p>
+											{service.destinationCountry && (
+												<div className="service-meta">
+													<LocationOnOutlinedIcon className="meta-icon" />
+													{service.destinationCountry}
+												</div>
+											)}
+											{service.processingTime && (
+												<div className="service-meta">
+													<AccessTimeOutlinedIcon className="meta-icon" />
+													{service.processingTime}
+												</div>
+											)}
+											<div className="service-rating-row">
+												<Rating value={service.averageRating ?? 0} readOnly size="small" precision={0.5} />
+												<span className="review-count">({service.totalReviews})</span>
+											</div>
 										</div>
-										<span className="service-arrow">
-											<ArrowForwardIcon />
-										</span>
+										<div className="service-footer">
+											<div className="service-price">
+												{service.price ? `$${service.price.toLocaleString()}` : ui('help.contactUs')}
+											</div>
+											<span className="service-arrow">
+												<ArrowForwardIcon />
+											</span>
+										</div>
 									</div>
 								</div>
 							</Link>

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+﻿import React, { useState } from 'react';
 import { Box, Button, Chip, Rating } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
@@ -10,6 +10,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 import { Agency } from '../../types/agency/agency';
 import { AgencyVerificationStatus } from '../../enums/agency.enum';
+import { ServiceType } from '../../enums/service.enum';
 import { getImageUrl, isLiked, truncateText } from '../../utils';
 import { useLang } from '../../utils/lang';
 import { REACT_APP_API_URL } from '../../config';
@@ -21,22 +22,56 @@ interface Props {
 	onLike?: (e: React.MouseEvent) => void;
 }
 
+// Agency'da haqiqiy kategoriya maydoni yo'q — shuning uchun _id bo'yicha
+// barqaror (har doim bir xil) taqsimlash orqali 4 ta fallback rasmdan biri tanlanadi.
+const CATEGORY_FALLBACKS: Record<ServiceType, string> = {
+	[ServiceType.STUDY_ABROAD]: '/images/agencies/default-study.webp',
+	[ServiceType.WORK_ABROAD]: '/images/agencies/default-work.webp',
+	[ServiceType.TRAVEL]: '/images/agencies/default-travel.webp',
+	[ServiceType.VISA_SERVICES]: '/images/agencies/default-visa.webp',
+};
+const FALLBACK_CATEGORIES = Object.values(ServiceType) as ServiceType[];
+
+const getCategoryFallback = (id: string): string => {
+	let hash = 0;
+	for (let i = 0; i < id.length; i++) hash = (hash * 31 + id.charCodeAt(i)) >>> 0;
+	return CATEGORY_FALLBACKS[FALLBACK_CATEGORIES[hash % FALLBACK_CATEGORIES.length]];
+};
+
 const AgencyCard = ({ agency, onClick, onLike }: Props) => {
 	const tr = useLang();
 	const ui = useUiLang();
 	const countries = agency.operatingCountries ?? [];
 	const description = tr(agency.description) || ui('agency.defaultCardDescription');
 	const liked = isLiked(agency.meLiked);
-	const cardImageUrl = (agency as any).coverImage
-		? `${REACT_APP_API_URL}/uploads/${(agency as any).coverImage}`
-		: getImageUrl(agency.logo, '/img/hero-bg.jpg');
+	const coverImage = (agency as any).coverImage;
+	const [imgFailed, setImgFailed] = useState(false);
+	const categoryFallback = getCategoryFallback(agency._id);
+	// Cover rasm bo'lmasa logo ko'rsatiladi — logo qirqilmasligi uchun
+	// "contain" rejimida (card-image--logo), foni esa xiralashtirilgan nusxa.
+	const isLogoFallback = !coverImage && !!agency.logo && !imgFailed;
+	const cardImageUrl = imgFailed
+		? categoryFallback
+		: coverImage
+		? `${REACT_APP_API_URL}/uploads/${coverImage}`
+		: getImageUrl(agency.logo, categoryFallback);
 
 	return (
 		<Box className="agency-card" onClick={onClick}>
-			<Box className="card-image">
+			<Box className={`card-image${isLogoFallback ? ' card-image--logo' : ''}`}>
 				<img
+					className="card-image__backdrop"
+					src={cardImageUrl}
+					alt=""
+					aria-hidden="true"
+					onError={() => setImgFailed(true)}
+				/>
+				<img
+					className="card-image__photo"
 					src={cardImageUrl}
 					alt={tr(agency.name)}
+					loading="lazy"
+					onError={() => setImgFailed(true)}
 				/>
 				{agency.verificationStatus === AgencyVerificationStatus.VERIFIED && (
 					<Chip className="verified-badge" icon={<VerifiedIcon />} label={ui('admin.verified')} />
@@ -61,17 +96,6 @@ const AgencyCard = ({ agency, onClick, onLike }: Props) => {
 					<span>{agency.totalReviews || 0} {ui('agency.reviews2')}</span>
 				</Box>
 
-				<Box className="agency-metrics">
-					<span>
-						<WorkOutlineIcon />
-						{agency.totalServices || 0} {ui('admin.services')}
-					</span>
-					<span>
-						<VisibilityIcon />
-						{agency.viewCount || 0} {ui('agency.views2')}
-					</span>
-				</Box>
-
 				<Box className="card-actions">
 					<Box
 						className={`action-btn like-action ${liked ? 'liked' : ''}`}
@@ -83,6 +107,20 @@ const AgencyCard = ({ agency, onClick, onLike }: Props) => {
 					<Box className="action-btn comment-action">
 						<ChatBubbleOutlineIcon fontSize="small" />
 						<span>{agency.totalReviews || 0}</span>
+					</Box>
+					<Box
+						className="action-btn metric-action"
+						aria-label={`${agency.totalServices || 0} ${ui('admin.services')}`}
+						title={`${agency.totalServices || 0} ${ui('admin.services')}`}
+					>
+						<WorkOutlineIcon fontSize="small" />
+					</Box>
+					<Box
+						className="action-btn metric-action"
+						aria-label={`${agency.viewCount || 0} ${ui('agency.views2')}`}
+						title={`${agency.viewCount || 0} ${ui('agency.views2')}`}
+					>
+						<VisibilityIcon fontSize="small" />
 					</Box>
 					<Button className="profile-button" endIcon={<ArrowForwardIcon />}>
 						{ui('common.view')}

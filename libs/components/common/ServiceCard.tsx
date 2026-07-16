@@ -14,9 +14,10 @@ interface Props {
 	service: Service;
 	onClick: () => void;
 	onLike?: (e: React.MouseEvent) => void;
+	onComment?: (e: React.MouseEvent) => void;
 }
 
-const ServiceCard = ({ service, onClick, onLike }: Props) => {
+const ServiceCard = ({ service, onClick, onLike, onComment }: Props) => {
 	const liked = isLiked(service.meLiked);
 	const tr = useLang();
 	const ui = useUiLang();
@@ -55,7 +56,13 @@ const ServiceCard = ({ service, onClick, onLike }: Props) => {
 							{liked ? <FavoriteIcon fontSize="small" /> : <FavoriteBorderIcon fontSize="small" />}
 							<span>{service.likeCount || 0}</span>
 						</Box>
-						<Box className="service-action-btn comment-btn">
+						<Box
+							component="button"
+							type="button"
+							className="service-action-btn comment-btn"
+							aria-label={ui('agency.reviews')}
+							onClick={(e) => { e.stopPropagation(); onComment?.(e); }}
+						>
 							<ChatBubbleOutlineIcon fontSize="small" />
 							<span>{service.totalReviews || 0}</span>
 						</Box>

@@ -21,7 +21,6 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import SearchIcon from '@mui/icons-material/Search';
 import StarIcon from '@mui/icons-material/Star';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import TuneIcon from '@mui/icons-material/Tune';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import withLayoutMain from '../../libs/components/layout/LayoutHome';
 import ServiceCard from '../../libs/components/common/ServiceCard';
@@ -83,6 +82,7 @@ const ServiceList: NextPage = () => {
 	const [sort, setSort] = useState(ServiceSortField.SERVICE_RANK);
 	const [priceRange, setPriceRange] = useState<number[]>([0, MAX_PRICE]);
 	const [page, setPage] = useState(1);
+	const [agencyPage, setAgencyPage] = useState(1);
 
 	const pushServiceFilters = (filters: { type?: string; text?: string; country?: string }) => {
 		const query: Record<string, string> = {};
@@ -101,6 +101,7 @@ const ServiceList: NextPage = () => {
 		setSearch(text);
 		setCountry(queryCountry);
 		setPage(1);
+		setAgencyPage(1);
 	}, [router.query.type, router.query.text, router.query.country]);
 
 	const { data, loading, refetch } = useQuery(GET_SERVICES, {
@@ -114,7 +115,7 @@ const ServiceList: NextPage = () => {
 				sort,
 				direction: SortDirection.DESC,
 				page,
-				limit: 9,
+				limit: 6,
 			},
 		},
 	});
@@ -126,8 +127,8 @@ const ServiceList: NextPage = () => {
 				serviceType: serviceType || undefined,
 				sort: AgencySortField.AGENCY_RANK,
 				direction: SortDirection.DESC,
-				page: 1,
-				limit: 3,
+				page: agencyPage,
+				limit: 6,
 			},
 		},
 	});
@@ -137,6 +138,11 @@ const ServiceList: NextPage = () => {
 	const services: Service[] = data?.getServices?.list ?? [];
 	const total: number = data?.getServices?.metaCounter?.[0]?.total ?? 0;
 	const agencies: Agency[] = agencyData?.getAgencies?.list ?? [];
+	const agencyTotal: number = agencyData?.getAgencies?.metaCounter?.[0]?.total ?? 0;
+	const countryOptions = Array.from(new Set([
+		country,
+		...services.map((service) => service.destinationCountry),
+	].filter((value): value is string => Boolean(value)))).slice(0, 5);
 
 	const handleServiceLike = async (serviceId: string) => {
 		if (!user?._id) { router.push('/account/join'); return; }
@@ -161,14 +167,24 @@ const ServiceList: NextPage = () => {
 	const resetFilters = () => {
 		setSort(ServiceSortField.SERVICE_RANK);
 		setPriceRange([0, MAX_PRICE]);
+		setAgencyPage(1);
 		pushServiceFilters({});
+	};
+
+	const changePage = (nextPage: number, targetId: string, setter: (value: number) => void) => {
+		setter(nextPage);
+		requestAnimationFrame(() => document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
 	};
 
 	const heroBg = heroBgMap[serviceType] || '/img/all-service-bg.jpg';
 	const heroTitle = heroTitleMap[serviceType] || 'Explore services for every step of your journey';
+	const serviceBoardClass = serviceType ? serviceType.toLowerCase().replace(/_/g, '-') : 'all';
 
 	return (
-		<div className="services-page">
+		<div className={`services-page services-page--${serviceBoardClass}`}>
+			{/* "Yirtilgan chekka" — yon tomonlardagi diagonal chiziqli naqsh (hero'dan pastda) */}
+			<div className="frayed-side frayed-side--left" aria-hidden="true" />
+			<div className="frayed-side frayed-side--right" aria-hidden="true" />
 			{/* Hero */}
 			<div className="page-hero">
 				<div className="hero-bg">
@@ -217,38 +233,73 @@ const ServiceList: NextPage = () => {
 
 				<Box className="services-layout">
 					<Box className="service-filter-panel">
-						<Box className="panel-title">
-							<TuneIcon />
-							<span>{ui('service.filters')}</span>
+						<Box className="filter-group">
+							<label>{ui('mypage.serviceType')}</label>
+							<Box className="filter-check-list">
+								{serviceTypeOptions.map((option) => (
+									<button
+										key={option.value || 'all'}
+										type="button"
+										className={`filter-check-row${serviceType === option.value ? ' active' : ''}`}
+										onClick={() => pushServiceFilters({ type: option.value, text: search, country })}
+									>
+										<span className="filter-check-box" />
+										<span>{ui(option.label)}</span>
+									</button>
+								))}
+							</Box>
 						</Box>
 
-						<label>{ui('common.sortBy')}</label>
-						<Box className="sort-pills">
-							{sortOptions.map((option) => (
-								<button
-									key={option.value}
-									className={`sort-pill${sort === option.value ? ' active' : ''}`}
-									onClick={() => { setSort(option.value); setPage(1); }}
-								>
-									{option.icon}
-									{ui(option.label)}
-								</button>
-							))}
+						{countryOptions.length > 0 && (
+							<Box className="filter-group">
+								<label>{ui('mypage.countries')}</label>
+								<Box className="filter-check-list">
+									{countryOptions.map((option) => (
+										<button
+											type="button"
+											key={option}
+											className={`filter-check-row${country === option ? ' active' : ''}`}
+											onClick={() => pushServiceFilters({ type: serviceType, text: search, country: country === option ? '' : option })}
+										>
+											<span className="filter-check-box" />
+											<span>{option}</span>
+										</button>
+									))}
+								</Box>
+							</Box>
+						)}
+
+						<Box className="filter-group">
+							<label>{ui('common.sortBy')}</label>
+							<Box className="sort-pills">
+								{sortOptions.map((option) => (
+									<button
+										key={option.value}
+										className={`sort-pill${sort === option.value ? ' active' : ''}`}
+										onClick={() => { setSort(option.value); setPage(1); }}
+									>
+										{option.icon}
+										{ui(option.label)}
+									</button>
+								))}
+							</Box>
 						</Box>
 
-						<label>{ui('service.priceRange')}</label>
-						<Box className="price-label">${priceRange[0]} – ${priceRange[1]}</Box>
-						<Slider
-							value={priceRange}
-							onChange={(_, value) => {
-								setPriceRange(value as number[]);
-								setPage(1);
-							}}
-							min={0}
-							max={MAX_PRICE}
-							step={100}
-							valueLabelDisplay="auto"
-						/>
+						<Box className="filter-group filter-group--price">
+							<label>{ui('service.priceRange')}</label>
+							<Box className="price-label">${priceRange[0]} – ${priceRange[1]}</Box>
+							<Slider
+								value={priceRange}
+								onChange={(_, value) => {
+									setPriceRange(value as number[]);
+									setPage(1);
+								}}
+								min={0}
+								max={MAX_PRICE}
+								step={100}
+								valueLabelDisplay="auto"
+							/>
+						</Box>
 
 						<Button fullWidth className="reset-filters-btn" onClick={resetFilters}>
 							{ui('service.resetFilters')}
@@ -256,15 +307,15 @@ const ServiceList: NextPage = () => {
 					</Box>
 
 					<Box>
-						<Box className="related-agencies-panel">
+						<Box id="related-agencies" className="related-agencies-panel">
 							<Box className="related-agencies-head">
 								<span>{serviceType ? ui(getServiceTypeLabel(serviceType)) : ui('service.verifiedPartners')}</span>
 								<h2>{serviceType ? ui('service.agenciesForThisService') : ui('service.recommendedAgencies')}</h2>
 								<p>{serviceType ? ui('service.verifiedAgenciesOfferingThisCategory') : ui('service.verifiedAgenciesAcrossAllService')}</p>
 							</Box>
 							{agenciesLoading ? (
-								<Grid container spacing={2.5}>
-									{Array.from({ length: 3 }).map((_, index) => (
+								<Grid container className="related-agencies-grid">
+									{Array.from({ length: 6 }).map((_, index) => (
 										<Grid item xs={12} md={4} key={index}>
 											<Box className="agency-card">
 												<Skeleton variant="rectangular" className="card-image" />
@@ -278,7 +329,7 @@ const ServiceList: NextPage = () => {
 									))}
 								</Grid>
 							) : agencies.length > 0 ? (
-								<Grid container spacing={2.5}>
+								<Grid container className="related-agencies-grid">
 									{agencies.map((agency) => (
 										<Grid item xs={12} md={4} key={agency._id}>
 											<AgencyCard
@@ -292,8 +343,19 @@ const ServiceList: NextPage = () => {
 							) : (
 								<Box className="related-agencies-empty">{ui('service.noVerifiedAgenciesFoundFor')}</Box>
 							)}
+							{agencyTotal > 6 && (
+								<Box className="related-agencies-pagination">
+									<Pagination
+										count={Math.ceil(agencyTotal / 6)}
+										page={agencyPage}
+										onChange={(_, value) => changePage(value, 'related-agencies', setAgencyPage)}
+										color="primary"
+									/>
+								</Box>
+							)}
 						</Box>
 
+						<Box id="services-results" className="services-results">
 						{loading ? (
 							<Grid container spacing={2.5}>
 								{Array.from({ length: 6 }).map((_, index) => (
@@ -311,7 +373,12 @@ const ServiceList: NextPage = () => {
 							<Grid container spacing={2.5}>
 								{services.map((service) => (
 									<Grid item xs={12} sm={6} lg={4} key={service._id}>
-										<ServiceCard service={service} onClick={() => router.push(`/service/detail?id=${service._id}`)} onLike={() => handleServiceLike(service._id)} />
+										<ServiceCard
+											service={service}
+											onClick={() => router.push(`/service/detail?id=${service._id}`)}
+											onLike={() => handleServiceLike(service._id)}
+											onComment={() => router.push(`/service/detail?id=${service._id}#service-reviews`)}
+										/>
 									</Grid>
 								))}
 							</Grid>
@@ -326,16 +393,17 @@ const ServiceList: NextPage = () => {
 							</Box>
 						)}
 
-						{total > 9 && (
+						{total > 6 && (
 							<Box className="pagination-box">
 								<Pagination
-									count={Math.ceil(total / 9)}
+									count={Math.ceil(total / 6)}
 									page={page}
-									onChange={(_, value) => setPage(value)}
+									onChange={(_, value) => changePage(value, 'services-results', setPage)}
 									color="primary"
 								/>
 							</Box>
 						)}
+						</Box>
 					</Box>
 				</Box>
 

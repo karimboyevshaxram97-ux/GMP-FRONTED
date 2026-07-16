@@ -36,7 +36,15 @@ const Chat = () => {
 	}, [messagesList, open]);
 
 	useEffect(() => {
-		if (!socket) return;
+		if (!socket) { setOnlineUsers(0); return; }
+
+		const requestOnlineCount = () => {
+			if (socket.readyState === WebSocket.OPEN) {
+				socket.send(JSON.stringify({ event: 'getOnlineCount' }));
+			}
+		};
+		const handleOpen = () => requestOnlineCount();
+		const handleClose = () => setOnlineUsers(0);
 
 		const handleMessage = (event: MessageEvent) => {
 			try {
@@ -58,9 +66,14 @@ const Chat = () => {
 		};
 
 		socket.addEventListener('message', handleMessage);
+		socket.addEventListener('open', handleOpen);
+		socket.addEventListener('close', handleClose);
+		requestOnlineCount();
 
 		return () => {
 			socket.removeEventListener('message', handleMessage);
+			socket.removeEventListener('open', handleOpen);
+			socket.removeEventListener('close', handleClose);
 		};
 	}, [socket]);
 

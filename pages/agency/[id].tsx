@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { Stack, Box, Button, Rating, Chip, Tabs, Tab, Divider, Skeleton } from '@mui/material';
+import { Stack, Box, Button, Rating, Chip, Tabs, Tab, Divider, Skeleton, TextField, Pagination } from '@mui/material';
 import { useQuery, useMutation, useReactiveVar } from '@apollo/client';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CheckIcon from '@mui/icons-material/Check';
@@ -16,9 +16,9 @@ import SendIcon from '@mui/icons-material/Send';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
-import { GET_AGENCY, REVIEWS_BY_AGENCY } from '../../apollo/user/query';
+import { GET_AGENCY, GET_SERVICES_BY_AGENCY, MY_REVIEW_BY_AGENCY, REVIEWS_BY_AGENCY } from '../../apollo/user/query';
 import { useLang } from '../../libs/utils/lang';
-import { TOGGLE_LIKE, FOLLOW_AGENCY, UNFOLLOW_AGENCY, CREATE_OR_GET_CONVERSATION, SEND_MESSAGE, RECORD_VIEW } from '../../apollo/user/mutation';
+import { TOGGLE_LIKE, FOLLOW_AGENCY, UNFOLLOW_AGENCY, CREATE_OR_GET_CONVERSATION, SEND_MESSAGE, RECORD_VIEW, CREATE_REVIEW } from '../../apollo/user/mutation';
 import { userVar } from '../../apollo/store';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 import { getImageUrl, isLiked, isFollowed } from '../../libs/utils';
@@ -30,6 +30,7 @@ import { ViewTargetType } from '../../libs/enums/view.enum';
 import { AgencyVerificationStatus } from '../../libs/enums/agency.enum';
 import { UserRole } from '../../libs/enums/user.enum';
 import { useUiLang } from '../../libs/utils/translations';
+import ServiceCard from '../../libs/components/common/ServiceCard';
 
 const AgencyDetail: NextPage = () => {
 	const router = useRouter();
@@ -43,6 +44,10 @@ const AgencyDetail: NextPage = () => {
 	const [msgSending, setMsgSending] = useState(false);
 	const [msgSent, setMsgSent] = useState(false);
 	const [sentConversationId, setSentConversationId] = useState('');
+	const [reviewRating, setReviewRating] = useState<number>(5);
+	const [reviewComment, setReviewComment] = useState('');
+	const [reviewSubmitting, setReviewSubmitting] = useState(false);
+	const [servicePage, setServicePage] = useState(1);
 
 	const { data, loading, refetch } = useQuery(GET_AGENCY, {
 		errorPolicy: 'all',
@@ -52,10 +57,20 @@ const AgencyDetail: NextPage = () => {
 		skip: !agencyId,
 	});
 
-	const { data: reviewData, loading: reviewsLoading } = useQuery(REVIEWS_BY_AGENCY, {
+	const { data: reviewData, loading: reviewsLoading, refetch: refetchReviews } = useQuery(REVIEWS_BY_AGENCY, {
 		errorPolicy: 'all',
 		variables: { agencyId },
 		skip: !agencyId,
+	});
+	const { data: myReviewData, refetch: refetchMyReview } = useQuery(MY_REVIEW_BY_AGENCY, {
+		variables: { agencyId },
+		skip: !agencyId || !user?._id,
+		fetchPolicy: 'cache-and-network',
+	});
+	const { data: agencyServicesData, loading: servicesLoading, refetch: refetchAgencyServices } = useQuery(GET_SERVICES_BY_AGENCY, {
+		variables: { agencyId },
+		skip: !agencyId,
+		fetchPolicy: 'cache-and-network',
 	});
 
 	const [toggleLike] = useMutation(TOGGLE_LIKE);
@@ -64,6 +79,7 @@ const AgencyDetail: NextPage = () => {
 	const [createConversation] = useMutation(CREATE_OR_GET_CONVERSATION);
 	const [sendMessage] = useMutation(SEND_MESSAGE);
 	const [recordView] = useMutation(RECORD_VIEW);
+	const [createReview] = useMutation(CREATE_REVIEW);
 
 	const fetchedAgency = data?.getAgency;
 	const canViewRestricted =
@@ -79,7 +95,17 @@ const AgencyDetail: NextPage = () => {
 			recordView({ variables: { targetId: agency._id, targetType: ViewTargetType.AGENCY } }).catch(() => {});
 		}
 	}, [agency?._id, recordView]);
+
+	useEffect(() => {
+		setServicePage(1);
+	}, [agencyId]);
 	const reviews = reviewData?.reviewsByAgency ?? [];
+	const myAgencyReview = myReviewData?.myReviewByAgency;
+	const agencyServices: any[] = agencyServicesData?.getServicesByAgency ?? [];
+	const pagedAgencyServices = agencyServices.slice((servicePage - 1) * 6, servicePage * 6);
+	const reviewCount = reviews.length + (
+		myAgencyReview && !reviews.some((review: any) => review._id === myAgencyReview._id) ? 1 : 0
+	);
 
 	const requireLogin = () => {
 		if (!user?._id) {
@@ -137,6 +163,50 @@ const AgencyDetail: NextPage = () => {
 			setMsgSent(true);
 		} finally {
 			setMsgSending(false);
+		}
+	};
+
+	const handleAgencyReview = async () => {
+		if (!requireLogin() || !agency || reviewSubmitting) return;
+		if (!reviewComment.trim()) {
+			await sweetMixinErrorAlert(ui('agency.writeReviewRequired'));
+			return;
+		}
+
+		setReviewSubmitting(true);
+		try {
+			await createReview({
+				variables: {
+					input: {
+						agencyId: agency._id,
+						rating: reviewRating,
+						comment: reviewComment.trim(),
+					},
+				},
+			});
+			setReviewComment('');
+			await Promise.all([refetchMyReview(), refetchReviews(), refetch()]);
+			await sweetMixinSuccessAlert(ui('agency.reviewSentForModeration'));
+		} catch (err: any) {
+			const message = err?.message || '';
+			if (message.includes('Review already exists') || message.includes('ALREADY_EXISTS')) {
+				await refetchMyReview();
+				await sweetMixinErrorAlert(ui('agency.reviewAlreadyExists'));
+			} else {
+				await sweetMixinErrorAlert(toFriendlyError(err, ui('agency.reviewSubmitFailed')));
+			}
+		} finally {
+			setReviewSubmitting(false);
+		}
+	};
+
+	const handleServiceLike = async (serviceId: string) => {
+		if (!requireLogin()) return;
+		try {
+			await toggleLike({ variables: { targetId: serviceId, targetType: LikeTargetType.SERVICE } });
+			await refetchAgencyServices();
+		} catch (err: any) {
+			await sweetMixinErrorAlert(toFriendlyError(err, ui('errors.failedToLike')));
 		}
 	};
 
@@ -236,7 +306,8 @@ const AgencyDetail: NextPage = () => {
 					<Box className="profile-main" key={`pm-${tab}`}>
 						<Tabs value={tab} onChange={(_, value) => setTab(value)} className="profile-tabs">
 							<Tab label={ui('agency.about')} />
-							<Tab label={`${ui('agency.reviews')} (${reviews.length})`} />
+							<Tab label={`${ui('agency.services')} (${agencyServices.length})`} />
+							<Tab label={`${ui('agency.reviews')} (${reviewCount})`} />
 						</Tabs>
 
 						{tab === 0 && (
@@ -260,8 +331,85 @@ const AgencyDetail: NextPage = () => {
 						)}
 
 						{tab === 1 && (
+							<Box className="profile-section agency-services-section">
+								<Box className="agency-services-heading">
+									<div>
+										<span>{ui('agency.availableServices')}</span>
+										<h2>{ui('agency.chooseAService')}</h2>
+									</div>
+									<p>{ui('agency.serviceSectionHint')}</p>
+								</Box>
+
+								{servicesLoading && !agencyServices.length ? (
+									<Box className="agency-services-grid">
+										{Array.from({ length: 3 }).map((_, index) => <Skeleton key={index} variant="rounded" height={240} />)}
+									</Box>
+								) : pagedAgencyServices.length ? (
+									<Box className="agency-services-grid">
+										{pagedAgencyServices.map((service: any) => (
+											<ServiceCard
+												key={service._id}
+												service={service}
+												onClick={() => router.push(`/service/detail?id=${service._id}`)}
+												onLike={() => handleServiceLike(service._id)}
+												onComment={() => router.push(`/service/detail?id=${service._id}#service-reviews`)}
+											/>
+										))}
+									</Box>
+								) : (
+									<Box className="empty-inline">{ui('agency.noActiveServices')}</Box>
+								)}
+
+								{agencyServices.length > 6 && (
+									<Box className="agency-services-pagination">
+										<Pagination count={Math.ceil(agencyServices.length / 6)} page={servicePage} onChange={(_, value) => setServicePage(value)} color="primary" />
+									</Box>
+								)}
+							</Box>
+						)}
+
+						{tab === 2 && (
 							<Box className="profile-section">
 								<h2>{ui('agency.clientReviews')}</h2>
+								{!isOwnAgency && (
+									!user?._id ? (
+										<Box className="agency-review-login">
+											<strong>{ui('agency.shareYourExperience')}</strong>
+											<p>{ui('agency.loginToReview')}</p>
+											<Button variant="outlined" onClick={() => router.push('/account/join')}>{ui('auth.login')}</Button>
+										</Box>
+									) : myAgencyReview ? (
+										<Box className="agency-review-status" data-status={myAgencyReview.status}>
+											<Rating value={myAgencyReview.rating} size="small" readOnly />
+											<strong>{ui(myAgencyReview.status === 'PENDING' ? 'agency.reviewPending' : 'agency.reviewPublished')}</strong>
+											<p>{myAgencyReview.comment}</p>
+										</Box>
+									) : (
+										<Box className="agency-review-form">
+											<div className="agency-review-form__intro">
+												<span>{ui('agency.yourExperience')}</span>
+												<strong>{ui('agency.shareYourExperience')}</strong>
+												<p>{ui('agency.reviewFormHint')}</p>
+											</div>
+											<div className="agency-review-form__fields">
+												<label>{ui('agency.yourRating')}</label>
+												<Rating value={reviewRating} onChange={(_, value) => setReviewRating(value ?? 5)} size="large" />
+												<TextField
+													multiline
+													minRows={3}
+													fullWidth
+													value={reviewComment}
+													onChange={(event) => setReviewComment(event.target.value)}
+													placeholder={ui('agency.reviewPlaceholder')}
+													inputProps={{ maxLength: 1000 }}
+												/>
+												<Button variant="contained" startIcon={<SendIcon />} onClick={handleAgencyReview} disabled={reviewSubmitting || !reviewComment.trim()}>
+													{reviewSubmitting ? ui('agency.sending') : ui('agency.sendReview')}
+												</Button>
+											</div>
+										</Box>
+									)
+								)}
 								{reviewsLoading ? (
 									<Box>
 										<Skeleton height={72} />
@@ -277,9 +425,9 @@ const AgencyDetail: NextPage = () => {
 											<p>{review.comment || ui('agency.noCommentProvided')}</p>
 										</Box>
 									))
-								) : (
+								) : !myAgencyReview ? (
 									<Box className="empty-inline">{ui('agency.noReviewsYet')}</Box>
-								)}
+								) : null}
 							</Box>
 						)}
 					</Box>

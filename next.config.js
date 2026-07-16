@@ -3,6 +3,10 @@ const { i18n } = require('./next-i18next.config');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	reactStrictMode: true,
+	outputFileTracingRoot: __dirname,
+	sassOptions: {
+		silenceDeprecations: ['import'],
+	},
 	i18n,
 	env: {
 		REACT_APP_API_URL: process.env.REACT_APP_API_URL,

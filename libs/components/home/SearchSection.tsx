@@ -47,19 +47,22 @@ const SearchSection = () => {
 	return (
 		<div className="home-search">
 			<div className="container">
-				<div className="home-search__card">
-					<div className="home-search__input-wrap">
-						<SearchIcon />
-						<input
-							placeholder={ui('home.searchServicesAgencies')}
-							value={keyword}
-							onChange={(e) => setKeyword(e.target.value)}
-							onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-						/>
+				<div className="home-search__row">
+					<div className="home-search__ai-launch">
 						<AiSearchAssistant />
 					</div>
+					<div className="home-search__card">
+						<div className="home-search__input-wrap">
+							<SearchIcon />
+							<input
+								placeholder={ui('home.searchServicesAgencies')}
+								value={keyword}
+								onChange={(e) => setKeyword(e.target.value)}
+								onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+							/>
+						</div>
 
-					<div className="home-search__select">
+						<div className="home-search__select">
 						<CategoryOutlinedIcon />
 						<Select
 							className="home-search__mui-select"
@@ -76,9 +79,9 @@ const SearchSection = () => {
 								</MenuItem>
 							))}
 						</Select>
-					</div>
+						</div>
 
-					<div className="home-search__select">
+						<div className="home-search__select">
 						<PublicOutlinedIcon />
 						<Select
 							className="home-search__mui-select"
@@ -95,11 +98,12 @@ const SearchSection = () => {
 								</MenuItem>
 							))}
 						</Select>
-					</div>
+						</div>
 
-					<button className="home-search__btn" onClick={handleSearch}>
-						<SearchIcon /> {ui('agency.search')}
-					</button>
+						<button className="home-search__btn" onClick={handleSearch}>
+							<SearchIcon /> {ui('agency.search')}
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
