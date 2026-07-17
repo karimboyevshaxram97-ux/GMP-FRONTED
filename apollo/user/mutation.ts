@@ -286,8 +286,8 @@ export const UPDATE_APPLICATION_STATUS = gql`
 `;
 
 export const RECORD_VIEW = gql`
-	mutation RecordView($targetId: String!, $targetType: ViewTargetType!) {
-		recordView(targetId: $targetId, targetType: $targetType)
+	mutation RecordView($targetId: String!, $targetType: ViewTargetType!, $anonymousViewerId: String) {
+		recordView(targetId: $targetId, targetType: $targetType, anonymousViewerId: $anonymousViewerId)
 	}
 `;
 

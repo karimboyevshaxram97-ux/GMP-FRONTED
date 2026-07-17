@@ -5,7 +5,6 @@ import {
 	Stack,
 	Box,
 	Grid,
-	Pagination,
 	Select,
 	MenuItem,
 	InputLabel,
@@ -21,6 +20,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import MapIcon from '@mui/icons-material/Map';
 import withLayoutMain from '../../libs/components/layout/LayoutHome';
+import AppPagination from '../../libs/components/common/AppPagination';
 import AgencyCard from '../../libs/components/common/AgencyCard';
 import { GET_AGENCIES } from '../../apollo/user/query';
 import { TOGGLE_LIKE } from '../../apollo/user/mutation';
@@ -247,11 +247,10 @@ const AgencyHome: NextPage = () => {
 
 						{total > 9 && (
 							<Box className="pagination-box">
-								<Pagination
+								<AppPagination
 									count={Math.ceil(total / 9)}
 									page={page}
 									onChange={(_, value) => setPage(value)}
-									color="primary"
 								/>
 							</Box>
 						)}

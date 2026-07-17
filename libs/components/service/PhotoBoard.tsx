@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { useQuery, useLazyQuery, useMutation, useReactiveVar } from '@apollo/client';
-import { Box, Pagination } from '@mui/material';
+import { Box } from '@mui/material';
+import AppPagination from '../common/AppPagination';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
@@ -23,6 +24,7 @@ import { useUiLang } from '../../utils/translations';
 import { getJwtToken } from '../../auth';
 import { sweetMixinErrorAlert } from '../../sweetAlert';
 import { getServiceTypeLabel } from '../../utils';
+import { getAnonymousViewerId } from '../../utils/viewer';
 import PhotoCommentThread from '../common/PhotoCommentThread';
 
 // PhotoBoard `pages/service/index.tsx` orqali getStaticProps bilan build vaqtida
@@ -104,7 +106,13 @@ const PhotoBoard = ({ serviceType }: { serviceType?: string }) => {
 		setLightboxImage(null);
 		setReplyingTo(null);
 		loadComments({ variables: { photoId: photo._id } });
-		recordView({ variables: { targetId: photo._id, targetType: ViewTargetType.PHOTO } })
+		recordView({
+			variables: {
+				targetId: photo._id,
+				targetType: ViewTargetType.PHOTO,
+				anonymousViewerId: user?._id ? undefined : getAnonymousViewerId(),
+			},
+		})
 			.then(() => refetch())
 			.catch(() => undefined);
 	};
@@ -307,7 +315,7 @@ const PhotoBoard = ({ serviceType }: { serviceType?: string }) => {
 
 			{pageCount > 1 && (
 				<Box className="photo-board__pagination">
-					<Pagination count={pageCount} page={page} onChange={(_, value) => setPage(value)} color="primary" />
+					<AppPagination count={pageCount} page={page} onChange={(_, value) => setPage(value)} />
 				</Box>
 			)}
 

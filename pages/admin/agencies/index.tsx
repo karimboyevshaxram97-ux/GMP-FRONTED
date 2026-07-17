@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NextPage } from 'next';
 import {
 	Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Chip, Button,
-	Pagination, TextField, Select, MenuItem, InputAdornment, Dialog, DialogTitle,
+	TextField, Select, MenuItem, InputAdornment, Dialog, DialogTitle,
 	DialogContent, DialogActions, Divider, Typography,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
@@ -11,6 +11,7 @@ import { useQuery, useMutation } from '@apollo/client';
 import { ADMIN_AGENCIES } from '../../../apollo/admin/query';
 import { APPROVE_AGENCY, REJECT_AGENCY, SUSPEND_AGENCY, ACTIVATE_AGENCY, ADMIN_DELETE_AGENCY } from '../../../apollo/admin/mutation';
 import withLayoutAdmin from '../../../libs/components/layout/LayoutAdmin';
+import AppPagination from '../../../libs/components/common/AppPagination';
 import { sweetConfirmAlert, sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../../libs/sweetAlert';
 import { REACT_APP_API_URL } from '../../../libs/config';
 import { useLang } from '../../../libs/utils/lang';
@@ -218,7 +219,7 @@ const AdminAgencies: NextPage = () => {
 			</TableContainer>
 
 			<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-				<Pagination count={pageCount} page={page} onChange={(_, v) => setPage(v)} color="primary" />
+				<AppPagination count={pageCount} page={page} onChange={(_, v) => setPage(v)} />
 			</Box>
 
 			{/* Agency detail modal */}

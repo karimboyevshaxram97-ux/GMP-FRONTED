@@ -10,7 +10,6 @@ import {
 	DialogTitle,
 	InputAdornment,
 	MenuItem,
-	Pagination,
 	Paper,
 	Select,
 	Table,
@@ -25,6 +24,7 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import { useMutation, useQuery } from '@apollo/client';
 import withLayoutAdmin from '../../../libs/components/layout/LayoutAdmin';
+import AppPagination from '../../../libs/components/common/AppPagination';
 import { ADMIN_SUPPORT_TICKETS } from '../../../apollo/admin/query';
 import { UPDATE_SUPPORT_TICKET_STATUS } from '../../../apollo/admin/mutation';
 import { useDebounce } from '../../../libs/hooks/useDebounce';
@@ -138,7 +138,7 @@ const AdminSupport: NextPage = () => {
 			</TableContainer>
 
 			<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-				<Pagination count={pageCount} page={page} onChange={(_, value) => setPage(value)} color="primary" />
+				<AppPagination count={pageCount} page={page} onChange={(_, value) => setPage(value)} />
 			</Box>
 
 			<Dialog open={!!selected} onClose={() => setSelected(null)} maxWidth="sm" fullWidth>

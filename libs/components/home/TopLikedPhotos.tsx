@@ -20,6 +20,7 @@ import { useLang } from '../../utils/lang';
 import { useUiLang } from '../../utils/translations';
 import { getJwtToken } from '../../auth';
 import { sweetMixinErrorAlert } from '../../sweetAlert';
+import { getAnonymousViewerId } from '../../utils/viewer';
 import PhotoCommentThread from '../common/PhotoCommentThread';
 
 const EmojiPicker = dynamic(() => import('emoji-picker-react'), { ssr: false });
@@ -148,7 +149,13 @@ const TopLikedPhotos = () => {
 		});
 		loadComments({ variables: { photoId: photo._id } });
 
-		recordView({ variables: { targetId: photo._id, targetType: ViewTargetType.PHOTO } })
+		recordView({
+			variables: {
+				targetId: photo._id,
+				targetType: ViewTargetType.PHOTO,
+				anonymousViewerId: user?._id ? undefined : getAnonymousViewerId(),
+			},
+		})
 			.then(async () => {
 				const result = await refetch();
 				const updated = result?.data?.getPhotos?.list?.find((item: any) => item._id === photo._id);

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { Stack, Box, Button, Rating, Chip, Tabs, Tab, Divider, Skeleton, TextField, Pagination } from '@mui/material';
+import { Stack, Box, Button, Rating, Chip, Tabs, Tab, Divider, Skeleton, TextField } from '@mui/material';
+import AppPagination from '../libs/components/common/AppPagination';
 import { useQuery, useMutation, useReactiveVar } from '@apollo/client';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CheckIcon from '@mui/icons-material/Check';
@@ -31,6 +32,7 @@ import { AgencyVerificationStatus } from '../../libs/enums/agency.enum';
 import { UserRole } from '../../libs/enums/user.enum';
 import { useUiLang } from '../../libs/utils/translations';
 import ServiceCard from '../../libs/components/common/ServiceCard';
+import { getAnonymousViewerId } from '../../libs/utils/viewer';
 
 const AgencyDetail: NextPage = () => {
 	const router = useRouter();
@@ -92,9 +94,15 @@ const AgencyDetail: NextPage = () => {
 
 	useEffect(() => {
 		if (agency?._id) {
-			recordView({ variables: { targetId: agency._id, targetType: ViewTargetType.AGENCY } }).catch(() => {});
+			recordView({
+				variables: {
+					targetId: agency._id,
+					targetType: ViewTargetType.AGENCY,
+					anonymousViewerId: user?._id ? undefined : getAnonymousViewerId(),
+				},
+			}).catch(() => {});
 		}
-	}, [agency?._id, recordView]);
+	}, [agency?._id, recordView, user?._id]);
 
 	useEffect(() => {
 		setServicePage(1);
@@ -362,7 +370,7 @@ const AgencyDetail: NextPage = () => {
 
 								{agencyServices.length > 6 && (
 									<Box className="agency-services-pagination">
-										<Pagination count={Math.ceil(agencyServices.length / 6)} page={servicePage} onChange={(_, value) => setServicePage(value)} color="primary" />
+										<AppPagination count={Math.ceil(agencyServices.length / 6)} page={servicePage} onChange={(_, value) => setServicePage(value)} />
 									</Box>
 								)}
 							</Box>

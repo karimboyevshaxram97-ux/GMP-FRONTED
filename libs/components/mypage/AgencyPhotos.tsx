@@ -23,7 +23,7 @@ const AgencyPhotos = ({ agencyId }: { agencyId: string }) => {
 
 	const { data, refetch } = useQuery(GET_PHOTOS, {
 		fetchPolicy: 'cache-and-network',
-		variables: { input: { agencyId, page: 1, limit: 50 } },
+		variables: { input: { agencyId, serviceType, page: 1, limit: 50 } },
 	});
 
 	const [createPhoto] = useMutation(CREATE_PHOTO);

@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@apollo/client';
-import { Box, Pagination, Rating } from '@mui/material';
+import { Box, Rating } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import { GET_SERVICES } from '../../../apollo/user/query';
+import AppPagination from '../common/AppPagination';
 import { serviceTypeLabels } from '../../config';
 import { useLang } from '../../utils/lang';
 import { useUiLang } from '../../utils/translations';
@@ -132,11 +133,10 @@ const FeaturedServices = () => {
 
 				{total > PAGE_LIMIT && (
 					<Box className="home-featured-services__pagination">
-						<Pagination
+						<AppPagination
 							count={Math.ceil(total / PAGE_LIMIT)}
 							page={page}
 							onChange={(_, value) => setPage(value)}
-							color="primary"
 						/>
 					</Box>
 				)}

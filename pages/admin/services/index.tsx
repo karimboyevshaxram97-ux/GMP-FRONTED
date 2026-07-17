@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NextPage } from 'next';
 import {
 	Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-	Paper, Chip, Button, Pagination, TextField, Select, MenuItem, InputAdornment,
+	Paper, Chip, Button, TextField, Select, MenuItem, InputAdornment,
 	Dialog, DialogTitle, DialogContent, DialogActions, Typography, Divider,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
@@ -11,6 +11,7 @@ import { useQuery, useMutation } from '@apollo/client';
 import { ADMIN_SERVICES } from '../../../apollo/admin/query';
 import { ADMIN_DELETE_SERVICE, ADMIN_UPDATE_SERVICE_STATUS } from '../../../apollo/admin/mutation';
 import withLayoutAdmin from '../../../libs/components/layout/LayoutAdmin';
+import AppPagination from '../../../libs/components/common/AppPagination';
 import { sweetConfirmAlert, sweetMixinSuccessAlert, sweetMixinErrorAlert } from '../../../libs/sweetAlert';
 import { useLang } from '../../../libs/utils/lang';
 import { useDebounce } from '../../../libs/hooks/useDebounce';
@@ -188,7 +189,7 @@ const AdminServices: NextPage = () => {
 			</TableContainer>
 
 			<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-				<Pagination count={pageCount} page={page} onChange={(_, v) => setPage(v)} color="primary" />
+				<AppPagination count={pageCount} page={page} onChange={(_, v) => setPage(v)} />
 			</Box>
 
 			{/* Detail dialog */}

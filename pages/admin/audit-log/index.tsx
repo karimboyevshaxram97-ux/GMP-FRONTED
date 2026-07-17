@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { NextPage } from 'next';
 import {
 	Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-	Paper, Chip, Pagination,
+	Paper, Chip,
 } from '@mui/material';
 import { useQuery } from '@apollo/client';
 import { AUDIT_LOGS } from '../../../apollo/admin/query';
 import withLayoutAdmin from '../../../libs/components/layout/LayoutAdmin';
+import AppPagination from '../../../libs/components/common/AppPagination';
 import { useUiLang } from '../../../libs/utils/translations';
 
 const LIMIT = 30;
@@ -112,7 +113,7 @@ const AuditLogPage: NextPage = () => {
 			</TableContainer>
 
 			<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-				<Pagination count={pageCount} page={page} onChange={(_, v) => setPage(v)} color="primary" />
+				<AppPagination count={pageCount} page={page} onChange={(_, v) => setPage(v)} />
 			</Box>
 		</div>
 	);

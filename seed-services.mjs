@@ -34,13 +34,23 @@ async function login(phoneOrEmail, password) {
 async function createAgency(token, input) {
 	const data = await gql(`
 		mutation CreateAgency($input: CreateAgencyInput!) {
-			createAgency(input: $input) { _id name }
+			createAgency(input: $input) { _id name { en } }
 		}
 	`, { input }, token);
 	return data.createAgency;
 }
 
-// ── 3. Create service ─────────────────────────────────────────────────────────
+// ── 3. Approve agency ─────────────────────────────────────────────────────────
+async function approveAgency(token, agencyId) {
+	const data = await gql(`
+		mutation ApproveAgency($input: ApproveAgencyInput!) {
+			approveAgency(input: $input) { _id verificationStatus }
+		}
+	`, { input: { agencyId } }, token);
+	return data.approveAgency;
+}
+
+// ── 4. Create service ─────────────────────────────────────────────────────────
 async function createService(token, agencyId, input) {
 	const data = await gql(`
 		mutation CreateService($agencyId: String!, $input: CreateServiceInput!) {
@@ -50,7 +60,7 @@ async function createService(token, agencyId, input) {
 	return data.createService;
 }
 
-// ── 4. Delete service ─────────────────────────────────────────────────────────
+// ── 5. Delete service ─────────────────────────────────────────────────────────
 async function deleteService(token, serviceId) {
 	const data = await gql(`
 		mutation DeleteService($serviceId: String!) {
@@ -235,14 +245,25 @@ try {
 let agency;
 try {
 	agency = await createAgency(token, {
-		name: 'GMP Demo Agency',
-		agentPhone: '+998901234567',
-		agentEmail: 'demo@gmp.com',
-		description: 'Demo agency for testing purposes',
-		establishedIn: 2015,
-		countryOfOperation: 'Uzbekistan',
+		name: {
+			uz: 'GMP Demo Agentligi',
+			ru: 'Демо-агентство GMP',
+			en: 'GMP Demo Agency',
+			ko: 'GMP 데모 에이전시',
+		},
+		email: 'demo@gmp.com',
+		phoneNumber: '+998901234567',
+		description: {
+			uz: 'Sinov uchun demo agentlik',
+			ru: 'Демо-агентство для тестирования',
+			en: 'Demo agency for testing purposes',
+			ko: '테스트용 데모 에이전시',
+		},
+		operatingCountries: ['Uzbekistan', 'South Korea', 'Germany'],
+		country: 'Uzbekistan',
 	});
-	console.log(`✅  Agency yaratildi: ${agency.name} (${agency._id})\n`);
+	await approveAgency(token, agency._id);
+	console.log(`✅  Agency yaratildi va tasdiqlandi: ${agency.name.en} (${agency._id})\n`);
 } catch (e) {
 	console.error('❌  Agency yaratishda xato:', e.message);
 	console.error('    Admin akkaunt SUPER_ADMIN roliga ega emasmi?');

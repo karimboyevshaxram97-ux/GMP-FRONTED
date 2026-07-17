@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@apollo/client';
-import { Box, Pagination, Rating } from '@mui/material';
+import { Box, Rating } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import { GET_AGENCIES } from '../../../apollo/user/query';
+import AppPagination from '../common/AppPagination';
 import { REACT_APP_API_URL } from '../../config';
 import { useLang } from '../../utils/lang';
 import { useUiLang } from '../../utils/translations';
@@ -176,11 +177,10 @@ const FeaturedAgencies = () => {
 
 				{total > PAGE_LIMIT && (
 					<Box className="home-featured-agencies__pagination">
-						<Pagination
+						<AppPagination
 							count={Math.ceil(total / PAGE_LIMIT)}
 							page={page}
 							onChange={(_, value) => setPage(value)}
-							color="primary"
 						/>
 					</Box>
 				)}

@@ -21,6 +21,7 @@ import { useLang } from '../../libs/utils/lang';
 import { sweetMixinSuccessAlert, sweetMixinErrorAlert } from '../../libs/sweetAlert';
 import { applicationErrorMessage, toFriendlyError } from '../../libs/utils/errors';
 import { useUiLang } from '../../libs/utils/translations';
+import { getAnonymousViewerId } from '../../libs/utils/viewer';
 
 const ServiceDetail: NextPage = () => {
 	const router = useRouter();
@@ -45,9 +46,15 @@ const ServiceDetail: NextPage = () => {
 
 	useEffect(() => {
 		if (service?._id) {
-			recordView({ variables: { targetId: service._id, targetType: ViewTargetType.SERVICE } }).catch(() => {});
+			recordView({
+				variables: {
+					targetId: service._id,
+					targetType: ViewTargetType.SERVICE,
+					anonymousViewerId: user?._id ? undefined : getAnonymousViewerId(),
+				},
+			}).catch(() => {});
 		}
-	}, [service?._id, recordView]);
+	}, [service?._id, recordView, user?._id]);
 	const reviews = reviewData?.reviewsByService ?? [];
 	const isServiceFull = Number.isFinite(service?.maxApplicationCount)
 		&& service.maxApplicationCount > 0

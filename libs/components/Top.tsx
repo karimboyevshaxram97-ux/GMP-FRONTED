@@ -1,6 +1,7 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { animate, stagger } from 'animejs';
 import { Stack, Box, Menu, MenuItem, Badge, Divider, Typography, IconButton, Tooltip, Drawer } from '@mui/material';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
@@ -106,25 +107,23 @@ const Top = () => {
 
 	useEffect(() => {
 		if (typeof window === 'undefined') return;
-		import('animejs').then(({ animate, stagger }) => {
-			animate('.logo-box', {
-				translateX: [-30, 0],
-				duration: 600,
-				delay: 500,
-				ease: 'outExpo',
-			});
-			animate('.router-box a', {
-				translateY: [-12, 0],
-				duration: 500,
-				delay: stagger(60, { start: 550 }),
-				ease: 'outExpo',
-			});
-			animate('.join-box, .user-box', {
-				translateX: [30, 0],
-				duration: 600,
-				delay: 600,
-				ease: 'outExpo',
-			});
+		animate('.logo-box', {
+			translateX: [-30, 0],
+			duration: 600,
+			delay: 500,
+			ease: 'outExpo',
+		});
+		animate('.router-box a', {
+			translateY: [-12, 0],
+			duration: 500,
+			delay: stagger(60, { start: 550 }),
+			ease: 'outExpo',
+		});
+		animate('.join-box, .user-box', {
+			translateX: [30, 0],
+			duration: 600,
+			delay: 600,
+			ease: 'outExpo',
 		});
 	}, []);
 

@@ -10,7 +10,6 @@ import {
 	Stack,
 	Box,
 	Grid,
-	Pagination,
 	Button,
 	Slider,
 	Skeleton,
@@ -26,6 +25,7 @@ import withLayoutMain from '../../libs/components/layout/LayoutHome';
 import ServiceCard from '../../libs/components/common/ServiceCard';
 import PhotoBoard from '../../libs/components/service/PhotoBoard';
 import AgencyCard from '../../libs/components/common/AgencyCard';
+import AppPagination from '../../libs/components/common/AppPagination';
 import { GET_AGENCIES, GET_SERVICES } from '../../apollo/user/query';
 import { TOGGLE_LIKE } from '../../apollo/user/mutation';
 import { userVar } from '../../apollo/store';
@@ -345,11 +345,10 @@ const ServiceList: NextPage = () => {
 							)}
 							{agencyTotal > 6 && (
 								<Box className="related-agencies-pagination">
-									<Pagination
+									<AppPagination
 										count={Math.ceil(agencyTotal / 6)}
 										page={agencyPage}
 										onChange={(_, value) => changePage(value, 'related-agencies', setAgencyPage)}
-										color="primary"
 									/>
 								</Box>
 							)}
@@ -395,11 +394,10 @@ const ServiceList: NextPage = () => {
 
 						{total > 6 && (
 							<Box className="pagination-box">
-								<Pagination
+								<AppPagination
 									count={Math.ceil(total / 6)}
 									page={page}
 									onChange={(_, value) => changePage(value, 'services-results', setPage)}
-									color="primary"
 								/>
 							</Box>
 						)}
