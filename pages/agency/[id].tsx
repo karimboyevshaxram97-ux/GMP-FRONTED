@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { Stack, Box, Button, Rating, Chip, Tabs, Tab, Divider, Skeleton, TextField } from '@mui/material';
-import AppPagination from '../libs/components/common/AppPagination';
+import AppPagination from '../../libs/components/common/AppPagination';
 import { useQuery, useMutation, useReactiveVar } from '@apollo/client';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CheckIcon from '@mui/icons-material/Check';
