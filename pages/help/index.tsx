@@ -18,107 +18,28 @@ import { CREATE_SUPPORT_TICKET } from '../../apollo/user/mutation';
 import { userVar } from '../../apollo/store';
 import { useUiLang } from '../../libs/utils/translations';
 
+// Savol-javob matnlari to'rt tilda public/locales/<lang>/common.json ichida (faq.* kalitlari)
 const faqs = [
-	{
-		cat: 'Getting Started',
-		q: 'What is GMP and how does it work?',
-		a: 'GMP (Global Migration Platform) is an online platform that connects individuals with verified agencies for study abroad, work permits, travel visas, and other international migration services. Browse agencies, compare services, submit your application online, and track everything from your personal dashboard.',
-	},
-	{
-		cat: 'Getting Started',
-		q: 'Do I need to create an account to use GMP?',
-		a: 'You can browse agencies and services without an account. However, to submit applications, message agencies, track your status, or save favorites, you need to register. Registration is free and takes less than 2 minutes.',
-	},
-	{
-		cat: 'Applications',
-		q: 'How do I apply for a service?',
-		a: 'Browse our services page, select the service you need, and click "Apply Now". You\'ll need an account to apply. After submitting, the agency will review your application and contact you within 2–3 business days.',
-	},
-	{
-		cat: 'Applications',
-		q: 'Can I apply to multiple agencies at the same time?',
-		a: 'Yes. You can submit applications to multiple agencies simultaneously. This is recommended — comparing offers lets you choose the best price, timeline, and service quality. All applications are managed from your My Page dashboard.',
-	},
-	{
-		cat: 'Applications',
-		q: 'Can I cancel or change my application?',
-		a: 'Contact the agency through the messaging system to request changes or cancellations. Cancellation policies vary by agency, so check their terms before applying. Most agencies allow free cancellation before the process officially begins.',
-	},
-	{
-		cat: 'Documents',
-		q: 'What documents do I need to prepare?',
-		a: 'Required documents vary by service type. For study abroad: passport, diploma, language certificates (IELTS/TOEFL). For work permits: passport, CV, job offer letter, medical certificate. For visas: passport, bank statements, travel insurance, hotel bookings. Your agency will provide a full personalized checklist after you apply.',
-	},
-	{
-		cat: 'Documents',
-		q: 'Are my uploaded documents safe and private?',
-		a: 'Yes. All documents are encrypted and stored securely. Only the agency you applied to can access your submitted files. GMP does not share your documents with third parties. You can request document deletion at any time from My Page → Settings.',
-	},
-	{
-		cat: 'Timeline',
-		q: 'How long does the process take?',
-		a: 'Processing times depend on the service and destination country. Tourist visa: 2–4 weeks. Student visa: 4–12 weeks. Work permit: 4 weeks to 6 months. Permanent residency: 6–24 months. Your assigned agency will give you an accurate personalized timeline during the initial consultation.',
-	},
-	{
-		cat: 'Timeline',
-		q: 'What happens if my application is delayed?',
-		a: 'Delays can happen due to embassy workload, missing documents, or country-specific requirements. Your agency will proactively notify you of any delays and explain next steps. You can also check live status updates from My Page at any time.',
-	},
-	{
-		cat: 'Trust',
-		q: 'Are the agencies on GMP verified?',
-		a: 'Yes. Every agency undergoes a strict verification process before being listed on GMP. Our admin team reviews government-issued licenses, years of operation, success rates, and client reviews. Agencies with the blue verified badge have passed all checks. We remove agencies that receive repeated complaints.',
-	},
-	{
-		cat: 'Trust',
-		q: 'What if I have a problem with an agency?',
-		a: 'First, try to resolve it directly through our messaging system. If the issue is not resolved, use the "Report Agency" button on their profile page. Our support team reviews all reports within 48 hours and can mediate disputes, issue warnings, or remove agencies that violate our policies.',
-	},
-	{
-		cat: 'Tracking',
-		q: 'How do I track my application status?',
-		a: 'Log in and go to My Page → Applications. You can see real-time status for all your applications (Pending, In Review, Documents Required, Approved, Rejected) and read any messages from the agency. You will also receive email and in-app notifications for every status change.',
-	},
-	{
-		cat: 'Tracking',
-		q: 'Can I communicate with the agency after applying?',
-		a: 'Yes. Every application has a built-in messaging thread between you and the agency. You can send questions, share additional documents, and receive updates directly in the thread. All messages are archived for your records.',
-	},
-	{
-		cat: 'Payments',
-		q: 'What payment methods are accepted?',
-		a: 'Payment terms are set by each agency and handled directly between you and them. GMP does not process or hold payments. Common methods include bank transfer, PayMe, Click, and Payme. Confirm payment terms with your chosen agency before starting your application.',
-	},
-	{
-		cat: 'Payments',
-		q: 'Are there any fees for using GMP?',
-		a: 'Creating an account and browsing is completely free. GMP charges no commission on your service fees — the price you see from the agency is the price you pay. Agency service fees vary based on the type and complexity of the service.',
-	},
-	{
-		cat: 'Agencies',
-		q: 'How do I register my agency on GMP?',
-		a: 'Click "Register", select "Agency" as your account type, and complete your agency profile. Submit your government-issued license, business registration documents, and team information through My Page. Our team will review your application within 3–5 business days and notify you via email.',
-	},
-	{
-		cat: 'Agencies',
-		q: 'How can an agency improve its ranking on GMP?',
-		a: 'Agency rankings are based on client review score, number of completed applications, response speed, and verification status. Maintaining a high rating, responding to clients quickly, and keeping your profile up to date are the best ways to improve your ranking.',
-	},
-	{
-		cat: 'Account',
-		q: 'I forgot my password. How do I reset it?',
-		a: 'On the login page, click "Forgot Password" and enter your registered email or phone number. You will receive a reset link within a few minutes. If you don\'t receive it, check your spam folder or contact support@gmp.com.',
-	},
-	{
-		cat: 'Account',
-		q: 'How do I delete my account?',
-		a: 'Go to My Page → Settings → Account → Delete Account. You will be asked to confirm your password before deletion. Note that deleting your account will permanently remove all your applications, messages, and history. Active applications should be resolved with your agency before deletion.',
-	},
-	{
-		cat: 'Account',
-		q: 'Can I change my registered phone number or email?',
-		a: 'Yes. Go to My Page → Settings → Profile and update your contact information. You will need to verify the new phone number or email address with a confirmation code before the change takes effect.',
-	},
+	{ cat: 'faq.cat.gettingStarted', q: 'faq.1.q', a: 'faq.1.a' },
+	{ cat: 'faq.cat.gettingStarted', q: 'faq.2.q', a: 'faq.2.a' },
+	{ cat: 'faq.cat.applications', q: 'faq.3.q', a: 'faq.3.a' },
+	{ cat: 'faq.cat.applications', q: 'faq.4.q', a: 'faq.4.a' },
+	{ cat: 'faq.cat.applications', q: 'faq.5.q', a: 'faq.5.a' },
+	{ cat: 'faq.cat.documents', q: 'faq.6.q', a: 'faq.6.a' },
+	{ cat: 'faq.cat.documents', q: 'faq.7.q', a: 'faq.7.a' },
+	{ cat: 'faq.cat.timeline', q: 'faq.8.q', a: 'faq.8.a' },
+	{ cat: 'faq.cat.timeline', q: 'faq.9.q', a: 'faq.9.a' },
+	{ cat: 'faq.cat.trust', q: 'faq.10.q', a: 'faq.10.a' },
+	{ cat: 'faq.cat.trust', q: 'faq.11.q', a: 'faq.11.a' },
+	{ cat: 'faq.cat.tracking', q: 'faq.12.q', a: 'faq.12.a' },
+	{ cat: 'faq.cat.tracking', q: 'faq.13.q', a: 'faq.13.a' },
+	{ cat: 'faq.cat.payments', q: 'faq.14.q', a: 'faq.14.a' },
+	{ cat: 'faq.cat.payments', q: 'faq.15.q', a: 'faq.15.a' },
+	{ cat: 'faq.cat.agencies', q: 'faq.16.q', a: 'faq.16.a' },
+	{ cat: 'faq.cat.agencies', q: 'faq.17.q', a: 'faq.17.a' },
+	{ cat: 'faq.cat.account', q: 'faq.18.q', a: 'faq.18.a' },
+	{ cat: 'faq.cat.account', q: 'faq.19.q', a: 'faq.19.a' },
+	{ cat: 'faq.cat.account', q: 'faq.20.q', a: 'faq.20.a' },
 ];
 
 const HelpPage: NextPage = () => {
@@ -142,11 +63,12 @@ const HelpPage: NextPage = () => {
 		}));
 	}, [user?._id, user?.firstName, user?.lastName, user?.email]);
 
+	// Qidiruv tanlangan tildagi (tarjima qilingan) matn bo'yicha ishlaydi
 	const filtered = faqs.filter(
 		(f) =>
 			search === '' ||
-			f.q.toLowerCase().includes(search.toLowerCase()) ||
-			f.a.toLowerCase().includes(search.toLowerCase()),
+			ui(f.q).toLowerCase().includes(search.toLowerCase()) ||
+			ui(f.a).toLowerCase().includes(search.toLowerCase()),
 	);
 
 	// ── Cosmos canvas ──────────────────────────────────────────────────

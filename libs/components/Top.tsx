@@ -132,6 +132,10 @@ const Top = () => {
 
 	const isMyPage = router.pathname.startsWith('/mypage');
 
+	// Hero rasmi yo'q sahifalarda shaffof navbar oq fonda ko'rinmay qoladi —
+	// bunday marshrutlarda doim to'ldirilgan (scrolled) ko'rinish ishlatiladi.
+	const forceSolidNav = router.pathname.startsWith('/agency/map');
+
 	// Marshrut o'zgarsa mobil menyu yopilsin
 	useEffect(() => {
 		setMobileOpen(false);
@@ -140,7 +144,7 @@ const Top = () => {
 	return (
 		<>
 		<div className={'navbar'}>
-			<div className={`navbar-main ${scrolled ? 'scrolled' : ''}`}>
+			<div className={`navbar-main ${scrolled || forceSolidNav ? 'scrolled' : ''}`}>
 				<div className={'container'}>
 
 					{/* LEFT: Logo only */}
