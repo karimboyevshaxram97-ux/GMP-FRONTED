@@ -18,7 +18,7 @@ const TopAgenciesSection = () => {
 		nextFetchPolicy: 'cache-first',
 		variables: {
 			input: {
-				sort: 'CREATED_AT',
+				sort: 'AVERAGE_RATING',
 				direction: 'DESC',
 				page: 1,
 				limit: 12,

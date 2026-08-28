@@ -952,6 +952,7 @@
 			display: -webkit-box;
 			-webkit-box-orient: vertical;
 			-webkit-line-clamp: 3;
+			line-clamp: 3;
 			overflow: hidden;
 			min-height: 59px;
 			margin-bottom: 20px;
@@ -1235,9 +1236,10 @@
 
 	.hfa-card {
 		@include button-states;
-		display: flex;
-		flex-direction: column;
-		background: #fff;
+		position: relative;
+		display: block;
+		min-width: 0;
+		background: #111827;
 		border: 1px solid #e9edf6;
 		border-radius: 14px;
 		overflow: hidden;
@@ -1245,26 +1247,48 @@
 		box-shadow: 0 8px 24px rgba(10, 36, 114, 0.05);
 		transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 
+		&::after {
+			content: '';
+			position: absolute;
+			inset: 0;
+			z-index: 1;
+			background: linear-gradient(180deg, rgba(5, 10, 24, 0.02) 34%, rgba(5, 10, 24, 0.84) 100%);
+			pointer-events: none;
+		}
+
 		&:hover {
 			transform: translateY(-4px);
 			border-color: rgba(22, 73, 255, 0.22);
 			box-shadow: 0 18px 42px rgba(10, 36, 114, 0.11);
 
-			.hfa-media img { transform: scale(1.04); }
+			.hfa-media img { transform: scale(1.045); }
 		}
 	}
 
 	.hfa-media {
-		position: relative;
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
 		overflow: hidden;
-		background: #eef1fb;
+		background: #182038;
+
+		&__backdrop {
+			position: absolute;
+			inset: -20px;
+			background-size: cover;
+			background-position: center;
+			filter: blur(24px) brightness(0.55);
+			transform: scale(1.1);
+		}
 
 		img {
 			position: absolute;
 			inset: 0;
 			width: 100%;
 			height: 100%;
-			object-fit: cover;
+			object-fit: contain;
+			object-position: center;
 			transition: transform 0.35s ease;
 		}
 
@@ -1303,11 +1327,19 @@
 	}
 
 	.hfa-body {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 2;
 		display: flex;
 		flex-direction: column;
-		gap: 8px;
-		padding: 16px 18px 18px;
+		justify-content: flex-end;
+		gap: 5px;
+		min-width: 0;
 		text-align: left;
+		padding: 52px 16px 14px;
+		background: linear-gradient(180deg, transparent 0%, rgba(5, 10, 24, 0.68) 45%, rgba(5, 10, 24, 0.9) 100%);
 	}
 
 	.hfa-name-row {
@@ -1317,167 +1349,22 @@
 		gap: 10px;
 
 		h3 {
-			font-size: 17px;
+			font-size: 15px;
 			font-weight: 800;
-			color: $text-primary;
+			color: #ffffff;
 			overflow: hidden;
 			text-overflow: ellipsis;
 			white-space: nowrap;
+			text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
 		}
 	}
 
 	.hfa-chip {
 		flex-shrink: 0;
-		border: 1px solid #dbe3f5;
-		color: $primary;
-		font-size: 12px;
-		font-weight: 700;
+		border: 1px solid rgba(255, 255, 255, 0.28);
 		border-radius: 8px;
-		padding: 4px 10px;
-		white-space: nowrap;
-	}
-
-	.hfa-meta {
-		color: $text-secondary;
-		font-size: 13.5px;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-	}
-
-	.hfa-rating {
-		display: flex;
-		align-items: center;
-		gap: 6px;
-
-		span {
-			color: $text-secondary;
-			font-size: 13px;
-			font-weight: 600;
-		}
-	}
-
-	.hfa-profile-btn {
-		margin-top: 10px;
-		display: block;
-		text-align: center;
-		background: #14161f;
-		color: #fff;
-		border-radius: 10px;
-		padding: 13px;
-		font-size: 14px;
-		font-weight: 700;
-		transition: background 0.2s ease;
-	}
-
-	.hfa-card--feature {
-		.hfa-media { flex: 1; min-height: 230px; }
-		.hfa-body { padding: 20px; gap: 10px; }
-		.hfa-name-row h3 { font-size: 22px; }
-
-		&:hover .hfa-profile-btn { background: #232636; }
-	}
-
-	.hfa-card--small .hfa-media {
-		height: 150px;
-		flex-shrink: 0;
-	}
-
-	.hfa-card--wide {
-		flex-direction: row;
-
-		.hfa-media {
-			width: 38%;
-			min-height: 180px;
-			flex-shrink: 0;
-		}
-
-		.hfa-body {
-			flex: 1;
-			min-width: 0;
-			justify-content: center;
-		}
-
-		@media (max-width: 560px) {
-			flex-direction: column;
-
-			.hfa-media {
-				width: 100%;
-				height: 160px;
-				min-height: 0;
-			}
-		}
-	}
-
-	// Bento joylashuvi o'zgarmaydi; kartalarning ichi full-bleed rasmga o'tadi.
-	.hfa-card {
-		position: relative;
-		display: block;
-		min-width: 0;
-		background: #111827;
-
-		&::after {
-			content: '';
-			position: absolute;
-			inset: 0;
-			z-index: 1;
-			background: linear-gradient(180deg, rgba(5, 10, 24, 0.02) 34%, rgba(5, 10, 24, 0.84) 100%);
-			pointer-events: none;
-		}
-
-		&:hover .hfa-media img { transform: scale(1.045); }
-	}
-
-	.hfa-card .hfa-media {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		min-height: 0;
-		background: #182038;
-
-		img {
-			object-fit: cover;
-			object-position: center;
-		}
-	}
-
-	.hfa-card .hfa-body {
-		position: absolute;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		z-index: 2;
-		display: flex;
-		justify-content: flex-end;
-		gap: 5px;
-		min-width: 0;
-		padding: 52px 16px 14px;
-		background: linear-gradient(180deg, transparent 0%, rgba(5, 10, 24, 0.68) 45%, rgba(5, 10, 24, 0.9) 100%);
-
-		.hfa-name-row h3 {
-			color: #ffffff;
-			font-size: 15px;
-			font-weight: 800;
-			text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
-		}
-
-		.hfa-meta {
-			color: rgba(255, 255, 255, 0.7);
-			font-size: 10.5px;
-		}
-
-		.hfa-rating {
-			gap: 4px;
-
-			.MuiRating-root { font-size: 14px; }
-			span { color: rgba(255, 255, 255, 0.74); font-size: 10px; }
-		}
-	}
-
-	.hfa-card .hfa-chip {
 		padding: 3px 7px;
-		border-color: rgba(255, 255, 255, 0.28);
+		white-space: nowrap;
 		background: rgba(5, 10, 24, 0.38);
 		color: #ffffff;
 		font-size: 9px;
@@ -1485,7 +1372,29 @@
 		-webkit-backdrop-filter: blur(8px);
 	}
 
-	.hfa-card .hfa-profile-btn {
+	.hfa-meta {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		color: rgba(255, 255, 255, 0.7);
+		font-size: 10.5px;
+	}
+
+	.hfa-rating {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+
+		.MuiRating-root { font-size: 14px; }
+
+		span {
+			color: rgba(255, 255, 255, 0.74);
+			font-size: 10px;
+			font-weight: 600;
+		}
+	}
+
+	.hfa-profile-btn {
 		display: inline-flex;
 		align-items: center;
 		width: fit-content;
@@ -1496,6 +1405,8 @@
 		background: rgba(255, 255, 255, 0.14);
 		color: #ffffff;
 		font-size: 9.5px;
+		font-weight: 700;
+		transition: background 0.2s ease;
 		backdrop-filter: blur(8px);
 		-webkit-backdrop-filter: blur(8px);
 	}
@@ -1505,6 +1416,8 @@
 
 		.hfa-body { padding: 82px 20px 18px; }
 		.hfa-body .hfa-name-row h3 { font-size: 17px; }
+
+		&:hover .hfa-profile-btn { background: #232636; }
 	}
 
 	.hfa-card--small { min-height: 300px; }
@@ -2606,7 +2519,7 @@ $brands-bg: #f5f7fa; // yuqoridagi qidiruv bo'limi bilan bir xil — chegara sez
 
 // Foydalanuvchi "reduce motion" tanlagan bo'lsa — kartalar darhol ko'rinadi.
 @media (prefers-reduced-motion: reduce) {
-	.home-featured-agencies__grid > *,
+	.home-featured-agencies__bento > *,
 	.home-featured-services__grid > *,
 	.top-agencies__grid .top-agency-card,
 	.top-liked-photos__grid .top-liked-photo-card {
