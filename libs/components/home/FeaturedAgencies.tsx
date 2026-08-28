@@ -71,17 +71,11 @@ const FeaturedAgencies = () => {
 	const renderMedia = (agency: any) => (
 		<div className="hfa-media">
 			{agency.coverImage || agency.logo ? (
-				<>
-					<div
-						className="hfa-media__backdrop"
-						style={{ backgroundImage: `url(${REACT_APP_API_URL}/uploads/${agency.coverImage || agency.logo})` }}
-					/>
-					<img
-						src={`${REACT_APP_API_URL}/uploads/${agency.coverImage || agency.logo}`}
-						alt={tr(agency.name)}
-						loading="lazy"
-					/>
-				</>
+				<img
+					src={`${REACT_APP_API_URL}/uploads/${agency.coverImage || agency.logo}`}
+					alt={tr(agency.name)}
+					loading="lazy"
+				/>
 			) : (
 				<div className="hfa-placeholder" style={{ background: pickGradient(agency._id || tr(agency.name)) }}>
 					<span>{(tr(agency.name) || '?').charAt(0).toUpperCase()}</span>
