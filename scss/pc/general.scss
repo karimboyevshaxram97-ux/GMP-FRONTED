@@ -231,7 +231,7 @@
 			box-sizing: border-box;
 			filter: none;
 			height: 100%;
-			object-fit: contain;
+			object-fit: cover;
 			object-position: center;
 			position: relative;
 			transition: transform 0.35s ease, filter 0.35s ease;
@@ -242,7 +242,7 @@
 		/* Logo fallback: logotip kichik va kvadrat bo'ladi — chetidan joy
 		   qoldirib ko'rsatamiz, orqa fonni esa yumshoqroq qilamiz */
 		&.card-image--logo {
-			.card-image__photo { padding: 26px; }
+			.card-image__photo { object-fit: contain; padding: 26px; }
 			.card-image__backdrop { filter: blur(34px) saturate(1.1); opacity: 0.45; }
 		}
 
