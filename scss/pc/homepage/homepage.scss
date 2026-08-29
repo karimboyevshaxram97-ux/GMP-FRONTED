@@ -1185,18 +1185,21 @@
 		> *:nth-child(3) { grid-area: s2; }
 		> *:nth-child(4) { grid-area: wide; }
 
-		// Skroll qilib yetib kelinganda paydo bo'ladi (JS .in-view klassini qo'shadi)
+		// Skroll qilib yetib kelinganda paydo bo'ladi (JS .in-view klassini qo'shadi).
+		// animation emas, transition ishlatiladi — aks holda animatsiya
+		// transform'ni "ushlab qolib", :hover'dagi scale ishlamay qoladi.
 		> * {
 			opacity: 0;
 			transform: translateY(26px) scale(0.97);
+			transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 		}
 
 		&.in-view > * {
+			opacity: 1;
+			transform: translateY(0) scale(1);
+
 			@for $i from 1 through 4 {
-				&:nth-child(#{$i}) {
-					animation: taFloatIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-					animation-delay: #{$i * 0.09}s;
-				}
+				&:nth-child(#{$i}) { transition-delay: #{$i * 0.09}s; }
 			}
 		}
 
@@ -1257,10 +1260,10 @@
 		}
 
 		&:hover {
-			transform: translateY(-4px) scale(1.035);
+			transform: translateY(-6px) scale(1.08);
 			z-index: 2;
 			border-color: rgba(22, 73, 255, 0.22);
-			box-shadow: 0 18px 42px rgba(10, 36, 114, 0.11);
+			box-shadow: 0 22px 50px rgba(10, 36, 114, 0.16);
 		}
 	}
 
