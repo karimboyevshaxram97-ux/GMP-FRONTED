@@ -13,8 +13,40 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      # Server SSH'i botlar sababli ba'zan "Exceeded MaxStartups" bilan
+      # ulanishni rad etadi — shuning uchun 3 martagacha urinib ko'riladi.
       - name: Serverda deploy.sh ni ishga tushirish
+        id: try1
         uses: appleboy/ssh-action@v1
+        continue-on-error: true
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          command_timeout: 30m
+          script: cd ~/gmp-deploy && ./deploy.sh
+      - name: Kutish (1)
+        if: steps.try1.outcome == 'failure'
+        run: sleep 45
+      - name: Qayta urinish (2)
+        id: try2
+        if: steps.try1.outcome == 'failure'
+        uses: appleboy/ssh-action@v1
+        continue-on-error: true
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          command_timeout: 30m
+          script: cd ~/gmp-deploy && ./deploy.sh
+      - name: Kutish (2)
+        if: steps.try2.outcome == 'failure'
+        run: sleep 45
+      - name: Qayta urinish (3)
+        id: try3
+        if: steps.try2.outcome == 'failure'
+        uses: appleboy/ssh-action@v1
+        continue-on-error: false
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
