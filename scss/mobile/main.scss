@@ -268,6 +268,114 @@
 		}
 	}
 
-	.home-service-types .stype-card { min-height: 360px; }
-	.top-agencies__grid > * { flex-basis: 64%; }
+	// ============================================================
+	// CARDLAR — har bir tur uchun alohida ixcham mobil o'lcham
+	// ============================================================
+
+	// 1) Xizmat turlari (karusel): past va torroq
+	.home-service-types__grid > * { flex-basis: 68%; }
+	.home-service-types .stype-card {
+		min-height: 250px !important;
+		border-radius: 18px;
+
+		.stype-card__content { padding: 18px 16px 15px !important; }
+		h3 { font-size: 18px !important; }
+		p { font-size: 11.5px !important; line-height: 1.5 !important; }
+	}
+
+	// 2) Qanday ishlaydi (karusel): kichik padding, kichik ikon/raqam
+	.home-how__steps > * { flex-basis: 70%; }
+	.home-how .hiw-card {
+		padding: 20px 16px 18px;
+		border-radius: 14px;
+
+		&__num { font-size: 42px; top: 10px; right: 14px; }
+		&__icon { width: 42px; height: 42px; font-size: 20px; border-radius: 11px; margin-bottom: 12px; }
+		h3 { font-size: 16px; margin-bottom: 6px; }
+		p { font-size: 12.5px; line-height: 1.55; }
+	}
+
+	// 3) Featured agentliklar (bento): katta + 2 ta yonma-yon kichik + keng
+	.home-featured-agencies__bento {
+		grid-template-columns: 1fr 1fr !important;
+		grid-template-areas:
+			'feature feature'
+			's1 s2'
+			'wide wide' !important;
+		gap: 12px !important;
+	}
+	.home-featured-agencies {
+		.hfa-card { border-radius: 14px; }
+		.hfa-card--feature { min-height: 230px !important; }
+		.hfa-card--small { min-height: 170px !important; }
+		.hfa-card--wide { min-height: 170px !important; }
+
+		.hfa-card--feature .hfa-body,
+		.hfa-card--wide .hfa-body { padding: 44px 14px 12px !important; }
+		.hfa-card--small .hfa-body { padding: 36px 10px 10px !important; }
+
+		.hfa-body .hfa-name-row h3 { font-size: 14px !important; }
+		.hfa-card--small .hfa-body .hfa-name-row h3 { font-size: 13px !important; }
+	}
+
+	// 4) Featured xizmatlar (homepage katalog): past qator, tor rasm
+	.home-featured-services .service-card {
+		grid-template-columns: 104px minmax(0, 1fr) !important;
+		min-height: 150px !important;
+		border-radius: 16px !important;
+
+		.featured-service-media { min-height: 150px !important; }
+		.featured-service-rank { font-size: 18px !important; left: 10px !important; bottom: 8px !important; }
+		.service-card-body { padding: 12px 12px 6px !important; gap: 5px !important; }
+		.service-footer { padding: 8px 12px 11px !important; }
+		.service-name { font-size: 15px !important; }
+		.service-price { font-size: 15px !important; }
+		.service-arrow { width: 30px !important; height: 30px !important; border-radius: 9px !important; }
+	}
+
+	// 5) Top agentliklar (karusel): bir ekranda ~2 ta
+	.top-agencies__grid > * { flex-basis: 46%; }
+	.top-agencies .top-agency-card {
+		height: 180px;
+		border-radius: 14px;
+
+		.top-agency-card__overlay { padding: 12px; }
+		.top-agency-card__name { font-size: 13px; }
+	}
+
+	// 6) Eng ko'p like olgan rasmlar: 2 ustun, past
+	.top-liked-photos {
+		&__row { flex-direction: row !important; flex-wrap: wrap; gap: 10px !important; }
+		&__grid { gap: 10px !important; }
+
+		&__row--top .top-liked-photo-card,
+		&__row--bottom .top-liked-photo-card {
+			flex: 1 1 calc(50% - 5px) !important;
+			min-width: calc(50% - 5px) !important;
+			height: 150px !important;
+			border-radius: 14px;
+		}
+	}
+
+	// 7) Xarita bo'limidagi agentlik kartalari
+	.hmc-card { padding: 10px 12px; gap: 10px; }
+	.hmc-avatar { width: 42px; height: 42px; }
+
+	// 8) /agency va boshqa ro'yxatlardagi AgencyCard: pastroq rasm
+	.agency-card {
+		.card-image { height: 170px !important; border-radius: 12px; }
+		.card-body { padding-top: 10px !important; gap: 6px !important; }
+		.agency-description {
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+		}
+	}
+
+	// 9) ServiceCard (ro'yxatlar): zichroq
+	.service-card:not(.home-featured-services .service-card) {
+		.service-card-body { padding: 12px !important; gap: 5px !important; }
+		.service-name { font-size: 14.5px !important; }
+	}
 }
