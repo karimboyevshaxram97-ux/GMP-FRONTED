@@ -10,6 +10,11 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import { Logout } from '@mui/icons-material';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
+import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
+import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
+import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import { useReactiveVar, useQuery, useMutation } from '@apollo/client';
 import { userVar } from '../../apollo/store';
 import { getJwtToken, logOut, updateUserInfo } from '../auth';
@@ -30,6 +35,15 @@ const navLinks = [
 	{ label: 'Map', href: '/agency/map', match: (p: string, q: any) => p === '/agency/map' },
 	{ label: 'Help', href: '/help', match: (p: string, q: any) => p === '/help' },
 ];
+
+// Mobil pastki tab-bar uchun ikonlar (navLinks bilan bir xil tartibda)
+const tabIcons: Record<string, React.ReactNode> = {
+	Home: <HomeOutlinedIcon />,
+	Study: <SchoolOutlinedIcon />,
+	Work: <WorkOutlineIcon />,
+	Travel: <FlightTakeoffIcon />,
+	Map: <MapOutlinedIcon />,
+};
 
 const Top = () => {
 	const ui = useUiLang();
@@ -298,9 +312,23 @@ const Top = () => {
 			</div>
 		</div>
 
-		{/* MOBILE: slide-in drawer */}
+		{/* MOBILE: pastki tab-bar (faqat mobilda ko'rinadi — CSS orqali) */}
+		<nav className={'mobile-tabbar'}>
+			{navLinks.filter((link) => tabIcons[link.label]).map((link) => (
+				<Link key={link.href} href={link.href} className={`tab-item ${isActive(link.match) ? 'active' : ''}`}>
+					{tabIcons[link.label]}
+					<span>{ui(link.label)}</span>
+				</Link>
+			))}
+			<button type={'button'} className={`tab-item ${mobileOpen ? 'active' : ''}`} onClick={() => setMobileOpen(true)}>
+				<MenuIcon />
+				<span>{ui('nav.menu')}</span>
+			</button>
+		</nav>
+
+		{/* MOBILE: pastdan chiqadigan menyu (bottom sheet) */}
 		<Drawer
-			anchor={'right'}
+			anchor={'bottom'}
 			open={mobileOpen}
 			onClose={() => setMobileOpen(false)}
 			className={'mobile-drawer'}

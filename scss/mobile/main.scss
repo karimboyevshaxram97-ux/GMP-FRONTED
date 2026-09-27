@@ -14,14 +14,31 @@
 	display: none;
 }
 
+// Pastki tab-bar standart (PC) holatda yashirin
+.mobile-tabbar {
+	display: none;
+}
+
 // ── Mobil drawer (body ga portal qilinadi — navbar ichida emas) ──
 .mobile-drawer-paper {
-	width: 82vw !important;
-	max-width: 330px !important;
+	width: 100% !important;
+	max-height: 86vh;
+	border-radius: 24px 24px 0 0 !important;
 	background: linear-gradient(160deg, #0c0a20 0%, #13103a 45%, #0d1b3e 100%) !important;
 	color: #fff !important;
 	box-sizing: border-box;
-	padding: 18px 18px 28px;
+	padding: 10px 18px calc(22px + env(safe-area-inset-bottom));
+
+	// Tepadagi "tortish" chizig'i
+	&::before {
+		content: '';
+		align-self: center;
+		width: 42px;
+		height: 5px;
+		border-radius: 3px;
+		background: rgba(255, 255, 255, 0.25);
+		margin-bottom: 10px;
+	}
 	display: flex;
 	flex-direction: column;
 
@@ -44,10 +61,12 @@
 		}
 	}
 
+	// Linklar 2 ustunli plitkalar ko'rinishida
 	.mobile-drawer-links {
-		display: flex;
-		flex-direction: column;
-		padding: 10px 0;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 10px;
+		padding: 14px 0;
 		margin-top: 6px;
 		border-top: 1px solid rgba(255, 255, 255, 0.08);
 		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -58,7 +77,10 @@
 			font-weight: 600;
 			color: rgba(255, 255, 255, 0.82);
 			padding: 14px 12px;
-			border-radius: 10px;
+			border-radius: 14px;
+			background: rgba(255, 255, 255, 0.05);
+			border: 1px solid rgba(255, 255, 255, 0.08);
+			text-align: center;
 			transition: background 0.2s ease, color 0.2s ease;
 
 			&:hover {
@@ -67,7 +89,8 @@
 
 			&.active {
 				color: #fff;
-				background: rgba(255, 255, 255, 0.08);
+				background: $accent-gradient;
+				border-color: transparent;
 			}
 		}
 	}
@@ -77,11 +100,12 @@
 		display: flex;
 		flex-direction: column;
 		gap: 16px;
-		padding-top: 20px;
+		padding-top: 18px;
 
 		.drawer-toggles {
 			display: flex;
 			align-items: center;
+			justify-content: center;
 			gap: 10px;
 		}
 
@@ -138,8 +162,9 @@
 				display: none;
 			}
 
+			// Menyu endi pastki tab-bar'da — hamburger kerak emas
 			.mobile-menu-btn {
-				display: inline-flex;
+				display: none;
 				color: #fff;
 				padding: 6px;
 
@@ -159,4 +184,90 @@
 	.container {
 		padding: 0 16px;
 	}
+
+	// ── Pastki tab-bar (ilova uslubidagi navigatsiya) ──
+	.mobile-tabbar {
+		position: fixed;
+		left: 10px;
+		right: 10px;
+		bottom: calc(10px + env(safe-area-inset-bottom));
+		z-index: 1200;
+		display: flex;
+		align-items: stretch;
+		justify-content: space-between;
+		gap: 2px;
+		padding: 6px;
+		border-radius: 22px;
+		background: rgba(12, 10, 32, 0.82);
+		backdrop-filter: blur(16px) saturate(160%);
+		-webkit-backdrop-filter: blur(16px) saturate(160%);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		box-shadow: 0 12px 34px rgba(8, 10, 40, 0.35);
+
+		.tab-item {
+			flex: 1 1 0;
+			min-width: 0;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 2px;
+			padding: 7px 2px 6px;
+			border: 0;
+			border-radius: 16px;
+			background: transparent;
+			color: rgba(255, 255, 255, 0.62);
+			font-family: $font-family;
+			font-size: 10.5px;
+			font-weight: 600;
+			text-decoration: none;
+			cursor: pointer;
+			transition: background 0.2s ease, color 0.2s ease;
+			-webkit-tap-highlight-color: transparent;
+
+			svg { font-size: 22px; }
+
+			span {
+				max-width: 100%;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+
+			&.active {
+				color: #fff;
+				background: $accent-gradient;
+			}
+		}
+	}
+
+	// Tab-bar kontentni to'sib qo'ymasligi uchun pastdan joy
+	#pc-wrap {
+		padding-bottom: calc(84px + env(safe-area-inset-bottom));
+	}
+
+	// ── Homepage cardlari: vertikal ustun o'rniga gorizontal swipe-karusel ──
+	.home-service-types__grid,
+	.home-how__steps,
+	.top-agencies__grid {
+		display: flex !important;
+		gap: 14px;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		-webkit-overflow-scrolling: touch;
+		scrollbar-width: none;
+		margin: 0 -16px;
+		padding: 4px 16px 14px;
+		scroll-padding: 0 16px;
+
+		&::-webkit-scrollbar { display: none; }
+
+		> * {
+			flex: 0 0 82%;
+			scroll-snap-align: start;
+		}
+	}
+
+	.home-service-types .stype-card { min-height: 360px; }
+	.top-agencies__grid > * { flex-basis: 64%; }
 }
